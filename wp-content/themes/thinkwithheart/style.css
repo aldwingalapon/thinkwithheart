@@ -50,6 +50,7 @@ p {font-family: 'OpenSans Light'; text-transform:none; font-size:20px; line-heig
 em{font-family: 'OpenSans Light Italic';}
 .strong, strong, b{font-family: 'OpenSans Bold';}
 .emphasis{color:#00ADEE !important; margin-top: 3rem;}
+strong em{font-family: 'OpenSans Bold Italic';}
 
 /*----------------------------------------------*/
 /* Header */
@@ -63,9 +64,16 @@ em{font-family: 'OpenSans Light Italic';}
 /*----------------------------------------------*/
 /* Content */
 /*----------------------------------------------*/
-.elementor-text-editor{}
-/*h2, .elementor-text-editor .quotation{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 27px; line-height: 37px;margin-bottom: 2rem;}
-h2 span, .elementor-text-editor .quotation .quotedby{display:block; font-family: 'OpenSans Light Italic'; text-transform:none; font-size:20px;}*/
+#heroslider{}
+#heroslider figcaption{margin: 0; padding-left: 10%; padding-right: 10%; position: absolute; left: 50%; transform: translate(-50%,0); text-align: center; bottom: 180px; width: 100%;}
+#heroslider figcaption .quote{}
+#heroslider figcaption span{display:block;}
+#heroslider figcaption .quote .text{font-family: 'OpenSans Regular'; color:#FFF; text-transform:none; font-size:50px; line-height:60px; margin-bottom: 3rem;}
+#heroslider figcaption .quote .by{font-family: 'Montserrat Regular'; color:#FFF; font-size:24px; line-height:28px; text-transform: none; margin-bottom: 3rem;}
+#heroslider figcaption p{}
+#heroslider figcaption p .btn-primary{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 16px; line-height: 20px;margin-top:2rem;margin-bottom: 1rem; padding: 1.625rem 3.25rem;}
+#homeintro h2, #homeintro .quotation{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 27px; line-height: 37px;margin-bottom: 2rem;}
+#homeintro h2 span, #homeintro .quotation .quotedby{display:block; font-family: 'OpenSans Light Italic'; text-transform:none; font-size:20px;}
 h3{font-family: 'Montserrat Regular'; font-size:18px; line-height:1; text-transform: uppercase; color:#58595b; overflow:hidden;}
 .line {text-align: center;}
 .line span {display: inline-block; position: relative;}
@@ -143,6 +151,38 @@ h3{font-family: 'Montserrat Regular'; font-size:18px; line-height:1; text-transf
 #whyonline h3, #whyonline .section-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 18px; line-height: 22px; color:#58595b; margin-bottom:1.5rem;}
 #whyonline p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 2rem;}
 #whyonline a{color:#000;}
+#programsimgfoldone{position:relative;}
+#programsimgfoldone:after{position: absolute; left: 50%; top:0; transform: translate(-50%,0); content: ""; width: 0; height: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-top: 75px solid #FFF;}
+#programsimgfoldone .quote{text-align:center;}
+#programsimgfoldone .quote .content{font-family: 'OpenSans Bold'; color:#FFF; font-size:32px; line-height:42px; text-transform:none; text-align:center; margin-bottom:4rem;}
+#programsimgfoldone .quote .by{font-family: 'Montserrat Bold'; color:#7DC440; text-transform: uppercase; font-size: 18px; line-height: 22px; margin-bottom:1rem;}
+#programs{}
+#programs h3, #programs .section-title{font-family: 'OpenSans Bold'; color:#000; font-size:40px; line-height:50px; text-transform:uppercase; text-align:left; margin-bottom:1.25rem;}
+#programs p.intro{font-family: 'OpenSans Light'; color:#000; font-size:35px; line-height:50px; text-transform:none; text-align:left; margin-bottom:4rem;}
+#programs p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+#programs a{color:#000;}
+#greenfold{}
+#greenfold h4{font-family: 'OpenSans Bold'; color:#FFF; font-size:40px; line-height:50px; text-transform:none; text-align:center; margin-bottom:0;}
+#programsimgfoldtwo{}
+#programsimgfoldtwo:after{position: absolute; left: 50%; top:0; transform: translate(-50%,0); content: ""; width: 0; height: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-top: 75px solid #7EC242;}
+#programsimgfoldtwo .quote{text-align:center;}
+#programsimgfoldtwo .quote .content{font-family: 'OpenSans Bold'; color:#FFF; font-size:32px; line-height:42px; text-transform:none; text-align:center; margin-bottom:4rem;}
+#programsimgfoldtwo .quote .by{font-family: 'Montserrat Bold'; color:#7DC440; text-transform: uppercase; font-size: 18px; line-height: 22px; margin-bottom:1rem;}
+#learncompassion h3, #learncompassion .section-title{font-family: 'OpenSans Bold'; color:#58595b; font-size:40px; line-height:50px; text-transform:none; text-align:left; margin-bottom:1.5rem;}
+#learncompassion ul{}
+#learncompassion ul li{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 0;}
+#inspirecompassion h3, #inspirecompassion .section-title{font-family: 'OpenSans Bold'; color:#58595b; font-size:40px; line-height:50px; text-transform:none; text-align:left; margin-bottom:1.5rem;}
+#inspirecompassion p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 1rem;}
+#donatetotwh h3, #donatetotwh .section-title{font-family: 'OpenSans Bold'; color:#58595b; font-size:40px; line-height:50px; text-transform:none; text-align:left; margin-bottom:1.5rem;}
+#donatetotwh p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 1rem;}
+#jomfoldimgone{}
+#jomfoldimgone:after{position: absolute; left: 50%; top:0; transform: translate(-50%,0); content: ""; width: 0; height: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-top: 75px solid #FFF;}
+#jomfoldimgone .quote{text-align:center;}
+#jomfoldimgone .quote .content{font-family: 'OpenSans Bold'; color:#FFF; font-size:32px; line-height:42px; text-transform:none; text-align:center; margin-bottom:4rem;}
+#jomfoldimgone .quote .by{font-family: 'Montserrat Bold'; color:rgb(211,211,211); text-transform: uppercase; font-size: 18px; line-height: 22px; margin-bottom:1rem;}
+#contactusfold h3, #contactusfold .section-title{font-family: 'OpenSans Bold'; color:#58595b; font-size:40px; line-height:50px; text-transform:none; text-align:left; margin-bottom:1.5rem;}
+#contactusfold p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 1rem;}
+#contactusfold a{color:#000;}
 
 /*----------------------------------------------*/
 /* Footer */
