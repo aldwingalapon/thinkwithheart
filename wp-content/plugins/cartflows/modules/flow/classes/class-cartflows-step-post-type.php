@@ -32,7 +32,7 @@ class Cartflows_Step_Post_Type {
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}

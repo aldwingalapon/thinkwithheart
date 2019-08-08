@@ -82,7 +82,7 @@ class Cartflows_Helper {
 	 * @param bool   $network   Whether to allow the network admin setting to be overridden on subsites.
 	 * @return mixed
 	 */
-	static public function update_admin_settings_option( $key, $value, $network = false ) {
+	public static function update_admin_settings_option( $key, $value, $network = false ) {
 
 		// Update the site-wide option since we're in the network admin.
 		if ( $network && is_multisite() ) {
@@ -102,7 +102,7 @@ class Cartflows_Helper {
 	 * @param  string $default Option default value if not exist.
 	 * @return mixed
 	 */
-	static public function get_common_setting( $key = '', $default = '' ) {
+	public static function get_common_setting( $key = '', $default = '' ) {
 		$settings = self::get_common_settings();
 
 		if ( $settings && array_key_exists( $key, $settings ) ) {
@@ -121,7 +121,7 @@ class Cartflows_Helper {
 	 * @param  string $default Option default value if not exist.
 	 * @return mixed
 	 */
-	static public function get_debug_setting( $key = '', $default = '' ) {
+	public static function get_debug_setting( $key = '', $default = '' ) {
 		$debug_data = self::get_debug_settings();
 
 		if ( $debug_data && array_key_exists( $key, $debug_data ) ) {
@@ -263,7 +263,7 @@ class Cartflows_Helper {
 	 *
 	 * @return  array.
 	 */
-	static public function get_common_settings() {
+	public static function get_common_settings() {
 
 		if ( null === self::$common ) {
 
@@ -276,7 +276,7 @@ class Cartflows_Helper {
 				)
 			);
 
-			$common = Cartflows_Helper::get_admin_settings_option( '_cartflows_common', false, true );
+			$common = self::get_admin_settings_option( '_cartflows_common', false, true );
 
 			$common = wp_parse_args( $common, $common_default );
 
@@ -295,7 +295,7 @@ class Cartflows_Helper {
 	 *
 	 * @return  array.
 	 */
-	static public function get_debug_settings() {
+	public static function get_debug_settings() {
 
 		if ( null === self::$debug_data ) {
 
@@ -306,7 +306,7 @@ class Cartflows_Helper {
 				)
 			);
 
-			$debug_data = Cartflows_Helper::get_admin_settings_option( '_cartflows_debug_data', false, true );
+			$debug_data = self::get_admin_settings_option( '_cartflows_debug_data', false, true );
 
 			$debug_data = wp_parse_args( $debug_data, $debug_data_default );
 
@@ -326,7 +326,7 @@ class Cartflows_Helper {
 	 *
 	 * @return  array.
 	 */
-	static public function get_permalink_settings() {
+	public static function get_permalink_settings() {
 
 		if ( null === self::$permalink_setting ) {
 
@@ -337,7 +337,7 @@ class Cartflows_Helper {
 				)
 			);
 
-			$permalink_data = Cartflows_Helper::get_admin_settings_option( '_cartflows_permalink', false, true );
+			$permalink_data = self::get_admin_settings_option( '_cartflows_permalink', false, true );
 
 			$permalink_data = wp_parse_args( $permalink_data, $permalink_default );
 
@@ -358,7 +358,7 @@ class Cartflows_Helper {
 	 * @param int    $post_id Post id.
 	 * @return array.
 	 */
-	static public function get_checkout_fields( $key, $post_id ) {
+	public static function get_checkout_fields( $key, $post_id ) {
 
 		$saved_fields = get_post_meta( $post_id, 'wcf_fields_' . $key, true );
 
@@ -389,7 +389,7 @@ class Cartflows_Helper {
 	 * @param int    $post_id Post id.
 	 * @return  boolean.
 	 */
-	static public function add_checkout_field( $type, $field_key, $field_data = array(), $post_id ) {
+	public static function add_checkout_field( $type, $field_key, $field_data = array(), $post_id ) {
 
 		$fields = self::get_checkout_fields( $type, $post_id );
 
@@ -408,7 +408,7 @@ class Cartflows_Helper {
 	 * @param int    $post_id Post id.
 	 * @return  array.
 	 */
-	static public function delete_checkout_field( $type, $field_key, $post_id ) {
+	public static function delete_checkout_field( $type, $field_key, $post_id ) {
 
 		$fields = self::get_checkout_fields( $type, $post_id );
 
@@ -426,7 +426,7 @@ class Cartflows_Helper {
 	 *
 	 * @return  array.
 	 */
-	static public function get_checkout_fields_settings() {
+	public static function get_checkout_fields_settings() {
 
 		if ( null === self::$checkout_fields ) {
 			$checkout_fields_default = array(
@@ -444,7 +444,7 @@ class Cartflows_Helper {
 				}
 			}
 
-			$checkout_fields = Cartflows_Helper::get_admin_settings_option( '_wcf_checkout_fields', false, true );
+			$checkout_fields = self::get_admin_settings_option( '_wcf_checkout_fields', false, true );
 
 			self::$checkout_fields = wp_parse_args( $checkout_fields, $checkout_fields_default );
 		}
@@ -461,7 +461,7 @@ class Cartflows_Helper {
 	 * @param  string $default      Default value.
 	 * @return string           Meta Value.
 	 */
-	static public function get_meta_option( $post_id, $key, $default = '' ) {
+	public static function get_meta_option( $post_id, $key, $default = '' ) {
 
 		$value = get_post_meta( $post_id, $key, true );
 
@@ -479,7 +479,7 @@ class Cartflows_Helper {
 	 * @param  int   $post_id     Product ID.
 	 * @param  array $args      Arguments array.
 	 */
-	static public function save_meta_option( $post_id, $args = array() ) {
+	public static function save_meta_option( $post_id, $args = array() ) {
 
 		if ( is_array( $args ) && ! empty( $args ) ) {
 
@@ -497,7 +497,7 @@ class Cartflows_Helper {
 	 *
 	 * @access public
 	 */
-	static public function _is_elementor_installed() {
+	public static function _is_elementor_installed() {
 		$path    = 'elementor/elementor.php';
 		$plugins = get_plugins();
 
@@ -512,7 +512,7 @@ class Cartflows_Helper {
 	 *
 	 * @access public
 	 */
-	static public function has_product_assigned( $step_id ) {
+	public static function has_product_assigned( $step_id ) {
 
 		$step_type = get_post_meta( $step_id, 'wcf-step-type', true );
 
@@ -536,7 +536,7 @@ class Cartflows_Helper {
 	 *
 	 * @access public
 	 */
-	static public function get_cartflows_container_atts() {
+	public static function get_cartflows_container_atts() {
 
 		$attributes  = apply_filters( 'cartflows_container_atts', array() );
 		$atts_string = '';

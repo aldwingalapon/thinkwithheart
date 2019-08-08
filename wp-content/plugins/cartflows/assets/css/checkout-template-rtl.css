@@ -188,7 +188,8 @@
 
 .wcf-embed-checkout-form .woocommerce .woocommerce-billing-fields [type="checkbox"]:checked:before,
 .wcf-embed-checkout-form .woocommerce #payment input[type=checkbox]:checked:before,
-.wcf-embed-checkout-form .woocommerce .woocommerce-shipping-fields [type="checkbox"]:checked:before{
+.wcf-embed-checkout-form .woocommerce .woocommerce-shipping-fields [type="checkbox"]:checked:before,
+.wcf-embed-checkout-form .woocommerce .woocommerce-account-fields input[type=checkbox]:checked:before{
     content: "\e600";
     margin: 0;
     color: #F16334;
@@ -197,7 +198,8 @@
 .wcf-embed-checkout-form .woocommerce .woocommerce-billing-fields [type="checkbox"],
 .wcf-embed-checkout-form .woocommerce #payment input[type=checkbox], 
 .wcf-embed-checkout-form .woocommerce .woocommerce-shipping-fields [type="checkbox"],
-.wcf-embed-checkout-form .woocommerce #payment input[type=radio]{
+.wcf-embed-checkout-form .woocommerce #payment input[type=radio],
+.wcf-embed-checkout-form .woocommerce .woocommerce-account-fields input[type=checkbox]{
     border: 1px solid #b4b9be;
     background: #fff;
     color: #555;
@@ -223,7 +225,8 @@
 .wcf-embed-checkout-form .woocommerce .woocommerce-billing-fields [type="checkbox"]:focus,
 .wcf-embed-checkout-form .woocommerce #payment input[type=checkbox]:focus, 
 .wcf-embed-checkout-form .woocommerce .woocommerce-shipping-fields [type="checkbox"]:focus,
-.wcf-embed-checkout-form .woocommerce #payment input[type=radio]:focus{
+.wcf-embed-checkout-form .woocommerce #payment input[type=radio]:focus,
+.wcf-embed-checkout-form .woocommerce .woocommerce-account-fields input[type=checkbox]:focus{
     border-color: #F16334;
     -webkit-box-shadow: 0 0 2px rgba(241, 99, 52,.8);
     box-shadow: 0 0 2px rgba(241, 99, 52,.8);
@@ -244,7 +247,8 @@
 .wcf-embed-checkout-form .woocommerce .woocommerce-billing-fields [type="checkbox"]:checked:before,
 .wcf-embed-checkout-form .woocommerce #payment input[type=checkbox]:checked:before,
 .wcf-embed-checkout-form .woocommerce .woocommerce-shipping-fields [type="checkbox"]:checked:before, 
-.wcf-embed-checkout-form .woocommerce #payment input[type=radio]:checked:before{
+.wcf-embed-checkout-form .woocommerce #payment input[type=radio]:checked:before,
+.wcf-embed-checkout-form .woocommerce .woocommerce-account-fields input[type=checkbox]:before{
     display: inline-block;
     float: right;
     font: normal 15px/1 cartflows-icon;
@@ -289,7 +293,7 @@
     font-size: 20px;
     text-transform: capitalize;
     margin:0 0 25px 0;
-    padding: 3px;
+    padding: 0px;
     width: 100%;
 }
 
@@ -449,6 +453,7 @@
 }
 
 .wcf-embed-checkout-form .wcf-custom-coupon-field {
+    clear: right;
     -js-display: flex;
     display: -webkit-box;
     display: -webkit-flex;

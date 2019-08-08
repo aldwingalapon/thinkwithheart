@@ -130,7 +130,7 @@ if( isset($course_step_post)  && $course_step_post instanceof WP_Post ):
                 $columns = apply_filters( 'learndash-assignment-list-columns', array(
                     'ld-assignment-column-approved'     => sprintf(
                         // translators: placeholders: assignment count approved, assignment count total.
-                        esc_html_x( '%d/%d Approved', 'placeholders: assignment count approved, assignment count total','learndash' ),
+                        esc_html_x( '%1$d/%2$d Approved', 'placeholders: assignment count approved, assignment count total','learndash' ),
                         $assignment_stats['complete'], $assignment_stats['total'] )
                     ) 
                 );

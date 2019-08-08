@@ -128,6 +128,7 @@ function learndash_editor_scripts() {
 		[],
 		filemtime( plugin_dir_path( __FILE__ ) . $editorStylePath )
 	);
+	wp_style_add_data( 'ldlms-blocks-editor-css', 'rtl', 'replace' );
 
 	// Call our function to load CSS/JS used by the shortcodes.
 	learndash_load_resources();
@@ -135,6 +136,7 @@ function learndash_editor_scripts() {
 	$filepath = SFWD_LMS::get_template( 'learndash_pager.css', null, null, true );
 	if ( ! empty( $filepath ) ) {
 		wp_enqueue_style( 'learndash_pager_css', learndash_template_url_from_path( $filepath ), array(), LEARNDASH_SCRIPT_VERSION_TOKEN );
+		wp_style_add_data( 'learndash_pager_css', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['learndash_pager_css'] = __FUNCTION__;
 	} 
 
@@ -172,6 +174,7 @@ function learndash_scripts() {
 		[],
 		filemtime(plugin_dir_path(__FILE__) . $stylePath )
 	);
+	wp_style_add_data( 'learndash-blocks', 'rtl', 'replace' );
 }
 
 // Hook scripts function into block editor hook.
@@ -194,8 +197,10 @@ function learndash_enqueue_course_grid_scripts() {
 		} else {
 			// Handle older versions of Course Grid. 1.4.1 and lower.
 			wp_enqueue_style( 'learndash_course_grid_css', plugins_url( 'style.css', LEARNDASH_COURSE_GRID_FILE ) );
+			wp_style_add_data( 'learndash_course_grid_css', 'rtl', 'replace' );
 			wp_enqueue_script( 'learndash_course_grid_js', plugins_url( 'script.js', LEARNDASH_COURSE_GRID_FILE ), array( 'jquery' ) );
 			wp_enqueue_style( 'ld-cga-bootstrap', plugins_url( 'bootstrap.min.css', LEARNDASH_COURSE_GRID_FILE ) );
+			wp_style_add_data( 'ld-cga-bootstrap', 'rtl', 'replace' );
 		}
 
 		return true;

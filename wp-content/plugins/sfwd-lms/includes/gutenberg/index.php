@@ -12,6 +12,7 @@ require plugin_dir_path( __FILE__ ) . 'lib/class-ld-rest-gutenberg-posts-control
 require plugin_dir_path( __FILE__ ) . 'lib/class-learndash-gutenberg-block.php';
 
 // Dynamic Blocks.
+require plugin_dir_path( __FILE__ ) . 'blocks/ld-login/index.php';
 require plugin_dir_path( __FILE__ ) . 'blocks/ld-profile/index.php';
 require plugin_dir_path( __FILE__ ) . 'blocks/ld-course-list/index.php';
 require plugin_dir_path( __FILE__ ) . 'blocks/ld-lesson-list/index.php';

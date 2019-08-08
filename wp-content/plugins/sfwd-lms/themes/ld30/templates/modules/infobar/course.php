@@ -137,7 +137,9 @@ $course_pricing = learndash_get_course_price( $course_id );
                      endif;
 
                      if( isset($course_pricing['type']) && $course_pricing['type'] == 'subscribe' ): ?>
-                        <span class="ld-text ld-recurring-duration"><?php echo sprintf( esc_html_x( 'Every %s %s', 'Recurring duration message', 'learndash' ), $course_pricing['interval'], $course_pricing['frequency'] ); ?></span>
+                        <span class="ld-text ld-recurring-duration"><?php echo sprintf( 
+                            // translators: Recurring duration message.
+                            esc_html_x( 'Every %1$s %2$s', 'Recurring duration message', 'learndash' ), $course_pricing['interval'], $course_pricing['frequency'] ); ?></span>
                     <?php endif; ?>
                 </span>
             </div>

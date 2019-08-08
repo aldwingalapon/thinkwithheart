@@ -636,6 +636,7 @@ function learndash_course_step_edit_init() {
 		$filepath = SFWD_LMS::get_template( 'learndash_pager.css', null, null, true );
 		if ( !empty( $filepath ) ) {
 			wp_enqueue_style( 'learndash_pager_css', learndash_template_url_from_path( $filepath ), array(), LEARNDASH_SCRIPT_VERSION_TOKEN );
+			wp_style_add_data( 'learndash_pager_css', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash_pager_css'] = __FUNCTION__;
 		} 
 
@@ -867,7 +868,12 @@ function learndash_profile( $atts ) {
 	else
 		$atts['show_header'] = false;
 
-		if ( ( strtolower($atts['course_points_user'] ) == 'yes' ) || ( $atts['course_points_user'] == 'true' ) || ( $atts['course_points_user'] == '1' ))
+	if ( ( strtolower($atts['show_search'] ) == 'yes' ) || ( $atts['show_search'] == 'true' ) || ( $atts['show_search'] == '1' ))
+		$atts['show_search'] = 'yes';
+	else
+		$atts['show_search'] = false;
+
+	if ( ( strtolower($atts['course_points_user'] ) == 'yes' ) || ( $atts['course_points_user'] == 'true' ) || ( $atts['course_points_user'] == '1' ))
 		$atts['course_points_user'] = 'yes';
 	else
 		$atts['course_points_user'] = false;

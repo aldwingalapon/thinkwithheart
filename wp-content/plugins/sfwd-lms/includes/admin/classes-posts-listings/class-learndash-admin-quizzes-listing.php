@@ -214,6 +214,29 @@ if ( ( class_exists( 'Learndash_Admin_Posts_Listing' ) ) && ( ! class_exists( 'L
 							esc_html__( 'Leaderboard', 'learndash' )
 						);
 					}
+
+					if ( ( current_user_can('wpProQuiz_export') ) && ( ! isset( $row_actions['export'] ) ) || ( empty( $row_actions['export'] ) ) ) {
+						$export_link = add_query_arg(
+							array(
+								'page'       => 'ldAdvQuiz',
+								'quiz_id'    => $post->ID,
+							),
+							admin_url( 'admin.php' )
+						);
+
+						$export_label = sprintf(
+							// translators: placeholder: Quiz.
+							esc_html_x( 'Export %s', 'placeholder: Quiz', 'learndash' ),
+							LearnDash_Custom_Label::get_label( 'quiz' )
+						);
+
+						$row_actions['export'] = sprintf(
+							'<a href="%s" rel="bookmark" aria-label="%s">%s</a>',
+							$export_link,
+							esc_attr( $export_label ),
+							esc_html__( 'Export', 'learndash' )
+						);
+					}
 				}
 			}
 

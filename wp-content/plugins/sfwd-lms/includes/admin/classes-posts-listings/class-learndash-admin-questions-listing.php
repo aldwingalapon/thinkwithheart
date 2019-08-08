@@ -64,9 +64,9 @@ if ( ( class_exists( 'Learndash_Admin_Posts_Listing' ) ) && ( ! class_exists( 'L
 					'field_id'         => 'quiz_id',
 					'show_all_value'   => '',
 					'show_all_label'   => sprintf(
-						// translators: placeholder: Questions.
-						esc_html_x( 'Show All %s', 'placeholder: Questions', 'learndash' ),
-						LearnDash_Custom_Label::get_label( 'questions' )
+						// translators: placeholder: Quizzes.
+						esc_html_x( 'Show All %s', 'placeholder: Quizzes', 'learndash' ),
+						LearnDash_Custom_Label::get_label( 'quizzes' )
 					),
 					'show_empty_value' => 'empty',
 					'show_empty_label' => sprintf(

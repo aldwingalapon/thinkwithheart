@@ -7,3 +7,157 @@
  Version:      1.0.0
  Text Domain:  astra-child
 */
+
+/*----------------------------------------------*/
+/* Global Reset */
+/*----------------------------------------------*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {margin: 0; padding: 0; border: 0; font: inherit;}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block;}
+body {line-height: 1;}
+ol, ul {list-style: none;}
+blockquote, q {quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after {content: ''; content: none;}
+table {border-collapse: collapse; border-spacing: 0;}
+
+/*----------------------------------------------*/
+/* Extra fonts */
+/*----------------------------------------------*/
+@font-face {font-family: 'Montserrat Regular'; src: url('assets/fonts/montserrat-regular-webfont.woff2') format('woff2'), url('assets/fonts/montserrat-regular-webfont.woff') format('woff'), url('assets/fonts/Montserrat-Regular.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'Montserrat Bold'; src: url('assets/fonts/montserrat-bold-webfont.woff2') format('woff2'), url('assets/fonts/montserrat-bold-webfont.woff') format('woff'), url('assets/fonts/Montserrat-Bold.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'OpenSans Regular'; src: url('assets/fonts/opensans-regular-webfont.woff2') format('woff2'), url('assets/fonts/opensans-regular-webfont.woff') format('woff'), url('assets/fonts/OpenSans-Regular.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'OpenSans Light'; src: url('assets/fonts/opensans-light-webfont.woff2') format('woff2'), url('assets/fonts/opensans-light-webfont.woff') format('woff'), url('assets/fonts/OpenSans-Light.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'OpenSans Light Italic'; src: url('assets/fonts/opensans-lightitalic-webfont.woff2') format('woff2'), url('assets/fonts/opensans-lightitalic-webfont.woff') format('woff'), url('assets/fonts/OpenSans-LightItalic.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'OpenSans SemiBold'; src: url('assets/fonts/opensans-semibold-webfont.woff2') format('woff2'), url('assets/fonts/opensans-semibold-webfont.woff') format('woff'), url('assets/fonts/OpenSans-SemiBold.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'OpenSans Bold'; src: url('assets/fonts/opensans-bold-webfont.woff2') format('woff2'), url('assets/fonts/opensans-bold-webfont.woff') format('woff'), url('assets/fonts/OpenSans-Bold.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'OpenSans Bold Italic'; src: url('assets/fonts/opensans-bolditalic-webfont.woff2') format('woff2'), url('assets/fonts/opensans-bolditalic-webfont.woff') format('woff'), url('assets/fonts/OpenSans-BoldItalic.ttf') format('ttf'); font-weight: normal; font-style: normal;}
+
+/*----------------------------------------------*/
+/* Base */
+/*----------------------------------------------*/
+html{-webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;padding:0;height:100%;overflow-y: scroll;}
+body{position:relative; font-family: 'OpenSans Regular'; color:#000; background-color: #fff; padding: 0; margin: 0; font-weight:300; font-size: 14px; height:100%;overflow: visible !important;}
+img, article img, aside img, header img, section img, img[class*="align"] {max-width: 100%;}
+img, article img, aside img, header img, section img, img[class*="align"] {height: auto;}
+hr{background-color:#BFBFBF !important;height:1px; width:100%;margin-bottom:3rem;}
+a, a:hover, a:active, a:focus {color:#F47C20; text-decoration:underline;}
+.alt-text{color:#F47C20;}
+.alt-text2{color:#00ADEE;}
+.text-center{text-align:center;}
+.btn{display: inline-block; border-radius: 30px;}
+.btn-primary, .btn-primary:hover{color:#F47C20; background-color:#FFF;}
+.btn-secondary, .btn-secondary:hover{color:#FFF; background-color:#F47C20;}
+p {font-family: 'OpenSans Light'; text-transform:none; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+em{font-family: 'OpenSans Light Italic';}
+.strong, strong, b{font-family: 'OpenSans Bold';}
+.emphasis{color:#00ADEE !important; margin-top: 3rem;}
+
+/*----------------------------------------------*/
+/* Header */
+/*----------------------------------------------*/
+.main-header-menu a, .ast-header-custom-item a{color:#000;}
+.main-header-menu a{font-family: 'Montserrat Regular'; font-size:15px; text-transform: uppercase; text-decoration:none; padding: 0 1.35rem;}
+.main-header-menu li:hover > a, .main-header-menu li:hover > .ast-menu-toggle, .main-header-menu .ast-masthead-custom-menu-items a:hover, .main-header-menu li.focus > a, .main-header-menu li.focus > .ast-menu-toggle, .main-header-menu .current-menu-item > a, .main-header-menu .current-menu-ancestor > a, .main-header-menu .current_page_item > a, .main-header-menu .current-menu-item > .ast-menu-toggle, .main-header-menu .current-menu-ancestor > .ast-menu-toggle, .main-header-menu .current_page_item > .ast-menu-toggle {color: #F47C20;}
+.main-header-menu li.alt-text a{color: #F47C20; padding-right:2.5rem;}
+.main-header-menu li.btn-secondary a{font-family: 'Montserrat Bold'; color:#FFF !important; font-size:16px; line-height:56px; padding:0 1.75rem;}
+
+/*----------------------------------------------*/
+/* Content */
+/*----------------------------------------------*/
+.elementor-text-editor{}
+/*h2, .elementor-text-editor .quotation{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 27px; line-height: 37px;margin-bottom: 2rem;}
+h2 span, .elementor-text-editor .quotation .quotedby{display:block; font-family: 'OpenSans Light Italic'; text-transform:none; font-size:20px;}*/
+h3{font-family: 'Montserrat Regular'; font-size:18px; line-height:1; text-transform: uppercase; color:#58595b; overflow:hidden;}
+.line {text-align: center;}
+.line span {display: inline-block; position: relative;}
+.line span:before, .line span:after {content: ""; position: absolute; height: 1px; border-top: 1px solid #58595b; top: 8px; width: 600px;}
+.line span:before {right: 100%; margin-right: 15px;}
+.line span:after {left: 100%; margin-left: 15px;}
+#bannerimage .wp-caption .wp-caption-text{position: absolute; z-index: 100; width: 100%; text-align: center; font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 80px; line-height: 96px; color: #FFF; top: 35%;}
+#mission{text-align:center;}
+#mission h2, #mission .section-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 40px; line-height: 48px;margin-bottom: 2rem;}
+#mission p{font-family: 'OpenSans Light'; text-transform:none; font-size:26px; line-height:43px;margin-bottom: 2rem;}
+#culturecorevalues{position:relative;}
+#culturecorevalues:after{position: absolute; left: 50%; bottom: -75px; transform: translate(-50%,0); content: ""; width: 0; height: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-top: 75px solid #AE4A9C;}
+#culturecorevalues h3, #culturecorevalues .section-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 18px; line-height: 22px; color:#FFF; margin-bottom: 2rem;}
+#culturecorevalues p{font-family: 'OpenSans Bold'; color:#FFF; font-size:40px; line-height:50px; margin-bottom:0;}
+.corevaluestitle h3, .corevaluestitle .section-title{font-family: 'Montserrat Regular'; font-size:26px; line-height:32px; text-transform: uppercase; text-align:center; color:#58595b;}
+.corevaluesitem .value-title{font-family: 'Montserrat Bold'; text-transform: uppercase; color:#D3D3D3; font-size: 73px; line-height: 120px;}
+.corevaluesitem .value-title .value-name{display:block;font-family: 'Montserrat Bold'; text-transform: lowercase; color:#AE4A9C; font-size: 33px; line-height: 37px;}
+.corevaluesitem .value-desc{font-family: 'OpenSans Light'; text-transform:none; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+#ourteam{text-align:center;}
+#ourteam h2, #ourteam .section-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 40px; line-height: 48px;margin-bottom: 2rem;}
+.team-desc{}
+.team-desc .team-name{font-family: 'Montserrat Bold'; color:#000; text-transform: none; font-size: 29px; line-height: 37px;margin-bottom: 1rem;}
+.team-desc .team-position{display:block; font-family: 'Montserrat Regular'; color:#58595b; font-size:16px; line-height:24px; text-transform: uppercase;}
+.team-desc p{font-family: 'OpenSans Light'; color:#58595b; font-size:18px; line-height:36px; margin-bottom:1rem;}
+.team-desc p:last-child{margin-bottom:90px;}
+.whyweexist h2, .whyweexist .section-title{font-family: 'OpenSans Bold'; color:#28ABE2; font-size:40px; line-height:50px; margin-bottom:1.5rem;}
+.whyweexist span, .whyweexist .pre-title, .whyweexist .block{display:block;}
+.whyweexist .pre-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 18px; line-height: 22px; color:#58595b; margin-bottom:1.5rem;}
+.whyweexist .block{}
+.whyweexist p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+#ourapproach{position:relative;}
+#ourapproach:after{position: absolute; left: 50%; top:0; transform: translate(-50%,0); content: ""; width: 0; height: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-top: 75px solid #FFF;}
+#ourapproach .quote, #ourapproach h3{font-family: 'OpenSans Bold'; color:#28ABE2; text-transform:none; font-size:50px; line-height:60px;margin-bottom: 0.5rem;}
+#ourapproach .block{display:block;}
+#ourapproach .ourapproach-content{padding-right: 4rem;}
+#ourapproach h4, #ourapproach .section-title{font-family: 'OpenSans Bold'; color:#28ABE2; text-transform:uppercase; font-size:18px; line-height:22px; margin-bottom:1.5rem;}
+#ourapproach p{font-family: 'OpenSans Bold'; color:#FFF; font-size:22px; line-height:33px; margin-bottom:1.5rem;}
+#ourapproach p.smaller{font-family: 'OpenSans Light'; text-transform:none; color:rgb(211,211,211); font-size:16px; line-height:26px;margin-bottom: 1.5rem;}
+#ourapproach ul, #ourapproach ul.thinkwithheartwork{}
+#ourapproach ul.thinkwithheartwork li{margin:0; padding:1.5rem 0; border-top:1px solid #D2D3D3;}
+#ourapproach ul.thinkwithheartwork span{display:block;}
+#ourapproach ul.thinkwithheartwork .title{font-family: 'OpenSans Bold'; color:#FFF; text-transform:uppercase; font-size:18px; line-height:28px; margin-bottom: 0.75rem;}
+#ourapproach ul.thinkwithheartwork .desc{font-family: 'OpenSans SemiBold'; color:#FFF; text-transform:none; font-size:18px; line-height:28px; margin-bottom: 0.75rem;}
+.default{}
+.default p{}
+.core-listeningproject{}
+.core-listeningproject .the-core{}
+.core-listeningproject .the-listening-project{}
+.core-listeningproject .the-core, .core-listeningproject .the-listening-project{text-align:center;}
+.core-listeningproject .icon-title{font-family: 'OpenSans Bold'; color:#000; text-transform:uppercase; font-size:18px; line-height:26px; margin-bottom:1.25rem;}
+.core-listeningproject p{font-family: 'OpenSans Light'; color:#000; text-transform:none; font-size:16px; line-height:26px; margin-bottom:2rem;}
+.core-listeningproject .btn{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 12px; line-height: 14px; margin:0 0 1rem; padding:1rem 2rem;}
+#bluefold{}
+#bluefold h4{font-family: 'OpenSans Bold'; color:#FFF; font-size:40px; line-height:50px; text-transform:none; text-align:center; margin-bottom:0;}
+#secondfoldimage.whatwedo{position:relative;}
+#secondfoldimage.whatwedo:after{position: absolute; left: 50%; top:0; transform: translate(-50%,0); content: ""; width: 0; height: 0; border-left: 75px solid transparent; border-right: 75px solid transparent; border-top: 75px solid #28ABE2;}
+#secondfoldimage.whatwedo .elementor-text-editor{}
+#secondfoldimage.whatwedo p{font-family: 'OpenSans SemiBold'; color:#FFF; text-transform:none; font-size:20px; line-height:37px; margin-bottom:2rem;}
+#whycompassion{}
+#whycompassion h2, #whycompassion .section-title{font-family: 'OpenSans Bold'; color:#28ABE2; font-size:40px; line-height:50px; margin-bottom:1.5rem;}
+#whycompassion span, #whycompassion .pre-title, .whyweexist .block{display:block;}
+#whycompassion .pre-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 18px; line-height: 22px; color:#58595b; margin-bottom:1.5rem;}
+#whycompassion .block{}
+#whycompassion p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+#whycompassion .emphasis{font-family: 'OpenSans Regular'; text-transform:none; font-size:26px; line-height:43px;margin-bottom: 1rem;}
+#componentscompassion{text-align:center;}
+#componentscompassion h4, #componentscompassion .section-title{font-family: 'Montserrat Regular'; color:#58595b; font-size:18px; line-height:22px; text-transform: uppercase; margin-bottom: 2rem;}
+#componentscompassion ul{}
+#componentscompassion ul li{font-family: 'OpenSans Bold'; color:#28ABE2; font-size:40px; line-height:60px; }
+#thirdcomponentcompassion{}
+#thirdcomponentcompassion p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+#programintro{}
+#programintro h3{font-family: 'OpenSans Bold'; color:#7DC440; font-size:40px; line-height:50px; text-transform:none; text-align:center; margin-bottom:1.5rem;}
+#whyonline{}
+#whyonline h3, #whyonline .section-title{font-family: 'Montserrat Bold'; text-transform: uppercase; font-size: 18px; line-height: 22px; color:#58595b; margin-bottom:1.5rem;}
+#whyonline p{font-family: 'OpenSans Light'; text-transform:none; color:#000; font-size:20px; line-height:37px;margin-bottom: 2rem;}
+#whyonline a{color:#000;}
+
+/*----------------------------------------------*/
+/* Footer */
+/*----------------------------------------------*/
+footer ul, footer ul.footer-widget{display: inline-block; list-style: none; line-height: 61px;}
+.footer-widget-right{float:right;}
+footer ul.footer-widget li{display: inline-block; vertical-align: middle; font-family: 'OpenSans Regular'; color:#FFF; font-size: 17px;}
+footer ul.footer-widget .logo{}
+footer ul.footer-widget .logo a{}
+footer ul.footer-widget .logo img{margin-right:1.5rem;}
+footer ul.footer-widget .tagline{font-family: 'Montserrat Bold'; text-transform:uppercase; font-size:16px;}
+footer ul.footer-widget .address, footer ul.footer-widget .email, footer ul.footer-widget .telno{}
+footer ul.footer-widget .address{}
+footer ul.footer-widget .address:before{content:"|"; margin: 0 1rem;}
+footer ul.footer-widget .email{}
+footer ul.footer-widget .email:before{content:"|"; margin: 0 1rem;}
+footer ul.footer-widget .telno{}
+footer ul.footer-widget .telno:before{content:"|"; margin: 0 1rem;}

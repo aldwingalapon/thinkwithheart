@@ -29,7 +29,7 @@ $sections        = ( isset($sections) ? $sections : array() );
 // $course_progress = learndash_get_course_progress( $user_id, $lesson['post']->ID, $course_id );
 // $lesson_class    = ( isset($course_progress['next']->ID) && $course_progress['next']->ID == $lesson['post']->ID ? 'ld-is-next' : '' );
 
-$atts = apply_filters( 'learndash_lesson_row_atts', (  isset($has_access) && !$has_access && $lesson['sample'] === 'is_not_sample' ? 'data-ld-tooltip="' . __( "You don't currently have access to this content", "learndash" ) . '"'  : '' ) );
+$atts = apply_filters( 'learndash_lesson_row_atts', (  isset($has_access) && !$has_access && $lesson['sample'] === 'is_not_sample' ? 'data-ld-tooltip="' . __( "You don't currently have access to this content", 'learndash' ) . '"'  : '' ) );
 
 
 /**
@@ -95,8 +95,17 @@ endif; ?>
 
                         if( $content_count['topics'] > 0 ): ?>
 
-                            <span class="ld-item-component"><?php echo esc_html( $content_count['topics'] . ' ' . _n( LearnDash_Custom_Label::get_label('topic'), LearnDash_Custom_Label::get_label('topics'), $content_count['topics'], 'learndash' ) ); ?> </span>
-
+                            <span class="ld-item-component"><?php echo sprintf(
+                                // translators: placeholders: Topic Count, Topic/Topics Label.
+                                esc_html_x( '%1$d %2$s', 'placeholders: Topic Count, Topic/Topics Label', 'learndash' ),
+                                $content_count['topics'],
+                                _n( 
+                                    LearnDash_Custom_Label::get_label('topic'), 
+                                    LearnDash_Custom_Label::get_label('topics'), 
+                                    $content_count['topics'], 
+                                    'learndash'
+                                )
+                            ); ?> </span>
                         <?php
                         endif;
 
@@ -105,7 +114,17 @@ endif; ?>
                         }
 
                         if( $content_count['quizzes'] > 0 ): ?>
-                            <span class="ld-item-component"><?php echo esc_html( $content_count['quizzes'] . ' ' . _n( LearnDash_Custom_Label::get_label('quiz'), LearnDash_Custom_Label::get_label('quizzes'), $content_count['quizzes'], 'learndash' ) ); ?></span>
+                            <span class="ld-item-component"><?php echo sprintf(
+                                // translators: placeholders: Quiz Count, Quiz/Quizzes Label.
+                                esc_html_x( '%1$d %2$s', 'placeholders: Quiz Count, Quiz/Quizzes Label', 'learndash' ),
+                                $content_count['quizzes'],
+                                _n( 
+                                    LearnDash_Custom_Label::get_label('quiz'),
+                                    LearnDash_Custom_Label::get_label('quizzes'),
+                                    $content_count['quizzes'],
+                                    'learndash'
+                                )
+                            ); ?></span>
                         <?php endif;
 
                         if( !empty($attributes) ): foreach( $attributes as $attribute ): ?>

@@ -25,6 +25,21 @@ function _is_cartflows_pro() {
 }
 
 /**
+ * Returns pro version number.
+ *
+ * @param int $version version number.
+ * @since 1.0.0
+ */
+function _is_cartflows_pro_ver_less_than( $version ) {
+
+	if ( defined( 'CARTFLOWS_PRO_VER' ) && version_compare( CARTFLOWS_PRO_VER, $version, '<' ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Returns step id.
  *
  * @since 1.0.0

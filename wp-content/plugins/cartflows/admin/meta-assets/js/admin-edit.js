@@ -762,45 +762,6 @@
 		});
 	}
 
-	var wcf_offer_fields_events = function() {
-		
-		/* Ready */
-		wcf_offer_fields();
-
-		/* Change Discount Type*/
-		$('.wcf-offer-table .field-wcf-offer-discount select').on('change', function(e) {
-			wcf_offer_fields();
-		});
-	}
-
-	var wcf_offer_fields = function() {
-
-		var wrap 	= $('.wcf-offer-table');
-
-		if ( wrap.length < 1 ) {
-			return;
-		}
-
-		var field_names = [
-			'.field-wcf-offer-discount-value',
-		];
-
-		$.each( field_names, function(i, val) {
-
-			if ( '.field-wcf-offer-discount-value' === val ) {
-				
-				var discount_type = wrap.find('.field-wcf-offer-discount select').val();
-				
-				if ( 'discount_percent' === discount_type || 'discount_price' === discount_type ) {
-					wrap.find( val ).show();
-				}else{
-					wrap.find( val ).hide();
-				}
-			}
-		});
-		
-	}
-
 	var wcf_input_file_init = function() {
 
 		var file_frame;
@@ -892,9 +853,6 @@
 		
 		/* Advance Style Fields Show Hide */
 		wcf_advance_style_fields_events();
-
-		/* Upsell/Downsell Show Hide Fields */
-		wcf_offer_fields_events();
 
 		/* Quantity Data */
 		wcf_add_quantity_data();

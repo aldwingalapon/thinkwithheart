@@ -34,7 +34,10 @@ class WpProQuiz_View_QuizOverall extends WpProQuiz_View_View {
 }
 </style>
 <div class="wrap wpProQuiz_quizOverall" style="position: relative;">
-	<h1><?php esc_html_e( 'Import/Export Associated Settings', 'learndash' ); ?></h1>
+	<h1><?php echo sprintf(
+		// translators: placeholder: Quiz.
+		esc_html_x( '%s Import/Export', 'placeholder: Quiz', 'learndash' ), learndash_get_custom_label( 'quiz' )
+	); ?></h1>
 	<?php
 		$quiz_page = 1;
 		if ( ( isset( $_GET['paged'] ) ) && ( ! empty( $_GET['paged'] ) ) ) {
@@ -47,6 +50,10 @@ class WpProQuiz_View_QuizOverall extends WpProQuiz_View_View {
 
 		$quiz_per_page = LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Section_General_Per_Page', 'quiz_num' );
 
+		$search_value = '';
+		if ( ( isset( $_GET['s'] ) ) && ( ! empty( $_GET['s'] ) ) ) {
+			$search_value = esc_attr( $_GET['s'] );
+		}
 		$quiz_query_args = array(
 			'post_type'      => learndash_get_post_type_slug( 'quiz' ),
 			'post_status'    => 'any',
@@ -55,9 +62,26 @@ class WpProQuiz_View_QuizOverall extends WpProQuiz_View_View {
 			'orderby'        => 'title',
 			'order'          => 'ASC',
 			'fields'         => 'ID',
+			's'              => $search_value
 		);
+		
+		if ( ( empty( $search_value ) ) && ( isset( $_GET['quiz_id'] ) ) && ( ! empty( $_GET['quiz_id'] ) ) ) {
+			$quiz_query_args['post__in'] = array( absint( $_GET['quiz_id'] ) );
+		}
+
 		$quiz_query_results = new WP_Query( $quiz_query_args );
 	?>
+	<form id="posts-filter" method="get">
+		<p class="search-box">
+			<label class="screen-reader-text" for="post-search-input">Search Courses:</label>
+			<input type="hidden" name="page" value="ldAdvQuiz">
+			<input type="search" id="quiz-search-input" name="s" value="<?php echo $search_value ?>">
+			<input type="submit" id="search-submit" class="button" value="<?php echo sprintf( 
+				// translators: placeholder: Quiz.
+				esc_html( 'Search %s', 'placeholder: Quiz', 'learndash' ), learndash_get_custom_label( 'quiz' )
+			); ?>">
+		</p>
+	</form>
 	<table class="wp-list-table widefat">
 		<thead>
 			<tr>

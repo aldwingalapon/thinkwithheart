@@ -1,3 +1,7 @@
+Version 1.2.4 - Wednesday, 31st July 2019
+- Improvement: Added compatibility for a future release of CartFlows Pro's Pre-Checkout Upsell.
+- Fix: Account field CSS updated.
+
 Version 1.2.3 - Thursday, 11th July 2019
 - New: Permalink option added in settings to change the "cartflows_step" post-type slug.
 - New: LearnDash Compatibility added for custom templates.

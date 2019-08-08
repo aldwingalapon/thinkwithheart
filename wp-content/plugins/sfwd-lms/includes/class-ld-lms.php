@@ -714,7 +714,7 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 						/**
 						 * include PayPal IPN
 						 */
-						require_once( 'vendor/paypal/ipn.php' );
+						require_once( __DIR__ . '/vendor/paypal/ipn.php' );
 				}
 			}
 		}
@@ -3047,7 +3047,7 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 				/**
 				 * include parseCSV to write csv file
 				 */
-				require_once( 'vendor/parsecsv.lib.php' );
+				require_once( __DIR__ . '/vendor/parsecsv.lib.php' );
 
 				$content = array();
 				set_time_limit( 0 );
@@ -3340,7 +3340,7 @@ if ( ! class_exists( 'SFWD_LMS' ) ) {
 				/**
 				 * Include parseCSV to write csv file
 				 */
-				require_once( 'vendor/parsecsv.lib.php' );
+				require_once( __DIR__ . '/vendor/parsecsv.lib.php' );
 
 				$content = array();
 				set_time_limit( 0 );

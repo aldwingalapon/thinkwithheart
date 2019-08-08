@@ -10,6 +10,7 @@
  */
 class Cartflows_Checkout_Meta extends Cartflows_Meta {
 
+
 	/**
 	 * Instance
 	 *
@@ -29,7 +30,7 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -102,7 +103,6 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 		$checkout_data = array();
 
 		foreach ( $meta as $key => $value ) {
-
 			$checkout_data[ $key ] = $meta[ $key ]['default'];
 		}
 
@@ -168,6 +168,12 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 				'icon'  => 'dashicons-cart',
 			),
 			array(
+				'title' => __( 'Pre-Checkout Upsell', 'cartflows' ),
+				'id'    => 'wcf-pre-checkout-offer',
+				'class' => 'wcf-pre-checkout-offer' === $active_tab ? 'wcf-tab wp-ui-text-highlight active' : 'wcf-tab',
+				'icon'  => 'dashicons-arrow-up-alt',
+			),
+			array(
 				'title' => __( 'Checkout Design', 'cartflows' ),
 				'id'    => 'wcf-checkout-style',
 				'class' => 'wcf-checkout-style' === $active_tab ? 'wcf-tab wp-ui-text-highlight active' : 'wcf-tab',
@@ -221,6 +227,7 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 					<?php $this->tab_shortcodes( $options, $post_id ); ?>
 					<?php $this->tab_general( $options, $post_id ); ?>
 					<?php $this->tab_style( $options, $post_id ); ?>
+					<?php $this->tab_pre_checkout_offer( $options, $post_id ); ?>
 					<?php $this->tab_product_bump( $options, $post_id ); ?>
 					<?php $this->tab_custom_fields( $options, $post_id ); ?>
 					<?php $this->tab_header_content( $options, $post_id ); ?>
@@ -283,7 +290,7 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 			if ( ! _is_cartflows_pro() ) {
 
 				echo wcf()->meta->get_hr_line_field( array() );
-				echo     wcf()->meta->get_description_field(
+				echo wcf()->meta->get_description_field(
 					array(
 						'name'    => 'wcf-upgrade-to-pro',
 						/* translators: %s: link */
@@ -300,6 +307,44 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 	}
 
 	/**
+	 * Pre Checkout tab
+	 *
+	 * @param array $options options.
+	 * @param int   $post_id post ID.
+	 */
+	function tab_pre_checkout_offer( $options, $post_id ) {
+		?>
+		<div class="wcf-pre-checkout-offer wcf-tab-content widefat">
+			<?php
+			if ( ! _is_cartflows_pro() ) {
+				echo wcf()->meta->get_description_field(
+					array(
+						'name'    => 'wcf-upgrade-to-pro',
+						/* translators: %s: link */
+						'content' => '<i>' . sprintf( __( 'Upgrade to %1$sCartFlows Pro%2$s for Pre-Checkout Upsell feature', 'cartflows' ), '<a href="https://cartflows.com/" target="_blank">', '</a>' ) . '</i>',
+					)
+				);
+			} elseif ( _is_cartflows_pro_ver_less_than( '1.2.0' ) ) {
+
+				$version = '1.2.0';
+				echo wcf()->meta->get_description_field(
+					array(
+						'name'    => 'wcf-upgrade-to-pro',
+						/* translators: %s: link */
+						'content' => '<i>' . sprintf( __( 'Update to %1$sCartFlows Pro%2$s to %3$s or above for Pre-Checkout Upsell feature', 'cartflows' ), '<a href="https://cartflows.com/" target="_blank">', '</a>', $version ) . '</i>',
+					)
+				);
+			}
+			?>
+
+			<?php do_action( 'cartflows_pre_checkout_offer_tab_content', $options, $post_id ); ?> 
+		</div>
+		<?php
+	}
+
+
+
+	/**
 	 * Product bump tab
 	 *
 	 * @param array $options options.
@@ -310,7 +355,6 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 		<div class="wcf-product-order-bump wcf-tab-content widefat">
 			<?php
 			if ( ! _is_cartflows_pro() ) {
-
 				echo wcf()->meta->get_description_field(
 					array(
 						'name'    => 'wcf-upgrade-to-pro',
@@ -338,7 +382,6 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 				/* Custom Checkout Fields Section */
 
 			if ( ! _is_cartflows_pro() ) {
-
 				echo wcf()->meta->get_description_field(
 					array(
 						'name'    => 'wcf-upgrade-to-pro',
@@ -417,7 +460,7 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 							)
 						);
 					?>
-				</div>					
+				</div>                  
 				<div class="wcf-cs-fields-options">
 					<?php
 						echo wcf()->meta->get_section(
@@ -779,7 +822,6 @@ class Cartflows_Checkout_Meta extends Cartflows_Meta {
 
 		wcf()->options->save_checkout_fields( $post_id );
 	}
-
 }
 
 /**

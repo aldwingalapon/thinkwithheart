@@ -896,6 +896,18 @@ function learndash_get_user_course_points( $user_id = 0 ) {
 function learndash_get_quiz_statistics_ref_for_quiz_attempt( $user_id = 0, $quiz_attempt = array() ) {
 	global $wpdb;
 
+	if ( empty( $user_id ) ) {
+		return 0;
+	}
+	
+	if ( ( ! isset( $quiz_attempt['pro_quizid'] ) ) || ( empty( $quiz_attempt['pro_quizid'] ) ) ) {
+		return 0;
+	} 
+
+	if ( ( ! isset( $quiz_attempt['time'] ) ) || ( empty( $quiz_attempt['time'] ) ) ) {
+		return 0;
+	} 
+
 	$sql_str = $wpdb->prepare(
 		'SELECT statistic_ref_id FROM ' . $wpdb->prefix . 'wp_pro_quiz_statistic_ref as stat
 		INNER JOIN ' . $wpdb->prefix . 'wp_pro_quiz_master as master ON stat.quiz_id=master.id

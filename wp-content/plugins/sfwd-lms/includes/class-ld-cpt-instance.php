@@ -404,7 +404,7 @@ if ( ! class_exists( 'SFWD_CPT_Instance' ) ) {
 							}
 						}
 
-						include_once 'vendor/paypal/enhanced-paypal-shortcodes.php';
+						include_once __DIR__ . '/vendor/paypal/enhanced-paypal-shortcodes.php';
 						$level = ob_get_level();
 						ob_start();
 						$template_file = SFWD_LMS::get_template( 'course', null, null, true );
@@ -801,7 +801,7 @@ if ( ! class_exists( 'SFWD_CPT_Instance' ) ) {
 									/**
 									 * Include library to generate PDF
 									 */
-									require_once 'ld-convert-post-pdf.php';
+									require_once __DIR__ . '/ld-convert-post-pdf.php';
 									post2pdf_conv_post_to_pdf();
 									die();
 								}
@@ -886,7 +886,7 @@ if ( ! class_exists( 'SFWD_CPT_Instance' ) ) {
 						/**
 						 * Include library to generate PDF
 						 */
-						require_once 'ld-convert-post-pdf.php';
+						require_once __DIR__ . '/ld-convert-post-pdf.php';
 						post2pdf_conv_post_to_pdf();
 						die();
 					} else {

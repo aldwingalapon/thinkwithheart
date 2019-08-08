@@ -16,7 +16,7 @@ class Cartflows_Admin_Fields {
 	 * @param  array $args Args.
 	 * @return string
 	 */
-	static public function text_field( $args ) {
+	public static function text_field( $args ) {
 
 		$id          = $args['id'];
 		$name        = $args['name'];
@@ -47,7 +47,7 @@ class Cartflows_Admin_Fields {
 	 * @param  array $args Args.
 	 * @return string
 	 */
-	static public function url_field( $args ) {
+	public static function url_field( $args ) {
 
 		$id    = $args['id'];
 		$name  = $args['name'];
@@ -68,7 +68,7 @@ class Cartflows_Admin_Fields {
 	 * @param  array $args Args.
 	 * @return string
 	 */
-	static public function checkobox_field( $args ) {
+	public static function checkobox_field( $args ) {
 
 		$id    = $args['id'];
 		$name  = $args['name'];
@@ -94,7 +94,7 @@ class Cartflows_Admin_Fields {
 	 * @param  array $args Args.
 	 * @return string
 	 */
-	static public function select_field( $args ) {
+	public static function select_field( $args ) {
 
 		$id          = $args['id'];
 		$name        = $args['name'];
@@ -133,7 +133,7 @@ class Cartflows_Admin_Fields {
 	 * @param  array $args Args.
 	 * @return string
 	 */
-	static public function flow_checkout_selection_field( $args ) {
+	public static function flow_checkout_selection_field( $args ) {
 
 		$id    = $args['id'];
 		$name  = $args['name'];

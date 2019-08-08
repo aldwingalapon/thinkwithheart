@@ -1,4 +1,13 @@
 <?php
+/**
+ * Added logic to only load the modal template once.
+ */
+global $login_model_load_once;
+if ( true === $login_model_load_once ) {
+	return false;
+}
+$login_model_load_once = true;
+
 $can_register = get_option( 'users_can_register' );  ?>
 
 <div class="ld-modal ld-login-modal <?php if( $can_register) echo 'ld-can-register'; ?>">
@@ -23,11 +32,20 @@ $can_register = get_option( 'users_can_register' );  ?>
 			 *
 			 * @since 3.0
 			 */
-			do_action( 'learndash-login-modal-heading-after' ); ?>
-			<div class="ld-modal-text">
-				<?php esc_html_e( 'Accessing this course requires a login, please enter your credentials below!', 'learndash' ); ?>
-			</div>
-			<?php
+			do_action( 'learndash-login-modal-heading-after' ); 
+			
+			if ( in_array( get_post_type(), learndash_get_post_types( 'course' ), true ) ) {
+				?>
+				<div class="ld-modal-text">
+					<?php echo sprintf( 
+						// translators: placeholder: course.
+						esc_html_x( 'Accessing this %s requires a login, please enter your credentials below!', 'placeholder: course', 'learndash' ),
+						learndash_get_custom_label_lower( 'course' )
+				); ?>
+				</div>
+				<?php
+			}
+
             /**
              * Action to add custom content after the modal text
              *

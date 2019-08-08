@@ -36,7 +36,7 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 			);
 
 			add_filter( 'learndash_metabox_save_fields_' . $this->settings_metabox_key, array( $this, 'filter_saved_fields' ), 30, 3 );
-			add_Filter( 'learndash_admin_settings_data', array( $this, 'learndash_admin_settings_data' ), 30, 1 );
+			add_filter( 'learndash_admin_settings_data', array( $this, 'learndash_admin_settings_data' ), 30, 1 );
 
 			// Map internal settings field ID to legacy field ID.
 			$this->settings_fields_map = array(
@@ -415,13 +415,19 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					'name'           => 'course_points_access',
 					'label'          => esc_html__( 'Required for Access', 'learndash' ),
 					'type'           => 'number',
-					'step'           => '1',
-					'min'            => '0',
 					'value'          => $this->setting_option_values['course_points_access'],
 					'default'        => 0,
 					'class'          => 'small-text',
 					'input_label'    => esc_html__( 'point(s)', 'learndash' ),
+					'input_error'    => esc_html__( 'Value should be zero or greater with up to 2 decimal places.', 'learndash' ),
 					'parent_setting' => 'course_points_enabled',
+					'attrs'          => array(
+						'step'        => '1.00',
+						'min'         => '0.00',
+						//'max'         => '10.00',
+						'can_decimal' => 2,
+						'can_empty'   => true,
+					),
 					'help_text'      => sprintf(
 						// translators: placeholder: course.
 						esc_html_x( 'Number of points required in order to gain access to this %s.', 'placeholder: course.', 'learndash' ),
@@ -443,6 +449,14 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 						// translators: placeholder: course.
 						esc_html_x( 'Number of points awarded for completing this %s.', 'placeholder: course.', 'learndash' ),
 						learndash_get_custom_label_lower( 'course' )
+					),
+					'input_error'    => esc_html__( 'Value should be zero or greater with up to 2 decimal places.', 'learndash' ),
+					'attrs'          => array(
+						'step'        => '1.00',
+						'min'         => '0.00',
+						//'max'         => '10.00',
+						'can_decimal' => 2,
+						'can_empty'   => true,
 					),
 				),
 

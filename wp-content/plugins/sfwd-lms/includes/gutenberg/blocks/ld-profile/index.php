@@ -32,6 +32,9 @@ if ( ( class_exists( 'LearnDash_Gutenberg_Block' ) ) && ( ! class_exists( 'Learn
 				'orderby' => array(
 					'type' => 'string',
 				),
+				'show_search' => array(
+					'type' => 'boolean',
+				),
 				'show_header' => array(
 					'type' => 'boolean',
 				),
@@ -150,6 +153,14 @@ if ( ( class_exists( 'LearnDash_Gutenberg_Block' ) ) && ( ! class_exists( 'Learn
 				if ( isset( $attributes['show_quizzes'] ) ) {
 					if ( false == $attributes['show_quizzes'] ) {
 						$attributes['show_quizzes'] = 'no';
+					}
+				}
+				
+				if ( isset( $attributes['show_search'] ) ) {
+					if ( false == $attributes['show_search'] ) {
+						$attributes['show_search'] = 'no';
+					} else if ( true == $attributes['show_search'] ) {
+						$attributes['show_quizzes'] = 'yes';
 					}
 				}
 			}

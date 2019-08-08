@@ -622,6 +622,16 @@ if ( ! class_exists( 'LearnDash_Settings_Fields' ) ) {
 			return $field_attribute;
 		}
 
+		public function get_field_error_message( $field_args = array() ) {
+			$field_attribute = '';
+
+			if ( ( isset( $field_args['input_error'] ) ) && ( ! empty( $field_args['input_error'] ) ) ) {
+				$field_attribute .= '<div class="learndash-section-field-error" style="display:none;">' . $field_args['input_error'] . '</div>';
+			}
+
+			return $field_attribute;
+		}
+
 		public function get_field_attribute_input_description( $field_args = array() ) {
 			$field_attribute = '';
 

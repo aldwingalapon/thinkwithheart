@@ -74,7 +74,7 @@ if( $logged_in ):
      if( file_exists('infobar-'.get_post_type().'.php') ) {
          incldue( 'infobar-' . get_post_type() . '.php' );
      } else {
-         include( 'infobar-generic.php' );
+         include( __DIR__ . '/infobar-generic.php' );
      }
 
 

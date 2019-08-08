@@ -52,6 +52,7 @@ if ( ( class_exists( 'LearnDash_Settings_Fields' ) ) && ( ! class_exists( 'Learn
 			$html .= ' />';
 
 			$html .= $this->get_field_attribute_input_label( $field_args );
+			$html .= $this->get_field_error_message( $field_args );
 
 			$html = apply_filters( 'learndash_settings_field_html_after', $html, $field_args );
 
@@ -71,13 +72,29 @@ if ( ( class_exists( 'LearnDash_Settings_Fields' ) ) && ( ! class_exists( 'Learn
 		 */
 		public function validate_section_field( $val, $key = '', $args = array() ) {
 			if ( ( isset( $args['field']['type'] ) ) && ( $args['field']['type'] === $this->field_type ) ) {
-				if ( ( '' === $val ) && ( isset( $args['field']['value_allow_blank'] ) ) && ( true === $args['field']['value_allow_blank'] ) ) {
+				// If empty check our settings.
+				if ( ( '' === $val ) && ( isset( $args['field']['attrs']['can_empty'] ) ) && ( true === $args['field']['attrs']['can_empty'] ) ) {
 					return $val;
-				} elseif ( ( isset( $args['field']['value_abs'] ) ) && ( true === $args['field']['value_abs'] ) ) {
-					return absint( $val );
-				} else {
-					return intval( $val );
 				}
+
+				if ( ! isset( $args['field']['attrs']['can_decimal'] ) ) {
+					$args['field']['attrs']['can_decimal'] = 0;
+				}
+
+				if ( $args['field']['attrs']['can_decimal'] > 0 ) {
+					$val = floatval( $val );
+					//$val = number_format ( $val, absint( $args['field']['attrs']['can_decimal'] ) );
+				} else {
+					$val = intval( $val );
+				}
+
+				if ( ( isset( $args['field']['attrs']['min'] ) ) && ( ! empty( $args['field']['attrs']['min'] ) ) && ( $val < $args['field']['attrs']['min'] ) ) {
+					return false;
+				} elseif ( ( isset( $args['field']['attrs']['max'] ) ) && ( ! empty( $args['field']['attrs']['max'] ) ) && ( $val > $args['field']['attrs']['max'] ) ) {
+					return false;
+				}
+
+				return $val;
 			}
 
 			return false;

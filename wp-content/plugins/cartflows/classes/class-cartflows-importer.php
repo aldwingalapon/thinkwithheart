@@ -32,7 +32,7 @@ if ( ! class_exists( 'CartFlows_Importer' ) ) :
 		 */
 		public static function get_instance() {
 			if ( ! isset( self::$instance ) ) {
-				self::$instance = new self;
+				self::$instance = new self();
 			}
 
 			return self::$instance;
@@ -352,7 +352,7 @@ if ( ! class_exists( 'CartFlows_Importer' ) ) :
 							// Set flow.
 							wp_set_object_terms( $new_step_id, 'flow-' . $flow_id, CARTFLOWS_TAXONOMY_STEP_FLOW );
 
-							CartFlows_Importer::get_instance()->set_step_to_flow( $flow_id, $new_step_id, $step['title'], $step_slug );
+							self::get_instance()->set_step_to_flow( $flow_id, $new_step_id, $step['title'], $step_slug );
 
 							if ( isset( $step['post_content'] ) && ! empty( $step['post_content'] ) ) {
 
@@ -1430,7 +1430,7 @@ if ( ! class_exists( 'CartFlows_Importer' ) ) :
 			wp_set_object_terms( $new_step_id, 'flow-' . $flow_id, CARTFLOWS_TAXONOMY_STEP_FLOW );
 			wcf()->logger->import_log( '(✓) Assigned flow step flow-' . $flow_id );
 
-			CartFlows_Importer::get_instance()->set_step_to_flow( $flow_id, $new_step_id, $step_type_title, $step_slug );
+			self::get_instance()->set_step_to_flow( $flow_id, $new_step_id, $step_type_title, $step_slug );
 
 			wcf()->logger->import_log( 'COMPLETE! Creating Blank STEP for Flow ' . $flow_id );
 			wcf()->logger->import_log( '------------------------------------' );

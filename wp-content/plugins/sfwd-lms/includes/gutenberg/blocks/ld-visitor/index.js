@@ -30,7 +30,8 @@ const {
 
  const {
     PanelBody,
-    TextControl
+    TextControl,
+    ToggleControl
 } = wp.components;
 
 registerBlockType(
@@ -45,9 +46,13 @@ registerBlockType(
                 type: 'string',
                 default: '',
             },
+            autop: {
+                type: 'boolean',
+                default: true
+            },
         },
         edit: props => {
-            const { attributes: { course_id }, className, setAttributes } = props;
+            const { attributes: { course_id, autop }, className, setAttributes } = props;
 
             const inspectorControls = (
                 <InspectorControls>
@@ -59,6 +64,11 @@ registerBlockType(
                             help={sprintf(_x('Enter single %1$s ID. Leave blank if used within a %2$s.', 'placeholders: course, course', 'learndash'), ldlms_get_custom_label('course'), ldlms_get_custom_label('course') ) }
                             value={course_id || ''}
                             onChange={course_id => setAttributes({ course_id })}
+                        />
+                        <ToggleControl
+                            label={__('Auto Paragraph', 'learndash')}
+                            checked={!!autop}
+                            onChange={autop => setAttributes({ autop })}
                         />
                     </PanelBody>
                 </InspectorControls>

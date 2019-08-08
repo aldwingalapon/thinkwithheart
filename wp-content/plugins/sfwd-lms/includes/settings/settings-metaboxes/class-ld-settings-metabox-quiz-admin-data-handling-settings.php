@@ -64,8 +64,9 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 				'timeLimitCookie'             => 'timeLimitCookie',
 
 				'templates_enabled'           => 'templates_enabled',
-				'templates_load'              => 'templates_load',
-				'templates_save'              => 'templates_save',
+				//'templateLoadId'              => 'templateLoadId',
+				//'templateSaveList'            => 'templateSaveList',
+				//'templateName'                => 'templateName',
 			);
 
 			parent::__construct();
@@ -97,6 +98,10 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 			$_POST['emailNotification']         = $settings_values['emailNotification'];
 			$_POST['userEmailNotification']     = $settings_values['userEmailNotification'];
 			$_POST['timeLimitCookie']           = $settings_values['timeLimitCookie'];
+
+//			$_POST['templateLoadId']            = $settings_values['templateLoadId'];
+//			$_POST['templateSaveList']          = $settings_values['templateSaveList'];
+//			$_POST['templateName']              = $settings_values['templateName'];
 		}
 
 		/**
@@ -252,11 +257,11 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 				}
 			}
 
-			$this->setting_option_values['templates_load'] = '';
+			$this->setting_option_values['templateLoadId'] = '';
 			if ( ( isset( $_GET['templateLoadId'] ) ) && ( ! empty( $_GET['templateLoadId'] ) ) ) {
-				$this->setting_option_values['templates_load'] = absint( $_GET['templateLoadId'] );
+				$this->setting_option_values['templateLoadId'] = absint( $_GET['templateLoadId'] );
 			}
-			if ( ! empty( $this->setting_option_values['templates_load'] ) ) {
+			if ( ! empty( $this->setting_option_values['templateLoadId'] ) ) {
 				$this->setting_option_values['templates_enabled'] = 'on';
 			} else {
 				$this->setting_option_values['templates_enabled'] = '';
@@ -278,6 +283,7 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 			$pro_quiz_options         = LD_QuizPro::get_quiz_list();
 			$pro_quiz_options_default = array(
 				'-1' => esc_html__( 'Select a ProQuiz association', 'learndash' ),
+				'new' => esc_html__( 'New ProQuiz association', 'learndash' ),
 			);
 			$pro_quiz_options         = $pro_quiz_options_default + $pro_quiz_options;
 
@@ -291,6 +297,10 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					'value'       => $this->setting_option_values['toplistDataAddBlock'],
 					'input_label' => esc_html__( 'minutes', 'learndash' ),
 					'default'     => '1',
+					'attrs'       => array(
+						'step' => 1,
+						'min'  => 0,
+					),
 				),
 			);
 			parent::load_settings_fields();
@@ -323,8 +333,11 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					'class'             => '-small',
 					'value'             => $this->setting_option_values['statisticsIpLock'],
 					'input_label'       => esc_html__( 'minutes', 'learndash' ),
-					'default'           => 'below',
-
+					'default'           => '0',
+					'attrs'       => array(
+						'step' => 1,
+						'min'  => 0,
+					),
 				),
 			);
 			parent::load_settings_fields();
@@ -369,6 +382,10 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					'value'             => $this->setting_option_values['timeLimitCookie'],
 					'input_label'       => esc_html__( 'seconds', 'learndash' ),
 					'default'           => '',
+					'attrs'       => array(
+						'step' => 1,
+						'min'  => 0,
+					),
 
 				),
 			);
@@ -656,17 +673,17 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					),
 					'child_section_state' => ( 'on' === $this->setting_option_values['templates_enabled'] ) ? 'open' : 'closed',
 				),
-				'templates_load'              => array(
-					'name'           => 'templates_load',
+				'templateLoadId'              => array(
+					'name'           => 'templateLoadId',
 					'type'           => 'quiz-templates-load',
 					'label'          => esc_html__( 'Use Template', 'learndash' ),
-					'value'          => $this->setting_option_values['templates_load'],
+					'value'          => $this->setting_option_values['templateLoadId'],
 					'default'        => '',
 					'template_type'  => WpProQuiz_Model_Template::TEMPLATE_TYPE_QUIZ,
 					'parent_setting' => 'templates_enabled',
 				),
-				'templates_save'              => array(
-					'name'           => 'templates_save',
+				'templateSaveList'              => array(
+					'name'           => 'templateSaveList',
 					'type'           => 'quiz-templates-save',
 					'label'          => esc_html__( 'Save as Template', 'learndash' ),
 					//'value'          => $this->setting_option_values['templates_load'],
@@ -849,6 +866,24 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					$settings_values['userEmailNotification'] = false;
 				}
 
+				if ( ( isset( $settings_values['templates_enabled'] ) ) && ( 'on' === $settings_values['templates_enabled'] ) ) {
+
+					if ( '-1' === $_POST['templateSaveList'] ) {
+						$_POST['templateSaveList'] = '';
+					}
+
+					if ( "0" === $_POST['templateSaveList'] ) {
+						if ( empty( $_POST['templateName'] ) ) {
+							$_POST['templateSaveList'] = '';
+						}
+					} else if ( '' !== $_POST['templateSaveList'] ) {
+						$_POST['templateName'] = '';	
+					}
+				} else {
+					$_POST['templateSaveList'] = '';
+					$_POST['templateName'] = '';
+				}
+
 				if ( ( isset( $settings_values['timeLimitCookie_enabled'] ) ) && ( 'on' === $settings_values['timeLimitCookie_enabled'] ) ) {
 					if ( ( isset( $settings_values['timeLimitCookie'] ) ) && ( ! empty( $settings_values['timeLimitCookie'] ) ) ) {
 						$timeLimit_cookie = absint( $settings_values['timeLimitCookie'] );
@@ -872,6 +907,10 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 				 */
 				if ( empty( $settings_values['quiz_pro'] ) ) {
 					$settings_values['quiz_pro'] = learndash_get_setting( get_the_ID(), 'quiz_pro' );
+				}
+
+				if ( 'new' === $settings_values['quiz_pro'] ) {
+					$settings_values['quiz_pro'] = '';
 				}
 			}
 

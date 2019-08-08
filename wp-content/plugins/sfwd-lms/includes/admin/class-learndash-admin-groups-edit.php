@@ -56,7 +56,8 @@ if ( ! class_exists( 'Learndash_Admin_Groups_Edit' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
-
+			wp_style_add_data( 'learndash-admin-binary-selector-style', 'rtl', 'replace' );
+			
 			// Add Metabox and hook for saving post metabox.
 			add_action( 'add_meta_boxes', array( $this, 'learndash_groups_add_custom_box' ) );
 			add_action( 'save_post', array( $this, 'learndash_groups_save_postdata' ) );

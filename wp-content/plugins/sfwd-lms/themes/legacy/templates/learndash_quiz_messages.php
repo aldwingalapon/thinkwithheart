@@ -157,7 +157,20 @@ switch( $context ) {
 	case 'quiz_essay_question_graded_review_message':
 		// Add alternate message here
 		break;
+	
+	// Default Message: 'Uploading'	
+	case 'quiz_essay_uploading':
+		// Add alternate message here
+		break;
+	
+	// Default Message: 'Success'	
+	case 'quiz_essay_success':
+		// Add alternate message here
+		break;
 		
+
+
+
 	// Default Message: 'Correct'
 	case 'quiz_question_answer_correct_message	':
 		// Add alternate message here

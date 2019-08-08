@@ -105,7 +105,11 @@ $assignment_points = learndash_get_points_awarded_array( $assignment->ID );  ?>
 
             if( post_type_supports( 'sfwd-assignment', 'comments' ) && apply_filters( 'comments_open', $assignment->comment_status, $assignment->ID ) ) {
                 ?>
-                <a href='<?php echo esc_attr( get_comments_link( $assignment->ID ) ); ?>' data-ld-tooltip="<?php echo sprintf( esc_attr( '%d Comments', 'placeholder: commentd count', 'learndash'), get_comments_number($assignment->ID) ); ?>"><?php echo esc_html(get_comments_number( $assignment->ID )); ?><span class="ld-icon ld-icon-comments"></span></a><?php
+                <a href='<?php echo esc_attr( get_comments_link( $assignment->ID ) ); ?>' data-ld-tooltip="<?php echo sprintf( 
+                    // translators: placeholder: commentd count.
+                    esc_html_x( '%d Comments', 'placeholder: commentd count', 'learndash'),
+                    get_comments_number( $assignment->ID )
+                ); ?>"><?php echo esc_html(get_comments_number( $assignment->ID )); ?><span class="ld-icon ld-icon-comments"></span></a><?php
             } else {
                 echo '';
             };
@@ -142,7 +146,11 @@ $assignment_points = learndash_get_points_awarded_array( $assignment->ID );  ?>
                 <span class="ld-icon ld-icon-checkmark"></span>
                 <?php
                 if( $assignment_points ):
-                    echo sprintf( esc_html__( '%s/%s Points Awarded ', 'learndash' ), $assignment_points['current'], $assignment_points['max'] ) . ' - ';
+                    echo sprintf(
+                        // translators: placeholders: points current, points max.
+                        esc_html_x( '%1$s/%2$s Points Awarded ', 'placeholders: points current, points max', 'learndash' ),
+                        $assignment_points['current'], $assignment_points['max']
+                    ) . ' - ';
                 endif;
 
                 esc_html_e( 'Approved', 'learndash' );

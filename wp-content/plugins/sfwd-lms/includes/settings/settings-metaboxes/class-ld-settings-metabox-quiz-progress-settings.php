@@ -296,8 +296,14 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					'class'             => '-small',
 					'default'           => '',
 					'value'             => $this->setting_option_values['repeats'],
-					'value_allow_blank' => true,
-					'value_abs'         => true,
+					//'value_allow_blank' => true,
+					//'value_abs'         => true,
+					'attrs'       => array(
+						'step' => 1,
+						'min'  => 0,
+						'can_empty' => true,
+						'can_decimal' => false
+					),
 					'parent_setting'    => 'retry_restrictions',
 				),
 				'quizRunOnceType'         => array(
@@ -418,11 +424,19 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					$settings_values['timeLimit'] = '';
 				}
 
-				if ( ( isset( $settings_values['quiz_time_limit_enabled'] ) ) && ( 'on' === $settings_values['quiz_time_limit_enabled'] ) ) {
-					if ( ( isset( $settings_values['timeLimit'] ) ) && ( empty( $settings_values['timeLimit'] ) ) ) {
+				if ( 'on' === $settings_values['quiz_time_limit_enabled'] ) {
+					if ( empty( $settings_values['timeLimit'] ) ) {
 						$settings_values['quiz_time_limit_enabled'] = '';
 					}
 				}
+
+				if ( ! empty( $settings_values['timeLimit'] ) ) {
+					if ( 'on' !== $settings_values['quiz_time_limit_enabled'] ) {
+						$settings_values['timeLimit'] = 0;
+					}
+				}
+
+
 
 				if ( 'on' === $settings_values['forcingQuestionSolve'] ) {
 					$settings_values['forcingQuestionSolve'] = true;

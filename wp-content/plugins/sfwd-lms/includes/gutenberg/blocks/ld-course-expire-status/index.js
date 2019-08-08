@@ -56,6 +56,10 @@ registerBlockType(
 				type: 'string',
 				default: '',
 			},
+			autop: {
+				type: 'boolean',
+				default: true
+			},
 			preview_show: {
 				type: 'boolean',
 				default: 1
@@ -70,7 +74,7 @@ registerBlockType(
 		},
         edit: function( props ) {
 			let { attributes: { course_id }, className } = props;
-			const { attributes: { user_id, label_before, label_after, preview_user_id, preview_show },
+			const { attributes: { user_id, label_before, label_after, autop, preview_user_id, preview_show },
             	setAttributes } = props;
 
 			const inspectorControls = (
@@ -103,6 +107,12 @@ registerBlockType(
 							value={label_after || ''}
 							onChange={label_after => setAttributes({ label_after })}
 						/>
+						<ToggleControl
+							label={__('Auto Paragraph', 'learndash')}
+							checked={!!autop}
+							onChange={autop => setAttributes({ autop })}
+						/>
+
 					</PanelBody>
 					<PanelBody
 						title={ __( 'Preview', 'learndash' ) }

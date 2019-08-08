@@ -203,6 +203,22 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 				qpp: " . $this->quiz->getQuestionsPerPage() . ",
 				catPoints: " . json_encode( $quizData['catPoints'] ) . ",
 				formPos: " . (int) $this->quiz->getFormShowPosition() . ",
+				essayUploading: '" . SFWD_LMS::get_template(
+					'learndash_quiz_messages',
+					array(
+						'quiz_post_id'	=>	$this->quiz->getID(),
+						'context' 		=> 	'quiz_essay_uploading',
+						'message' 		=> 	esc_html__('Uploading', 'learndash' )
+					)
+				)  . "',
+				essaySuccess: '" . SFWD_LMS::get_template(
+					'learndash_quiz_messages',
+					array(
+						'quiz_post_id'	=>	$this->quiz->getID(),
+						'context' 		=> 	'quiz_essay_success',
+						'message' 		=> 	esc_html__('Success', 'learndash' )
+					)
+				) . "',
 				lbn: " . json_encode( ( $this->quiz->isShowReviewQuestion() && ! $this->quiz->isQuizSummaryHide() ) ?  SFWD_LMS::get_template(
 						'learndash_quiz_messages',
 						array(
@@ -321,6 +337,23 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 				formPos: " . (int) $this->quiz->getFormShowPosition() . ",
 				ld_script_debug: ". $ld_script_debug .",
 				quiz_nonce: '". $quiz_nonce ."',
+				essayUploading: '" . SFWD_LMS::get_template(
+					'learndash_quiz_messages',
+					array(
+						'quiz_post_id'	=>	$this->quiz->getID(),
+						'context' 		=> 	'quiz_essay_uploading',
+						'message' 		=> 	esc_html__('Uploading', 'learndash' )
+					)
+				)  . "',
+				essaySuccess: '" . SFWD_LMS::get_template(
+					'learndash_quiz_messages',
+					array(
+						'quiz_post_id'	=>	$this->quiz->getID(),
+						'context' 		=> 	'quiz_essay_success',
+						'message' 		=> 	esc_html__('Success', 'learndash' )
+					)
+				) . "',
+
 				lbn: " . json_encode( ( $this->quiz->isShowReviewQuestion() && ! $this->quiz->isQuizSummaryHide() ) ?  SFWD_LMS::get_template(
 						'learndash_quiz_messages',
 						array(
@@ -1144,9 +1177,9 @@ class WpProQuiz_View_FrontQuiz extends WpProQuiz_View_View {
 
 			<?php if ( is_user_logged_in() ) { ?>
 				<p class="wpProQuiz_certificate" style="display: none ;">
-					<?php echo LD_QuizPro::certificate_link( "", $this->quiz->getId() ); ?>
+					<?php echo LD_QuizPro::certificate_link( "", $this->quiz ); ?>
 				</p>
-				<?php echo LD_QuizPro::certificate_details( $this->quiz->getId() ); ?>
+				<?php echo LD_QuizPro::certificate_details( $this->quiz ); ?>
 			<?php } ?>
 
 			<?php if ( $this->quiz->isShowAverageResult() ) { ?>

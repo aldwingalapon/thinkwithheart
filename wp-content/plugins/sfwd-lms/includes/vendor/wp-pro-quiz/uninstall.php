@@ -3,7 +3,7 @@
 if(!defined('WP_UNINSTALL_PLUGIN'))
 	exit();
 
-include_once 'lib/helper/WpProQuiz_Helper_DbUpgrade.php';
+include_once __DIR__ . '/lib/helper/WpProQuiz_Helper_DbUpgrade.php';
 
 $db = new WpProQuiz_Helper_DbUpgrade();
 $db->delete();

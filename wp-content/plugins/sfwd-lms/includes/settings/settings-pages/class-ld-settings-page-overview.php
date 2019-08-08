@@ -135,6 +135,7 @@ if ( ( class_exists( 'LearnDash_Settings_Page' ) ) && ( ! class_exists( 'LearnDa
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash-admin-overview-page-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash-admin-overview-page-style'] = __FUNCTION__;
 
 			wp_enqueue_script(
@@ -971,7 +972,7 @@ if ( ( class_exists( 'LearnDash_Settings_Page' ) ) && ( ! class_exists( 'LearnDa
 										<h4><?php esc_html_e( 'Popular Articles', 'learndash' ); ?></h4>
 
 										<ul>
-											<li><a href="https://www.learndash.com/support/docs/guides/login-registration/learndash/" target="_blank" rel="noopener noreferrer"><?php esc_html( 'Registration & Login', 'learndash' ); ?></a></li>
+											<li><a href="https://www.learndash.com/support/docs/guides/login-registration/learndash/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Registration & Login', 'learndash' ); ?></a></li>
 											<li><a href="https://www.learndash.com/support/docs/guides/focus-mode/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Focus Mode', 'learndash' ); ?></a></li>
 											<li><a href="https://www.learndash.com/support/docs/guides/user-profiles/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'User Profiles', 'learndash' ); ?></a></li>
 											<li><a href="https://www.learndash.com/support/docs/add-ons/course-grid/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Course Grid Add-on', 'learndash' ); ?></a></li>

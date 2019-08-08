@@ -51,7 +51,7 @@ if ( ! function_exists( 'ld_ipn_debug' ) ) {
 ld_ipn_debug( print_r( $_REQUEST, true ) );
 
 ld_ipn_debug( 'IPN Listener Loading...' );
-include 'ipnlistener.php';
+include __DIR__ . '/ipnlistener.php';
 $listener = new IpnListener();
 
 /**

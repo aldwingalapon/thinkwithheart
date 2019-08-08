@@ -49,6 +49,18 @@ if ( ( class_exists( 'LearnDash_Shortcodes_Section' ) ) && ( ! class_exists( 'Le
 					'value'     => '',
 					'class'     => 'small-text',
 				),
+				'autop'     => array(
+					'id'        => $this->shortcodes_section_key . 'autop',
+					'name'      => 'autop',
+					'type'      => 'select',
+					'label'     => esc_html__( 'Auto Paragraph', 'learndash' ),
+					'help_text' => esc_html__( 'Format shortcode content into proper pararaphs.', 'learndash' ),
+					'value'     => 'true',
+					'options'   => array(
+						''      => esc_html__( 'Yes (default)', 'learndash' ),
+						'false' => esc_html__( 'No', 'learndash' ),
+					),
+				),
 			);
 
 			if ( ( ! isset( $this->fields_args['post_type'] ) ) || ( ( 'sfwd-courses' !== $this->fields_args['post_type'] ) && ( 'sfwd-lessons' !== $this->fields_args['post_type'] ) && ( 'sfwd-topic' !== $this->fields_args['post_type'] ) ) ) {

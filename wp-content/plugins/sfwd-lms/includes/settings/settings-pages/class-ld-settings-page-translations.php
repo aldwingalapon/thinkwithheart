@@ -40,6 +40,7 @@ if ( ( class_exists( 'LearnDash_Settings_Page' ) ) && ( ! class_exists( 'LearnDa
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash-admin-settings-page-translations-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash-admin-settings-page-translations-style'] = __FUNCTION__;
 
 			wp_enqueue_script(

@@ -13,6 +13,7 @@
 class Cartflows_Default_Meta {
 
 
+
 	/**
 	 * Member Variable
 	 *
@@ -53,7 +54,7 @@ class Cartflows_Default_Meta {
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -62,7 +63,6 @@ class Cartflows_Default_Meta {
 	 *  Constructor
 	 */
 	public function __construct() {
-
 	}
 
 	/**
@@ -74,7 +74,6 @@ class Cartflows_Default_Meta {
 	function get_checkout_fields( $post_id ) {
 
 		if ( null === self::$checkout_fields ) {
-
 			self::$checkout_fields = array(
 				'wcf-field-google-font-url'     => array(
 					'default'  => '',
@@ -284,7 +283,6 @@ class Cartflows_Default_Meta {
 	function get_flow_fields( $post_id ) {
 
 		if ( null === self::$flow_fields ) {
-
 			self::$flow_fields = array(
 				'wcf-steps'   => array(
 					'default'  => array(),
@@ -328,19 +326,16 @@ class Cartflows_Default_Meta {
 	function save_meta_fields( $post_id, $post_meta ) {
 
 		if ( ! ( $post_id && is_array( $post_meta ) ) ) {
-
 			return;
 		}
 
 		foreach ( $post_meta as $key => $data ) {
-
 			$meta_value = false;
 
 			// Sanitize values.
 			$sanitize_filter = ( isset( $data['sanitize'] ) ) ? $data['sanitize'] : 'FILTER_DEFAULT';
 
 			switch ( $sanitize_filter ) {
-
 				case 'FILTER_SANITIZE_STRING':
 					$meta_value = filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
 					break;
@@ -361,18 +356,13 @@ class Cartflows_Default_Meta {
 
 				case 'FILTER_CARTFLOWS_CHECKOUT_PRODUCTS':
 					if ( isset( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ) {
-
 						$i = 0;
 						$q = 0;
 
 						foreach ( $_POST[ $key ] as $p_index => $p_data ) {
-
 							foreach ( $p_data as $i_key => $i_value ) {
-
 								if ( is_array( $i_value ) ) {
-
 									foreach ( $i_value as $q_key => $q_value ) {
-
 										$meta_value[ $i ][ $i_key ][ $q ] = array_map( 'sanitize_text_field', $q_value );
 
 										$q++;
@@ -395,11 +385,9 @@ class Cartflows_Default_Meta {
 							$post_data = $_POST[ $key ];
 
 						if ( 'wcf_field_order_billing' == $key ) {
-
 							$billing_fields = Cartflows_Helper::get_checkout_fields( 'billing', $post_id );
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $billing_fields[ $value ] ) ) {
 									$ordered_fields[ $value ]             = $billing_fields[ $value ];
 									$ordered_fields[ $value ]['priority'] = $count;
@@ -411,10 +399,8 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_field_order_shipping' == $key ) {
-
 							$shipping_fields = Cartflows_Helper::get_checkout_fields( 'shipping', $post_id );
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $shipping_fields[ $value ] ) ) {
 									$ordered_fields[ $value ]             = $shipping_fields[ $value ];
 									$ordered_fields[ $value ]['priority'] = $count;
@@ -425,7 +411,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_label_text_field_billing' == $key ) {
-
 							$get_ordered_billing_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_billing' );
 
 							if ( isset( $get_ordered_billing_fields ) && ! empty( $get_ordered_billing_fields ) ) {
@@ -437,7 +422,6 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $billing_fields[ $index ] ) ) {
 									$ordered_fields[ $index ]          = $billing_fields[ $index ];
 									$ordered_fields[ $index ]['label'] = wp_kses_post( trim( stripslashes( $value ) ) );
@@ -448,7 +432,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_label_text_field_shipping' == $key ) {
-
 							$get_ordered_shipping_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_shipping' );
 
 							if ( isset( $get_ordered_shipping_fields ) && ! empty( $get_ordered_shipping_fields ) ) {
@@ -458,7 +441,6 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $shipping_fields[ $index ] ) ) {
 									$ordered_fields[ $index ]          = $shipping_fields[ $index ];
 									$ordered_fields[ $index ]['label'] = wp_kses_post( trim( stripslashes( $value ) ) );
@@ -477,7 +459,6 @@ class Cartflows_Default_Meta {
 								$billing_fields = Cartflows_Helper::get_checkout_fields( 'billing', $post_id );
 							}
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $billing_fields[ $index ] ) ) {
 									$ordered_fields[ $index ]                = $billing_fields[ $index ];
 									$ordered_fields[ $index ]['placeholder'] = wc_clean( stripslashes( $value ) );
@@ -498,7 +479,6 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $shipping_fields[ $index ] ) ) {
 									$ordered_fields[ $index ]                = $shipping_fields[ $index ];
 									$ordered_fields[ $index ]['placeholder'] = wc_clean( stripslashes( $value ) );
@@ -507,11 +487,9 @@ class Cartflows_Default_Meta {
 
 							$key        = 'wcf_field_order_shipping';
 							$meta_value = $ordered_fields;
-
 						}
 
 						if ( 'wcf_label_default_field_billing' == $key ) {
-
 							$get_ordered_billing_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_billing' );
 
 							if ( isset( $get_ordered_billing_fields ) && ! empty( $get_ordered_billing_fields ) ) {
@@ -521,7 +499,6 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $billing_fields[ $index ] ) ) {
 									$ordered_fields[ $index ]            = $billing_fields[ $index ];
 									$ordered_fields[ $index ]['default'] = wp_kses_post( trim( stripslashes( $value ) ) );
@@ -533,7 +510,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_label_default_field_shipping' == $key ) {
-
 							$get_ordered_shipping_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_shipping' );
 
 							if ( isset( $get_ordered_shipping_fields ) && ! empty( $get_ordered_shipping_fields ) ) {
@@ -543,7 +519,6 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $shipping_fields[ $index ] ) ) {
 									$ordered_fields[ $index ]            = $shipping_fields[ $index ];
 									$ordered_fields[ $index ]['default'] = wp_kses_post( trim( stripslashes( $value ) ) );
@@ -555,7 +530,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_is_required_field_billing' == $key ) {
-
 							$get_ordered_billing_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_billing' );
 
 							if ( isset( $get_ordered_billing_fields ) && ! empty( $get_ordered_billing_fields ) ) {
@@ -565,11 +539,9 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $billing_fields[ $index ] ) ) {
 									$ordered_fields[ $index ] = $billing_fields[ $index ];
 									if ( 'yes' == $value ) {
-
 										$ordered_fields[ $index ]['required'] = true;
 									} else {
 										$ordered_fields[ $index ]['required'] = false;
@@ -582,7 +554,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_is_required_field_shipping' == $key ) {
-
 							$get_ordered_shipping_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_shipping' );
 
 							if ( isset( $get_ordered_shipping_fields ) && ! empty( $get_ordered_shipping_fields ) ) {
@@ -592,12 +563,10 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								if ( isset( $shipping_fields[ $index ] ) ) {
 									$ordered_fields[ $index ] = $shipping_fields[ $index ];
 
 									if ( 'yes' == $value ) {
-
 										$ordered_fields[ $index ]['required'] = true;
 									} else {
 										$ordered_fields[ $index ]['required'] = false;
@@ -610,7 +579,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_select_option_field_billing' == $key ) {
-
 							$get_ordered_billing_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_billing' );
 
 							if ( isset( $get_ordered_billing_fields ) && ! empty( $get_ordered_billing_fields ) ) {
@@ -620,7 +588,6 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								$options = explode( ',', $value );
 
 								if ( isset( $billing_fields[ $index ] ) ) {
@@ -629,7 +596,6 @@ class Cartflows_Default_Meta {
 									$ordered_fields[ $index ]['options'] = array();
 
 									foreach ( $options as $key => $option ) {
-
 										$ordered_fields[ $index ]['options'][ $option ] = trim( stripslashes( $option ) );
 									}
 								}
@@ -640,7 +606,6 @@ class Cartflows_Default_Meta {
 						}
 
 						if ( 'wcf_select_option_field_shipping' == $key ) {
-
 							$get_ordered_shipping_fields = wcf()->options->get_checkout_meta_value( $post_id, 'wcf_field_order_shipping' );
 
 							if ( isset( $get_ordered_shipping_fields ) && ! empty( $get_ordered_shipping_fields ) ) {
@@ -650,17 +615,14 @@ class Cartflows_Default_Meta {
 							}
 
 							foreach ( $post_data as $index => $value ) {
-
 								$options = explode( ',', $value );
 
 								if ( isset( $shipping_fields[ $index ] ) ) {
-
 									$ordered_fields[ $index ] = $shipping_fields[ $index ];
 
 									$ordered_fields[ $index ]['options'] = array();
 
 									foreach ( $options as $key => $option ) {
-
 										$ordered_fields[ $index ]['options'][ $option ] = trim( stripslashes( $option ) );
 									}
 								}
@@ -698,16 +660,12 @@ class Cartflows_Default_Meta {
 		$value = $this->get_save_meta( $post_id, $key );
 
 		if ( ! $value ) {
-
 			if ( $default ) {
-
 				$value = $default;
 			} else {
-
 				$fields = $this->get_flow_fields( $post_id );
 
 				if ( isset( $fields[ $key ]['default'] ) ) {
-
 					$value = $fields[ $key ]['default'];
 				}
 			}
@@ -729,16 +687,12 @@ class Cartflows_Default_Meta {
 		$value = $this->get_save_meta( $post_id, $key );
 
 		if ( ! $value ) {
-
 			if ( false !== $default ) {
-
 				$value = $default;
 			} else {
-
 				$fields = $this->get_checkout_fields( $post_id );
 
 				if ( isset( $fields[ $key ]['default'] ) ) {
-
 					$value = $fields[ $key ]['default'];
 				}
 			}
@@ -770,7 +724,6 @@ class Cartflows_Default_Meta {
 	function get_thankyou_fields( $post_id ) {
 
 		if ( null === self::$thankyou_fields ) {
-
 			self::$thankyou_fields = array(
 				'wcf-field-google-font-url'     => array(
 					'default'  => '',
@@ -833,7 +786,6 @@ class Cartflows_Default_Meta {
 					'sanitize' => 'FILTER_DEFAULT',
 				),
 			);
-
 		}
 
 		return apply_filters( 'cartflows_thankyou_meta_options', self::$thankyou_fields, $post_id );
@@ -852,16 +804,12 @@ class Cartflows_Default_Meta {
 		$value = $this->get_save_meta( $post_id, $key );
 
 		if ( ! $value ) {
-
 			if ( $default ) {
-
 				$value = $default;
 			} else {
-
 				$fields = $this->get_thankyou_fields( $post_id );
 
 				if ( isset( $fields[ $key ]['default'] ) ) {
-
 					$value = $fields[ $key ]['default'];
 				}
 			}
@@ -882,12 +830,9 @@ class Cartflows_Default_Meta {
 
 		$value = $this->get_save_meta( $post_id, $key );
 		if ( ! $value ) {
-
 			if ( $default ) {
-
 				$value = $default;
 			} else {
-
 				$fields = $this->get_landing_fields( $post_id );
 
 				if ( isset( $fields[ $key ]['default'] ) ) {
@@ -908,7 +853,6 @@ class Cartflows_Default_Meta {
 	function get_landing_fields( $post_id ) {
 
 		if ( null === self::$landing_fields ) {
-
 			self::$landing_fields = array(
 				'wcf-custom-script' => array(
 					'default'  => '',

@@ -28,9 +28,9 @@ $button = false;
 if ( $context == 'lesson' ) {
 
 	$button = array(
-		'url' 	=> get_permalink($course_id),
-		'label'	=> sprintf( esc_html_x( 'Back to %s ', 'Back to Course Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ),
-		'icon'  		=>  'arrow-left',
+		'url' 	        => get_permalink($course_id),
+		'label'	        => learndash_get_label_course_step_back( learndash_get_post_type_slug( 'course ' ) ),
+		'icon'  		=> 'arrow-left',
 		'icon-location' => 'left'
 	); // On the lesson single we display additional information.
 

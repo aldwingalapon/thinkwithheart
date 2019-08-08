@@ -493,7 +493,16 @@ function ld_course_access_expires_on( $course_id, $user_id ) {
 			}
 		}
 	}
-	return $course_access_upto;
+	
+	/**
+	 * Filter for 'ld_course_access_expires_on'.
+	 * 
+	 * @since 3.0.7
+	 * @param integer $course_access_upto timestamp.
+	 * @param integer $course_id Course ID.
+	 * @param integer $user_id User ID.
+	 */
+	return apply_filters( 'ld_course_access_expires_on', $course_access_upto, $course_id, $user_id );
 }
 
 
@@ -553,7 +562,15 @@ function ld_course_access_from( $course_id = 0, $user_id = 0 ) {
 		}
 	}
 
-	return $courses[ $course_id ][ $user_id ];
+	/**
+	 * Filter for 'ld_course_access_from'.
+	 * 
+	 * @since 3.0.7
+	 * @param integer timestamp
+	 * @param integer $course_id
+	 * @param integer $user_id
+	 */
+	return apply_filters( 'ld_course_access_from', $courses[ $course_id ][ $user_id ], $course_id, $user_id );
 }
 
 /**

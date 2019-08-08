@@ -1107,3 +1107,27 @@ Quiz Edit Result Text lists
 .sfwd_options .ld-settings-email-description {
   font-weight: 300;
 }
+
+/* Add support for error display */
+.sfwd_options .learndash_settings_field_invalid label.sfwd_label {
+  color: red;
+}
+.sfwd_options .learndash_settings_field_invalid input:invalid { 
+  border: 1px solid red;
+  box-shadow: none;
+}
+
+.sfwd_options .learndash_settings_field_invalid .learndash-section-field-error { 
+  color: red;
+}
+
+#learndash-settings-fields-notice-errors p.errors-header {
+  font-weight: 900;
+}
+#learndash-settings-fields-notice-errors ul.errors-list {
+  list-style: disc;
+}
+
+#learndash-settings-fields-notice-errors ul.errors-list li {
+  margin-left: 15px;
+}

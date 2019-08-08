@@ -1,4 +1,8 @@
 jQuery(document).ready(function() {
+
+	//console.log('wp[%o]', wp);
+	//console.log('isRtl[%o]', isRtl);
+
 	if ((typeof learndash_admin_settings_data !== 'undefined') && (typeof learndash_admin_settings_data.json !== 'undefined')) {
 		learndash_admin_settings_data = learndash_admin_settings_data.json.replace(/&quot;/g, '"');
 		learndash_admin_settings_data = jQuery.parseJSON(learndash_admin_settings_data);
@@ -22,9 +26,12 @@ jQuery(document).ready(function() {
 			if ((typeof placeholder === 'undefined') || (placeholder === '')) {
 				placeholder = 'Select an option';
 			}
+
 			jQuery(item).select2({
 				placeholder: placeholder,
-				width: 'resolve'
+				width: 'resolve',
+				dir: (window.isRtl) ? 'rtl' : '',
+				dropdownAutoWidth: true
 			});
 		});
 	}
@@ -635,7 +642,7 @@ jQuery(document).ready(function() {
 				html = ''; //'<option value="0">' + sfwd_data.select_a_lesson_lang + '</option>';
 				jQuery.each(json.opt, function (i, opt) {
 					if (opt.key != '' && opt.key != '0') {
-						selected = (opt.key == window['sfwd_quiz_lesson']) ? 'selected=selected' : '';
+						selected = (opt.key == window['sfwd_topic_lesson']) ? 'selected=selected' : '';
 						html += "<option value='" + opt.key + "' " + selected + ">" + opt.value + "</option>";
 					}
 				});
@@ -697,68 +704,6 @@ jQuery(document).ready(function() {
 		});
 		jQuery('select#learndash-quiz-progress-settings_quizRunOnceType').change();
 	}
-
-
-	/**
-	 * Handle Settings fields select state change logic.
-	 */
-	/*
-	if (jQuery('.sfwd_options select.learndash-section-field-select').length) {
-		jQuery('.sfwd_options select.learndash-section-field-select').each(function (idx, item) {
-			jQuery(item).change(function (e) {
-				var select_val = jQuery(e.currentTarget).val();
-
-				if ( ('' === select_val ) || ( '-1' == select_val ) ) {
-					checked_state = 'unchecked';
-				} else {
-					checked_state = 'checked';
-				}
-
-				var trigger_data = {
-					'type': 'ld_setting_select_changed_early',
-					'element': e.currentTarget,
-					'class': settings_sub_trigger_class,
-					'state': checked_state
-				}
-
-				jQuery('.sfwd_options').trigger({
-					type: 'ld_setting_select_changed_early',
-					ld_trigger_data: trigger_data
-				});
-
-				var settings_sub_trigger_class = jQuery(e.currentTarget).data('settings-sub-trigger');
-				if ((typeof settings_sub_trigger_class !== 'undefined') && (jQuery('.sfwd_options .' + settings_sub_trigger_class).length)) {
-					trigger_data['type'] = 'ld_setting_switch_sub_changed_late';
-
-					if ('checked' === checked_state) {
-						jQuery('.sfwd_options .' + settings_sub_trigger_class).slideDown(500, function () {
-							jQuery('.sfwd_options .' + settings_sub_trigger_class).removeClass('ld-settings-sub-state-closed');
-							jQuery('.sfwd_options .' + settings_sub_trigger_class).addClass('ld-settings-sub-state-open');
-
-							jQuery('.sfwd_options').trigger({
-								type: trigger_data['type'],
-								ld_trigger_data: trigger_data
-							});
-						});
-
-					} else {
-						jQuery('.sfwd_options .' + settings_sub_trigger_class).slideUp(400, function () {
-							jQuery('.sfwd_options .' + settings_sub_trigger_class).addClass('ld-settings-sub-state-closed');
-							jQuery('.sfwd_options .' + settings_sub_trigger_class).removeClass('ld-settings-sub-state-open');
-
-							jQuery('.sfwd_options').trigger({
-								type: trigger_data['type'],
-								ld_trigger_data: trigger_data
-							});
-						});
-					}
-				}
-				//e.preventDefault();
-				e.stopPropagation();
-			});
-		});
-	}
-	*/
 	
 	/**
 	 * Handle Settings Themes select state change logic.
@@ -780,7 +725,6 @@ jQuery(document).ready(function() {
 					});
 				}
 
-				//e.preventDefault();
 				e.stopPropagation();
 			});
 		});
@@ -803,121 +747,273 @@ jQuery(document).ready(function() {
 	}
 
 	/**
-	 * Adjust width of sum-elements to match parent.
-	 */
-	/*
-	if (jQuery('.sfwd_options .ld-settings-sub').length) {
-		jQuery(window).resize(function () {
-			var max_width = jQuery('.sfwd_options .sfwd_option_label').first().outerWidth(true);
-			jQuery('.sfwd_options .ld-settings-sub').each( function(idx, item) {
-				var parent_el_id = jQuery(item).data('parent-field');
-				if (typeof parent_el_id !== 'undefined') {
-					var parent_el = jQuery('#' + parent_el_id);
-					if (typeof parent_el !== 'undefined') {
-						var parent_label_width = jQuery('span.sfwd_option_label', parent_el).outerWidth(true);
-						if ((parent_label_width) && (typeof parent_label_width !== 'undefined') && (typeof parent_label_width !== 'null')  && ('' !== parent_label_width ) ) {
-							if (parent_label_width > max_width) {
-								max_width = parent_label_width;
-							}
-						}
-
-						if (max_width > 0) {
-							var adjusted_width = max_width - 25;
-							if (adjusted_width < 210) {
-								adjusted_width = 120;
-							}
-							if (adjusted_width > 300) {
-								adjusted_width = 300;
-							}
-							jQuery('.sfwd_option_label', item).width(adjusted_width);
-							jQuery('.ld-settings-inner .sfwd_option_label', item).css('width', 'auto');
-						}
-					} 
-				}
-			});
-		});		
-	}
-	*/
-
-	/**
 	 * Handle number fields with limits and filtering.
 	 */
+	function learndash_get_input_config( input_field ) {
+		var input_config = input_field.data('input-config');
+		if (typeof input_config === 'undefined') {
+			input_config = {};
+
+			input_config['input_min'] = input_field.attr('min');
+			if (typeof input_config['input_min'] === 'undefined') {
+				input_config['input_min'] = '';
+			}
+
+			input_config['input_max'] = input_field.attr('max');
+			if (typeof input_config['input_max'] === 'undefined') {
+				input_config['input_max'] = '';
+			}
+
+			input_config['input_step'] = input_field.attr('step');
+			if (typeof input_config['input_step'] === 'undefined') {
+				input_config['input_step'] = '';
+			}
+			
+			input_config["can_decimal"] = input_field.attr("can_decimal");
+			if ( ( typeof input_config["can_decimal"] !== "undefined") && ( '' !== input_config['can_decimal'] ) ) {
+				if ( "true" === input_config["can_decimal"] ) {
+					input_config["can_decimal"] = 2;
+				} else {
+					input_config['can_decimal'] = parseInt( input_config['can_decimal'].toString() );
+				}
+
+				if ( '' === input_config['can_decimal'] ) {
+					input_config["can_decimal"] = false;
+				}
+			} else {
+				input_config["can_decimal"] = false;
+			}
+
+			input_config["can_empty"] = input_field.attr("can_empty");
+			if ((typeof input_config["can_empty"] !== "undefined") && ( ( "true" === input_config["can_empty"] ) || ( '1' === input_config["can_empty"] ) ) ) {
+        		input_config["can_empty"] = true;
+      		} else {
+				input_config["can_empty"] = false;
+			}
+			
+			if ( ( "" === input_config["input_step"] ) && ( "" === input_config["input_min"] ) && ( "" === input_config["input_max"] ) ) {
+            	return false;
+			}
+
+			if ( input_config["can_decimals"] > 0 ) {
+				if ( '' !== input_config['input_min'] ) {
+					input_config["input_min"] = parseFloat( input_config["input_min"] );
+				}
+
+				if ( '' !== input_config['input_max'] ) {
+					input_config["input_max"] = parseFloat( input_config["input_max"] );
+				}
+
+				if ( '' !== input_config['input_step'] ) {
+					input_config["input_step"] = parseFloat( input_config["input_step"] );
+				}
+			} else {
+               if ( '' !== input_config['input_min'] ) {
+				   input_config['input_min'] = parseInt( input_config['input_min'] );
+			   }
+
+			   if ( '' !== input_config['input_max'] ) {
+				   input_config['input_max'] = parseInt( input_config['input_max'] );
+			   }
+
+			   if ( '' !== input_config['input_step'] ) {
+				   input_config['input_step'] = parseInt( input_config['input_step'] );
+			   }
+            }
+			
+			input_field.data("input-config", input_config);
+		}
+
+		return input_config;
+	}
+
+	var learndash_settings_fields_errors = {};
+
+	function learndash_set_input_error( target, invalid ) {
+		if (jQuery(target).length) {
+			//if (typenow !== 'undefined') {
+			//	console.log('typenow[%o]', typenow);
+			//}
+			
+  			var input_wrapper = jQuery(target).parents(".sfwd_input");
+  			if ("undefined" !== typeof input_wrapper) {
+				var input_id = jQuery(input_wrapper).attr('id');
+
+				if ( invalid === true ) {
+					if ( "undefined" === typeof learndash_settings_fields_errors[input_id] ) {
+						var input_label = jQuery('.sfwd_option_label label', input_wrapper).html();
+						if ("undefined" !== typeof input_label) {
+							var input_error = jQuery(target).next(".learndash-section-field-error").html();
+							if ("undefined" !== typeof input_error) {
+								learndash_settings_fields_errors[input_id] = input_label.trim() + " - " + input_error;
+							} else {
+								learndash_settings_fields_errors[input_id] = input_label.trim();
+							}
+						}
+					}
+
+	    			jQuery(input_wrapper).addClass("learndash_settings_field_invalid");
+					jQuery(input_wrapper).find(".learndash-section-field-error").show();
+				} else {
+					if ( "undefined" !== typeof learndash_settings_fields_errors[input_id] ) {
+						delete learndash_settings_fields_errors[input_id]
+					}
+					jQuery(input_wrapper).removeClass("learndash_settings_field_invalid");
+            		jQuery(input_wrapper).find(".learndash-section-field-error").hide();
+				}
+			}
+		}
+
+		learndash_update_header_notice();
+	}
+
+	function learndash_update_header_notice() {
+		if ( ! jQuery('#learndash-settings-fields-notice-errors').length ) {
+			if ("undefined" === typeof learndash_admin_settings_data['admin_notice_settings_fields_errors_container'] ) {
+				return;
+			}
+			
+			jQuery( learndash_admin_settings_data['admin_notice_settings_fields_errors_container'] ).insertAfter("hr.wp-header-end");
+		}
+
+		if ( jQuery('#learndash-settings-fields-notice-errors').length ) {
+			var notice_el = jQuery("#learndash-settings-fields-notice-errors");
+			var object_keys = Object.keys(learndash_settings_fields_errors);
+
+			var error_field_list = '';
+			for (var i = 0; i < object_keys.length; i++) { 
+				var object_key = object_keys[i];
+				var error_field_label = learndash_settings_fields_errors[object_key];
+				if ( '' !== error_field_label ) {
+					error_field_list += "<li>" + error_field_label + '</li>';
+				}
+			}
+
+			//if ( '' !== error_field_list ) {
+			//	error_field_list = "<p><ul>" + error_field_list + '</ul></p>';
+			//}
+			jQuery("ul.errors-list", notice_el).html(error_field_list);
+			if (object_keys.length > 0 ) {				
+        		notice_el.show();
+      		} else {
+        		notice_el.hide();
+      		}
+		}		
+	}
+
+
 	if (jQuery('.sfwd_options input[type="number"]').length) {
 		jQuery('.sfwd_options input[type="number"]').each(function (idx, item) {
-			jQuery(item).keypress(function (e) {
-				var charCode = (e.which) ? e.which : e.keyCode;
-
-				var input_min = jQuery(e.currentTarget).attr('min');
-				if (typeof input_min === 'undefined') {
-					input_step = 0;
+			jQuery(item).on( 'keypress', function (e) {
+				var input_config = learndash_get_input_config(jQuery(e.currentTarget));
+				if ( false === input_config ) {
+					return;
 				}
-
-				var input_max = jQuery(e.currentTarget).attr('max');
-				if (typeof input_max === 'undefined') {
-					input_max = 0;
-				}
-
-				if ( ( input_step == 0 ) && ( input_max == 0 ) ) {
-					if (charCode < 48 || charCode > 57) {
-						return false;
-					}
-					return true;
-				}
-
-				var input_step = jQuery(e.currentTarget).attr('step');
-				if (typeof input_step === 'undefined') {
-					input_step = 1;
-				}
-
-				var input_allow_decimal = false;
-				// Does the step contain a decimal.
-				/*
-				if (input_step % 1 != 0) {
-					input_allow_decimal = true;
-
-					input_step_split = input_step.split('.');
-				}
-				*/
-
+				var charCode = e.which ? e.which : e.keyCode;
 				var input_value_new = String.fromCharCode(charCode);
-				var input_value_current = jQuery(e.currentTarget).val();
-
-				if (input_value_new == '.') {
-					// If we already have a decimal.
-					if ((input_allow_decimal == true) && (input_value_current % 1 != 0)) {
-						return false;
-					} else if(input_allow_decimal != true) {
+				var input_value_current = e.currentTarget.valueAsNumber;
+		
+				if (input_value_new === '.') {
+					if ("undefined" === typeof input_value_current || isNaN(input_value_current)) {
+						learndash_set_input_error(e.currentTarget, true);
+						e.preventDefault();
 						return false;
 					}
-					return true;
-				} 
-
-				var input_value_combined = input_value_current + input_value_new;
-
-				if ( input_allow_decimal == true ) {
-					input_max = parseFloat(Math.round(input_max * 100) / 100).toFixed(2);
-					input_value_combined = parseFloat(Math.round(input_value_combined * 100) / 100).toFixed(2);
-				} else {
-					input_max = parseInt(input_max, 10);
-					input_value_combined = parseInt(input_value_combined, 10);
-				}
-
-				if ( input_max != '') {
-					if (input_value_combined > input_max) {
+					
+					if ( input_config["can_decimal"] === false ) {
+						e.preventDefault();
 						return false;
+					} else {
+						learndash_set_input_error(e.currentTarget, false);
+						return true;
 					}
 				}
 
-				//if (charCode > 31 && (charCode != 46 && (charCode < 48 || charCode > 57))) {
-				//if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-				if (charCode < 48 || charCode > 57) {
+				if ( input_value_new === '-') {
+					if ( ( "undefined" !== typeof input_config['input_min'] ) && ( input_config['input_min'] !== '' ) && ( input_config['input_min'] < 0 ) ) {
+						return true;
+					} else {
+						e.preventDefault();
+						return false;
+					}
+				}
+
+				if ( ( "undefined" !== typeof input_config["input_max"] ) && ( '' !== input_config["input_max"] ) && ( input_value_current > input_config["input_max"] ) ) {
+					learndash_set_input_error(e.currentTarget, true);
+					e.preventDefault();
+					return false;
+				}
+					
+				if ( ( "undefined" !== typeof input_config['input_min'] ) && ( '' !== input_config['input_min'] ) && ( input_value_current < input_config['input_min'] ) ) {
+					learndash_set_input_error(e.currentTarget, true);
+					e.preventDefault();
 					return false;
 				}
 
-
+				if (charCode < 48 || charCode > 57) {
+					e.preventDefault();
+					return false;
+				} 
+		
+				learndash_set_input_error(e.currentTarget, false);
 				return true;
 			});
-			//}
+
+			jQuery(item).on("invalid", function(e) {
+		        if (jQuery(e.currentTarget).length) {
+					learndash_set_input_error(e.currentTarget, true);
+
+					// prevent showing the default display
+              		e.preventDefault();
+            	}
+      		});
+			
+			jQuery(item).on("input", function(e) {
+        		if (jQuery(e.currentTarget).length) {
+					var input_config = learndash_get_input_config(jQuery(e.currentTarget));
+					if ( false === input_config ) {
+						return;
+					}
+
+					var input_value_current = e.currentTarget.valueAsNumber;					
+					if ( "undefined" === typeof input_value_current ) {
+        				learndash_set_input_error(e.currentTarget, true);
+        				return false;
+					}
+
+					if ( ( input_config['can_empty'] ) && ( isNaN( input_value_current) ) ) {
+						learndash_set_input_error(e.currentTarget, false);
+            			return true;
+					} else if (isNaN(input_value_current)) {
+						learndash_set_input_error(e.currentTarget, true);
+            			return false;
+					}
+				   
+					if ( "undefined" !== typeof input_config["input_max"] && "" !== input_config["input_max"] && input_value_current > input_config["input_max"] ) {
+						learndash_set_input_error(e.currentTarget, true);
+						return false;
+					}
+					
+					if ( ( "undefined" !== typeof input_config['input_min'] ) && ( '' !== input_config['input_min'] ) && ( input_value_current < input_config['input_min'] ) ) {
+						learndash_set_input_error(e.currentTarget, true);
+              			return false;
+					}
+
+					if ( ( "undefined" !== typeof input_config['can_decimal'] ) && ( false !== input_config['can_decimal'] ) ) {
+						input_value_current_split = input_value_current.toString().split(".");
+						if ( input_value_current_split.length > 1 ) {
+							if ( input_value_current_split[1].length > input_config['can_decimal'] ) {
+								var input_value_current_fixed = input_value_current.toFixed(input_config["can_decimal"]);
+								if (input_value_current_fixed !== input_value_current) {
+									jQuery(e.currentTarget).val(input_value_current_fixed);
+								}
+							}
+						}
+					}
+
+					learndash_set_input_error(e.currentTarget, false);
+        		}
+			});
 		});
 	}
 });

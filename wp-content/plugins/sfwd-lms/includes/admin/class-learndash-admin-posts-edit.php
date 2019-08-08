@@ -139,6 +139,7 @@ if ( ! class_exists( 'Learndash_Admin_Post_Edit' ) ) {
 						array(),
 						LEARNDASH_SCRIPT_VERSION_TOKEN
 					);
+					wp_style_add_data( 'learndash-admin-binary-selector-style', 'rtl', 'replace' );
 					$learndash_assets_loaded['styles']['learndash-admin-binary-selector-style'] = __FUNCTION__;
 				}
 
@@ -151,6 +152,7 @@ if ( ! class_exists( 'Learndash_Admin_Post_Edit' ) ) {
 						array(),
 						LEARNDASH_SCRIPT_VERSION_TOKEN
 					);
+					wp_style_add_data( 'learndash-admin-style', 'rtl', 'replace' );
 					$learndash_assets_loaded['styles']['learndash-admin-style'] = __FUNCTION__;
 				}
 
@@ -162,6 +164,7 @@ if ( ! class_exists( 'Learndash_Admin_Post_Edit' ) ) {
 						array(),
 						LEARNDASH_SCRIPT_VERSION_TOKEN
 					);
+					wp_style_add_data( 'learndash_pager_css', 'rtl', 'replace' );
 					$learndash_assets_loaded['styles']['learndash_pager_css'] = __FUNCTION__;
 				}
 

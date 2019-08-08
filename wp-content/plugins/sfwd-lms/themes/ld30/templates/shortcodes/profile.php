@@ -115,9 +115,11 @@ endif; ?>
             <div class="ld-section-heading">
                 <h3><?php printf( esc_html_x( 'Your %s', 'Profile Course Content Label', 'learndash' ), esc_attr( LearnDash_Custom_Label::get_label( 'courses' ) ) ); ?></h3>
                 <div class="ld-item-list-actions">
+                    <?php if( isset($shortcode_atts['show_search']) && $shortcode_atts['show_search'] == 'yes' ) { ?>
                     <div class="ld-search-prompt" data-ld-expands="ld-course-search">
                         <?php echo esc_html__( 'Search', 'learndash' ); ?> <span class="ld-icon-search ld-icon"></span>
                     </div> <!--/.ld-search-prompt-->
+                    <?php } ?>
                     <div class="ld-expand-button" data-ld-expands="ld-main-course-list" data-ld-expand-text="<?php echo esc_attr_e( 'Expand All', 'learndash' ); ?>" data-ld-collapse-text="<?php echo esc_attr_e( 'Collapse All', 'learndash' ); ?>">
                         <span class="ld-icon-arrow-down ld-icon"></span>
                         <span class="ld-text"><?php echo esc_html_e( 'Expand All', 'learndash' ); ?></span>

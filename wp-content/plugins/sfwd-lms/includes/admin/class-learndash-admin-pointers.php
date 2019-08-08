@@ -160,7 +160,7 @@ add_filter(
 						'<a href="' . admin_url( 'admin.php?page=learndash_lms_overview' ) . '">' . esc_html__( 'mini-Bootcamp', 'learndash' ) . '</a>'
 					) . '</span>',
 					'position' => array(
-						'edge'  => 'left', // top, bottom, left, right
+						'edge'  => is_rtl() ? 'right' : 'left', // top, bottom, left, right
 						'align' => 'middle', // top, bottom, left, right, middle
 					),
 				);

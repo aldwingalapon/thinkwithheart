@@ -1326,8 +1326,6 @@
 			},
 
 			uploadFile: function( event ) {
-				//console.log('click event[%o]', event);
-				
 				var question_id = event.currentTarget.id.replace('uploadEssaySubmit_', '');
 				var file = $( '#uploadEssay_' + question_id )[0].files[0];
 				
@@ -1335,7 +1333,7 @@
 				
 					var nonce = $( '#_uploadEssay_nonce_' + question_id ).val();
 					var uploadEssaySubmit = $('#uploadEssaySubmit_' + question_id );
-					uploadEssaySubmit.val('Uploading...');
+					uploadEssaySubmit.val(config.essayUploading);
 
 					var data = new FormData();
 					data.append('action', 'learndash_upload_essay');
@@ -1357,7 +1355,7 @@
 								$('#uploadEssayFile_' + question_id ).val(response.data.filelink);
 								uploadEssaySubmit.attr('disabled', 'disabled');
 								setTimeout( function(){
-									uploadEssaySubmit.val('Success');
+									uploadEssaySubmit.val(config.essaySuccess);
 								}, 1500 );
 							
 								var $item = $('#uploadEssayFile_' + question_id ).parents('.wpProQuiz_listItem');

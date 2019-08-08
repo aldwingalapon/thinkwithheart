@@ -240,8 +240,26 @@ if ( ! class_exists( 'LDLMS_Quiz_Questions' ) ) {
 
 						$question_mapper = new WpProQuiz_Model_QuestionMapper();
 
+						$_questions_changed = false;
 						foreach ( $this->questions['post_ids'] as $question_post_id => $question_pro_id ) {
-							$question_pro_object = $question_mapper->fetchById( absint( $question_pro_id ) );
+							$question_post_id = absint( $question_post_id );
+							$question_pro_id = absint( $question_pro_id );
+
+							$question_pro_object = $question_mapper->fetchById( $question_pro_id );
+							if ( is_null( $question_pro_object ) ) {
+								// Changed in LD 3.0.7 we don't trust the $question_pro_id value.
+								$question_pro_id_real = get_post_meta( $question_post_id, 'question_pro_id', true );
+								$question_pro_id_real = absint( $question_pro_id_real );
+								if ( ( ! empty( $question_pro_id_real ) ) && ( $question_pro_id_real !== $question_pro_id ) ) {
+									$question_pro_object = $question_mapper->fetchById( $question_pro_id_real );
+									if ( is_a( $question_pro_object, 'WpProQuiz_Model_Question' ) ) {
+										$_questions_changed = true;
+										$this->questions['post_ids'][ $question_post_id ] = $question_pro_id_real;
+										$question_pro_id = $question_pro_id_real;
+									}
+								}
+							}
+
 							if ( is_a( $question_pro_object, 'WpProQuiz_Model_Question' ) ) {
 								$question_pro_object->setQuestionPostId( $question_post_id );
 								$question_pro_object->setQuizId( absint( $this->quiz_pro_id ) );
@@ -252,9 +270,14 @@ if ( ! class_exists( 'LDLMS_Quiz_Questions' ) ) {
 								unset( $this->questions['post_ids'][ $question_post_id ] );
 							}
 						}
+
+						if ( true === $_questions_changed ) {
+							update_post_meta( $this->quiz_primary_id, 'ld_quiz_questions', $this->questions['post_ids'] );
+						}
 					}
 					break;
 			}
+
 			return $questions;
 		}
 

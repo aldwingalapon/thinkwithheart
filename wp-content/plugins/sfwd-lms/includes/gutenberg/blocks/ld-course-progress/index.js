@@ -28,12 +28,7 @@ const {
 
 const {
     ServerSideRender,
-    Tooltip,
     PanelBody,
-    PanelRow,
-    RangeControl,
-    FormToggle,
-    SelectControl,
     ToggleControl,
     TextControl
 } = wp.components;

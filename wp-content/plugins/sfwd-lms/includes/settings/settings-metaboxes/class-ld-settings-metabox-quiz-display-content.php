@@ -13,6 +13,12 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 	class LearnDash_Settings_Metabox_Quiz_Display_Content extends LearnDash_Settings_Metabox {
 
 		/**
+		 * Variable to hold the number of questions.
+		 * @var integer $questions_count
+		 */
+		var $questions_count = 0;
+		
+		/**
 		 * Public constructor for class
 		 */
 		public function __construct() {
@@ -104,6 +110,12 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 
 			if ( true === $this->settings_values_loaded ) {
 
+				$questionMapper = new WpProQuiz_Model_QuestionMapper();
+				$questions = $questionMapper->fetchAll( $this->quiz_edit['quiz']->getId() );
+				if ( ( is_array( $questions ) ) && ( ! empty( $questions ) ) ) {
+					$this->questions_count = count( $questions );
+				}
+
 				if ( ! isset( $this->setting_option_values['quiz_materials'] ) ) {
 					$this->setting_option_values['quiz_materials'] = '';
 				}
@@ -171,8 +183,8 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 						$this->setting_option_values['showMaxQuestionValue'] = '';
 					}
 
-					if ( absint( $this->setting_option_values['showMaxQuestionValue'] ) > $this->ld_quiz_questions_object->get_questions_count() ) {
-						$this->setting_option_values['showMaxQuestionValue'] = $this->ld_quiz_questions_object->get_questions_count();
+					if ( absint( $this->setting_option_values['showMaxQuestionValue'] ) > $this->questions_count ) {
+						$this->setting_option_values['showMaxQuestionValue'] = $this->questions_count;
 					}
 
 					if ( 'on' === $this->setting_option_values['questionRandom'] ) {
@@ -357,13 +369,13 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 					'input_label' => sprintf(
 						// translators: placeholder: questions.
 						esc_html_x( 'out of %1$d %2$s.', 'placeholder: count of questions, questions label.', 'learndash' ),
-						$this->ld_quiz_questions_object->get_questions_count(),
+						$this->questions_count,
 						learndash_get_custom_label_lower( 'questions' )
 					),
 					'attrs'       => array(
 						'step' => 1,
 						'min'  => 0,
-						'max'  => $this->ld_quiz_questions_object->get_questions_count(),
+						'max'  => $this->questions_count,
 					),
 					'value'       => $this->setting_option_values['showMaxQuestionValue'],
 					'default'     => 0,

@@ -611,6 +611,7 @@ if ( ! class_exists( 'Semper_Fi_Module' ) ) {
 			array(), 
 			LEARNDASH_SCRIPT_VERSION_TOKEN 
 		);
+		wp_style_add_data( 'sfwd-module-style', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['sfwd-module-style'] = __FUNCTION__;	
 	}
 

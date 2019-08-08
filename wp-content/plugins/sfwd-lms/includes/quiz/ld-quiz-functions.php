@@ -19,45 +19,67 @@
 function learndash_get_quiz_id_by_pro_quiz_id( $quiz_pro_id = 0 ) {
 	global $wpdb;
 
+	global $learndash_shortcode_atts;
+
 	static $quiz_post_ids = array();
 
 	if ( empty( $quiz_pro_id ) ) {
 		return;
 	}
+	$quiz_pro_id = absint( $quiz_pro_id );
 
-	if ( isset( $quiz_post_ids[ $quiz_pro_id ] ) ) {
+	if ( ( isset( $quiz_post_ids[ $quiz_pro_id ] ) ) && ( ! empty( $quiz_post_ids[ $quiz_pro_id ] ) ) ) {
 		return $quiz_post_ids[ $quiz_pro_id ];
 	} else {
 		$quiz_post_ids[ $quiz_pro_id ] = false;
 
-
-		/*
 		global $learndash_shortcode_atts;
 		if ( ! empty( $learndash_shortcode_atts ) ) {
 			foreach ( array_reverse( $learndash_shortcode_atts ) as $shortcode_tag => $shortcode_atts ) {
-				if ( isset( $shortcode_atts['quiz_post_id'] ) ) {
-					return intval( $shortcode_atts['quiz_post_id'] );
-				} elseif ( isset( $shortcode_atts['quiz_id'] ) ) {
-					return intval( $shortcode_atts['quiz_id'] );
-				} elseif ( isset( $shortcode_atts['quiz'] ) ) {
-					return intval( $shortcode_atts['quiz'] );
+				if ( in_array( $shortcode_tag, array('LDAdvQuiz', 'ld_quiz' ) ) ) {
+					if ( ( isset( $shortcode_atts['quiz_post_id'] ) ) && ( ! empty( $shortcode_atts['quiz_post_id'] ) ) ) {
+						$quiz_post_ids[ $quiz_pro_id ] = absint( $shortcode_atts['quiz_post_id'] );
+						return $quiz_post_ids[ $quiz_pro_id ];
+					} elseif ( ( isset( $shortcode_atts['quiz_id'] ) ) && ( ! empty( $shortcode_atts['quiz_id'] ) ) ) {
+						$quiz_post_ids[ $quiz_pro_id ] = absint( $shortcode_atts['quiz_id'] );
+						return $quiz_post_ids[ $quiz_pro_id ];
+					} elseif ( ( isset( $shortcode_atts['quiz'] ) ) && ( ! empty( $shortcode_atts['quiz'] ) ) ) {
+						$quiz_post_ids[ $quiz_pro_id ] = absint( $shortcode_atts['quiz'] );
+						return $quiz_post_ids[ $quiz_pro_id ];
+					}
+				}
+			}
+		}
+
+		// Before we run all the queries we check the global $post and see if we are showing a Quiz Post.
+		$queried_object = get_queried_object();
+		if ( ( is_a( $queried_object, 'WP_Post' ) ) && ( learndash_get_post_type_slug( 'quiz' ) === $queried_object->post_type ) ) {
+			$quiz_post_ids[ $quiz_pro_id ] = absint( $queried_object->ID );
+			return $quiz_post_ids[ $quiz_pro_id ];
+		}
+
+		/*
+		$post_id = get_the_ID();
+		if ( ! empty( $post_id ) ) {
+			$quiz_post = get_post( $post_id );
+			if ( ( $quiz_post instanceof WP_Post ) && ( $quiz_post->post_type == 'sfwd-quiz' ) ) {
+				//$quiz_post_id = $quiz_post->ID;
+				$quiz_pro_id_tmp = learndash_get_setting( $quiz_post->ID, 'quiz_pro' );
+				if ( ( $quiz_pro_id_tmp ) && ( absint( $quiz_pro_id_tmp ) === $quiz_pro_id ) ) {
+					$quiz_post_ids[ $quiz_pro_id ] = absint( $quiz_pro_id_tmp );
+					return $quiz_post_ids[ $quiz_pro_id ];
 				}
 			}
 		}
 		*/
-		/*
-		$queried_object = get_queried_object();
-		if ( ( is_a( $queried_object, 'WP_Post' ) ) && ( learndash_get_post_type_slug( 'quiz' ) === $queried_object->post_type ) ) {
-			return (int) $queried_object->ID;
-		}
-		*/
+
 
 		$sql_str = $wpdb->prepare( "SELECT post_id FROM " . $wpdb->postmeta . " as postmeta INNER JOIN " . $wpdb->posts . " as posts ON posts.ID=postmeta.post_id
 			WHERE posts.post_type = %s AND posts.post_status = %s AND postmeta.meta_key = %s", 'sfwd-quiz', 'publish', 'quiz_pro_id_' . absint( $quiz_pro_id ) );
 		$quiz_post_id = $wpdb->get_var( $sql_str );
 		if ( ! empty( $quiz_post_id ) ) {
 			$quiz_post_ids[ $quiz_pro_id ] = absint( $quiz_post_id );
-			return absint( $quiz_post_id );
+			return $quiz_post_ids[ $quiz_pro_id ];
 		}
 
 		$sql_str = $wpdb->prepare( "SELECT post_id FROM " . $wpdb->postmeta . " as postmeta INNER JOIN " . $wpdb->posts . " as posts ON posts.ID=postmeta.post_id
@@ -66,7 +88,7 @@ function learndash_get_quiz_id_by_pro_quiz_id( $quiz_pro_id = 0 ) {
 		if ( ! empty( $quiz_post_id ) ) {
 			update_post_meta( absint( $quiz_post_id ), 'quiz_pro_id_' . absint( $quiz_pro_id ), absint( $quiz_pro_id ) );
 			$quiz_post_ids[ $quiz_pro_id ] = absint( $quiz_post_id );
-			return absint( $quiz_post_id );
+			return $quiz_post_ids[ $quiz_pro_id ];
 		}
 
 		// Because we seem to have a mix of int and string values when these are serialized the format to look for end up being somewhat kludge-y.
@@ -84,7 +106,7 @@ function learndash_get_quiz_id_by_pro_quiz_id( $quiz_pro_id = 0 ) {
 			update_post_meta( $quiz_post_id, 'quiz_pro_id_' . absint( $quiz_pro_id ), absint( $quiz_pro_id ) );
 			update_post_meta( $quiz_post_id, 'quiz_pro_id', absint( $quiz_pro_id ) );
 			$quiz_post_ids[ $quiz_pro_id ] = $quiz_post_id;
-			return $quiz_post_id;
+			return $quiz_post_ids[ $quiz_pro_id ];
 		}
 	}
 }
@@ -949,7 +971,8 @@ function learndash_quiz_result_message_sort( $messages = array() ) {
 				if ( ! empty( $text ) ) {
 					$text = wp_check_invalid_utf8( $text );
 					if ( ! empty( $text ) ) {
-						$text = sanitize_post_field( 'post_content', $text, 0, 'db' );
+						$text = sanitize_post_field( 'post_content', $text, 0, 'display' );
+						$text = stripslashes( $text );
 					}
 				} else {
 					$activ = null;

@@ -288,6 +288,8 @@ if ( ( class_exists( 'WP_Plugin_Install_List_Table' ) ) && ( ! class_exists( 'Le
 
 				if ( ( ! empty( $plugin_icon_url ) ) && ( substr( $plugin_icon_url, 0, 2 ) != '//' ) ) {
 					$plugin_icon_url = LEARNDASH_LMS_PLUGIN_URL . $plugin_icon_url;
+				} else {
+					$plugin_icon_url = LEARNDASH_LMS_PLUGIN_URL . 'assets/images-add-ons/' . basename( $plugin_icon_url );
 				}
 
 				$last_updated_timestamp = strtotime( $plugin['last_updated'] );

@@ -1180,7 +1180,7 @@ function learndash_visitor_check_shortcode( $atts, $content = '' ) {
 		);
 		$atts = wp_parse_args( $atts, $defaults );
 		
-		if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+		if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 			$atts['autop'] = true;
 		} else {
 			$atts['autop'] = false;
@@ -1242,7 +1242,7 @@ function learndash_student_check_shortcode( $atts, $content = null ) {
 		);
 		$atts = wp_parse_args( $atts, $defaults );
 		
-		if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+		if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 			$atts['autop'] = true;
 		} else {
 			$atts['autop'] = false;
@@ -1299,7 +1299,7 @@ function learndash_ld_group_check_shortcode( $atts, $content = null ) {
 		);
 		$atts = wp_parse_args( $atts, $defaults );
 
-		if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+		if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 			$atts['autop'] = true;
 		} else {
 			$atts['autop'] = false;
@@ -1384,7 +1384,7 @@ function learndash_course_complete_shortcode( $atts = array(), $content = '' ) {
 		);
 		$atts = wp_parse_args( $atts, $defaults );
 
-		if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+		if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 			$atts['autop'] = true;
 		} else {
 			$atts['autop'] = false;
@@ -1436,7 +1436,7 @@ function learndash_course_inprogress_shortcode( $atts = array(), $content = '' )
 			'autop'		=> true
 		);
 		$atts = wp_parse_args( $atts, $defaults );
-		if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+		if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 			$atts['autop'] = true;
 		} else {
 			$atts['autop'] = false;
@@ -1489,7 +1489,7 @@ function learndash_course_notstarted_shortcode( $atts = array(), $content = '' )
 		);
 		$atts = wp_parse_args( $atts, $defaults );
 
-		if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+		if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 			$atts['autop'] = true;
 		} else {
 			$atts['autop'] = false;
@@ -1537,12 +1537,14 @@ function learndash_course_expire_status_shortcode( $atts, $content ) {
 		$atts
 	);
 
-	if ( ( true == $atts['autop'] ) || ( $atts['autop'] == 'true' ) || ( $atts['autop'] == '1' ) ) {
+	if ( ( true === $atts['autop'] ) || ( 'true' === $atts['autop'] ) || ( '1' === $atts['autop'] ) ) {
 		$atts['autop'] = true;
 	} else {
 		$atts['autop'] = false;
 	}
 
+	$atts = apply_filters('learndash_ld_course_expire_status_shortcode_atts', $atts );
+	
 	if ( ( !empty( $atts['course_id'] ) ) && ( !empty( $atts['user_id'] ) ) ) {
 		if ( sfwd_lms_has_access( $atts['course_id'], $atts['user_id'] ) ) {
 			$course_meta = get_post_meta( $atts['course_id'], '_sfwd-courses', true );
@@ -1602,6 +1604,8 @@ function learndash_quiz_shortcode( $atts, $content = '', $show_materials = false
 	$course_id = $atts['course_id'] = absint( $atts['course_id'] );
 	$quiz_pro_id = $atts['quiz_pro_id'] = absint( $atts['quiz_pro_id'] );
 
+	$learndash_shortcode_atts['ld_quiz'] = $atts;
+
 	if ( ! empty( $atts['quiz_id'] ) ) {
 		$post = get_post( $atts['quiz_id'] );
 
@@ -1629,6 +1633,10 @@ function learndash_quiz_shortcode( $atts, $content = '', $show_materials = false
 					$quiz_mapper = new WpProQuiz_Model_QuizMapper();
 					$pro_quiz_edit = $quiz_mapper->fetch( $quiz_settings['quiz_pro'] );
 					if ( ( $pro_quiz_edit ) && ( is_a( $pro_quiz_edit, 'WpProQuiz_Model_Quiz' ) ) ) {
+						if ( ( isset( $atts['quiz_id'] ) ) && ( ! empty( $atts['quiz_id'] ) ) ) {
+							$pro_quiz_edit->setPostId( $atts['quiz_id'] );
+						}
+
 						if ( $pro_quiz_edit->isQuizRunOnce() ) {
 							$repeats = 0;
 							// Update for later.
@@ -1700,10 +1708,8 @@ function learndash_quiz_shortcode( $atts, $content = '', $show_materials = false
 				
 				$quiz_content = '';
 				if ( ! empty( $quiz_settings['quiz_pro'] ) ) {
-					//$learndash_shortcode_atts['ld_quiz'] = $atts;
 					$quiz_content = wptexturize(
 						do_shortcode( '[LDAdvQuiz ' . $quiz_settings['quiz_pro'] . ' quiz_pro_id="' . $quiz_settings['quiz_pro'] . '" quiz_id="' . $quiz_post->ID . '"]' )
-						//do_shortcode( '[LDAdvQuiz ' . $quiz_settings['quiz_pro'] . ']' )
 					);
 				} 
 

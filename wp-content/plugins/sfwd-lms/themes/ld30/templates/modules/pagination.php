@@ -108,7 +108,12 @@ if ( ( isset( $pager_results ) ) && ( !empty( $pager_results ) ) ) {
 
 		<a class="prev ld-primary-color-hover <?php echo esc_attr($pager_left_class); ?>" <?php if ( ( isset( $href_query_arg ) ) && ( !empty( $href_query_arg ) ) ) { ?>
 			href="<?php echo add_query_arg( $href_query_arg, $href_val_prefix . $prev_page_number ) ?>"
-		<?php } ?> data-context="<?php echo esc_attr($pager_context); ?>" data-paged="<?php echo $href_val_prefix . $prev_page_number . $search_arg; ?>" data-course_id="<?php echo esc_attr($course_id); ?>" <?php echo $data_lesson_id; ?> class="<?php echo $pager_left_class ?>" <?php echo $pager_left_disabled; ?> title="<?php esc_attr_e( 'Previous Page', 'learndash' ); ?>"><span class="ld-icon-arrow-left ld-icon"></span></a>
+		<?php } ?> data-context="<?php echo esc_attr($pager_context); ?>" data-paged="<?php echo $href_val_prefix . $prev_page_number . $search_arg; ?>" data-course_id="<?php echo esc_attr($course_id); ?>" <?php echo $data_lesson_id; ?> class="<?php echo $pager_left_class ?>" <?php echo $pager_left_disabled; ?> title="<?php esc_attr_e( 'Previous Page', 'learndash' ); ?>">
+		<?php if ( is_rtl() ) { ?>
+			<span class="ld-icon-arrow-right ld-icon"></span></a>
+		<?php } else { ?>
+			<span class="ld-icon-arrow-left ld-icon"></span></a>
+		<?php } ?>
 		</span>
 		<span><?php 
 		// translators: placeholder: current page numer of total pages
@@ -119,7 +124,12 @@ if ( ( isset( $pager_results ) ) && ( !empty( $pager_results ) ) ) {
 		); ?></span>
 			<a class="next ld-primary-color-hover <?php echo esc_attr($pager_right_class); ?>" <?php if ( ( isset( $href_query_arg ) ) && ( !empty( $href_query_arg ) ) ) { ?>
 				href="<?php echo add_query_arg( $href_query_arg, $href_val_prefix . $next_page_number ) ?>"
-			<?php } ?> data-context="<?php echo esc_attr($pager_context); ?>" data-paged="<?php echo $href_val_prefix . $next_page_number . $search_arg; ?>" data-course_id="<?php echo esc_attr($course_id); ?>" <?php echo $data_lesson_id; ?> class="<?php echo $pager_right_class ?>" <?php echo $pager_right_disabled; ?> title="<?php esc_attr_e( 'Next Page', 'learndash' ); ?>"><span class="ld-icon-arrow-right ld-icon"></span></a>
+			<?php } ?> data-context="<?php echo esc_attr($pager_context); ?>" data-paged="<?php echo $href_val_prefix . $next_page_number . $search_arg; ?>" data-course_id="<?php echo esc_attr($course_id); ?>" <?php echo $data_lesson_id; ?> class="<?php echo $pager_right_class ?>" <?php echo $pager_right_disabled; ?> title="<?php esc_attr_e( 'Next Page', 'learndash' ); ?>">
+			<?php if ( is_rtl() ) { ?>
+				<span class="ld-icon-arrow-left ld-icon"></span></a>
+			<?php } else { ?>
+				<span class="ld-icon-arrow-right ld-icon"></span></a>
+			<?php } ?>
 
 		<?php
 

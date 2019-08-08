@@ -27,7 +27,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	static public function init_hooks() {
+	public static function init_hooks() {
 
 		if ( ! is_admin() ) {
 			return;
@@ -61,7 +61,7 @@ class Cartflows_Admin {
 	/**
 	 *  After save of permalinks.
 	 */
-	static public function cartflows_after_save_permalinks() {
+	public static function cartflows_after_save_permalinks() {
 
 		$has_saved_permalinks = get_option( 'cartflows_permalink_saved' );
 		if ( $has_saved_permalinks ) {
@@ -74,7 +74,7 @@ class Cartflows_Admin {
 	/**
 	 *  Initialize after Cartflows pro get loaded.
 	 */
-	static public function settings_admin_scripts() {
+	public static function settings_admin_scripts() {
 		// Enqueue admin scripts.
 		if ( isset( $_REQUEST['page'] ) && CARTFLOWS_SETTINGS == $_REQUEST['page'] ) {
 			add_action( 'admin_enqueue_scripts', __CLASS__ . '::styles_scripts' );
@@ -88,7 +88,7 @@ class Cartflows_Admin {
 	 * @param  array $links links.
 	 * @return array
 	 */
-	static public function add_action_links( $links ) {
+	public static function add_action_links( $links ) {
 		$mylinks = array(
 			'<a href="' . admin_url( 'admin.php?page=' . CARTFLOWS_SETTINGS ) . '">Settings</a>',
 			'<a target="_blank" href="' . esc_url( 'https://cartflows.com/docs' ) . '">Docs</a>',
@@ -107,7 +107,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	static public function initialise_plugin() {
+	public static function initialise_plugin() {
 
 		$name       = 'Cartflows';
 		$short_name = 'Cflows';
@@ -122,7 +122,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	static public function menu() {
+	public static function menu() {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -170,7 +170,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	static public function render() {
+	public static function render() {
 		$action = ( isset( $_GET['action'] ) ) ? sanitize_text_field( $_GET['action'] ) : '';
 		$action = ( ! empty( $action ) && '' != $action ) ? $action : 'general';
 		$action = str_replace( '_', '-', $action );
@@ -187,7 +187,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return void
 	 */
-	static public function render_content() {
+	public static function render_content() {
 
 		$action = ( isset( $_GET['action'] ) ) ? sanitize_text_field( $_GET['action'] ) : '';
 		$action = ( ! empty( $action ) && '' != $action ) ? $action : 'general';
@@ -204,7 +204,7 @@ class Cartflows_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	static public function save_common_settings() {
+	public static function save_common_settings() {
 
 		if ( isset( $_POST['cartflows-common-settings-nonce'] ) && wp_verify_nonce( $_POST['cartflows-common-settings-nonce'], 'cartflows-common-settings' ) ) {
 
@@ -213,7 +213,7 @@ class Cartflows_Admin {
 
 			if ( isset( $_POST['_cartflows_common'] ) ) {
 				// Loop through the input and sanitize each of the values.
-				$new_settings = Cartflows_Admin::sanitize_form_inputs( $_POST['_cartflows_common'] );
+				$new_settings = self::sanitize_form_inputs( $_POST['_cartflows_common'] );
 			}
 
 			Cartflows_Helper::update_admin_settings_option( '_cartflows_common', $new_settings, true );
@@ -234,7 +234,7 @@ class Cartflows_Admin {
 	 *
 	 * @since 1.1.14
 	 */
-	static public function save_debug_settings() {
+	public static function save_debug_settings() {
 
 		if ( isset( $_POST['cartflows-debug-settings-nonce'] ) && wp_verify_nonce( $_POST['cartflows-debug-settings-nonce'], 'cartflows-debug-settings' ) ) {
 
@@ -242,7 +242,7 @@ class Cartflows_Admin {
 			$new_settings = array();
 
 			if ( isset( $_POST['_cartflows_debug_data'] ) ) {
-				$new_settings = Cartflows_Admin::sanitize_form_inputs( $_POST['_cartflows_debug_data'] );
+				$new_settings = self::sanitize_form_inputs( $_POST['_cartflows_debug_data'] );
 			}
 
 			Cartflows_Helper::update_admin_settings_option( '_cartflows_debug_data', $new_settings, true );
@@ -265,7 +265,7 @@ class Cartflows_Admin {
 	 *
 	 * @since 1.1.14
 	 */
-	static public function save_permalink_settings() {
+	public static function save_permalink_settings() {
 
 		if ( isset( $_POST['cartflows-permalink-settings-nonce'] ) && wp_verify_nonce( $_POST['cartflows-permalink-settings-nonce'], 'cartflows-permalink-settings' ) ) {
 
@@ -277,7 +277,7 @@ class Cartflows_Admin {
 			}
 
 			if ( isset( $_POST['_cartflows_permalink'] ) ) {
-				$new_settings = Cartflows_Admin::sanitize_form_inputs( $_POST['_cartflows_permalink'] );
+				$new_settings = self::sanitize_form_inputs( $_POST['_cartflows_permalink'] );
 
 				if ( ! $new_settings['permalink'] ) {
 					$new_settings['permalink'] = CARTFLOWS_STEP_POST_TYPE;
@@ -306,7 +306,7 @@ class Cartflows_Admin {
 	 * @param array $input_settings input settings.
 	 * @return array
 	 */
-	static public function sanitize_form_inputs( $input_settings = array() ) {
+	public static function sanitize_form_inputs( $input_settings = array() ) {
 		$new_settings = array();
 		foreach ( $input_settings as $key => $val ) {
 
@@ -327,7 +327,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return boolean
 	 */
-	static public function is_global_admin() {
+	public static function is_global_admin() {
 
 		$current_screen = get_current_screen();
 
@@ -349,7 +349,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return boolean
 	 */
-	static public function is_flow_edit_admin() {
+	public static function is_flow_edit_admin() {
 
 		$current_screen = get_current_screen();
 
@@ -370,7 +370,7 @@ class Cartflows_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	static public function global_admin_scripts() {
+	public static function global_admin_scripts() {
 
 		$installed_plugins = get_plugins();
 		$is_wc_installed   = isset( $installed_plugins['woocommerce/woocommerce.php'] ) ? true : false;
@@ -414,7 +414,7 @@ class Cartflows_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	static public function global_admin_data() {
+	public static function global_admin_data() {
 
 		$current_screen = get_current_screen();
 
@@ -495,7 +495,7 @@ class Cartflows_Admin {
 	 *
 	 * @since 1.0.0
 	 */
-	static public function styles_scripts() {
+	public static function styles_scripts() {
 
 		// Styles.
 		wp_enqueue_style( 'cartflows-admin-settings', CARTFLOWS_URL . 'admin/assets/css/admin-menu-settings.css', array(), CARTFLOWS_VER );
@@ -516,7 +516,7 @@ class Cartflows_Admin {
 	/**
 	 * Save All admin settings here
 	 */
-	static public function save_settings() {
+	public static function save_settings() {
 
 		// Only admins can save settings.
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -538,7 +538,7 @@ class Cartflows_Admin {
 	 * @since 1.0.0
 	 * @return  string page url
 	 */
-	static public function get_page_url( $menu_slug ) {
+	public static function get_page_url( $menu_slug ) {
 
 		$parent_page = self::$default_menu_position;
 
@@ -563,7 +563,7 @@ class Cartflows_Admin {
 	 * @param String $classes body classes returned from the filter.
 	 * @return String body classes to be added to <body> tag in admin page
 	 */
-	static public function add_admin_body_class( $classes ) {
+	public static function add_admin_body_class( $classes ) {
 
 		$classes .= ' cartflows-' . CARTFLOWS_VER;
 

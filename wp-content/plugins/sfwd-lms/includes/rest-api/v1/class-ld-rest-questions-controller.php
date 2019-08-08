@@ -168,7 +168,7 @@ if ( ! class_exists( 'LD_REST_Questions_Controller_V1' ) ) {
 			if ( isset( $params['_question'] ) ) {
 				wp_update_post( [
 					'ID'           => $question_id,
-					'post_content' => $params['_question'],
+					'post_content' => wp_slash( $params['_question'] ),
 				] );
 			}
 

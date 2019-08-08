@@ -122,6 +122,7 @@ if ( ! class_exists( 'Learndash_Admin_Settings_Data_Reports' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash_style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash_style'] = __FUNCTION__;
 
 			wp_enqueue_style(
@@ -130,6 +131,7 @@ if ( ! class_exists( 'Learndash_Admin_Settings_Data_Reports' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'sfwd-module-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['sfwd-module-style'] = __FUNCTION__;
 
 			wp_enqueue_script(

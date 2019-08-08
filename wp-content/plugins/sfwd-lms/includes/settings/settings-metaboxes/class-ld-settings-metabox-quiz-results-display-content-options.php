@@ -410,9 +410,9 @@ if ( ( class_exists( 'LearnDash_Settings_Metabox' ) ) && ( ! class_exists( 'Lear
 			if ( ( $settings_screen_id === $this->settings_screen_id ) && ( $settings_metabox_key === $this->settings_metabox_key ) ) {
 
 				if ( ( isset( $settings_values['resultGradeEnabled'] ) ) && ( 'on' === $settings_values['resultGradeEnabled'] ) ) {
-					$settings_values['btnRestartQuizHidden'] = true;
+					$settings_values['resultGradeEnabled'] = true;
 				} else {
-					$settings_values['btnRestartQuizHidden'] = false;
+					$settings_values['resultGradeEnabled'] = false;
 				}
 
 				//if ( isset( $_POST['resultTextGrade'] ) ) {

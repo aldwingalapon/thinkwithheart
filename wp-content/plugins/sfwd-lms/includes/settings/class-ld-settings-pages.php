@@ -231,6 +231,7 @@ if ( ! class_exists( 'LearnDash_Settings_Page' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash_style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash_style'] = __FUNCTION__;
 
 			wp_enqueue_style(
@@ -239,6 +240,7 @@ if ( ! class_exists( 'LearnDash_Settings_Page' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'sfwd-module-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['sfwd-module-style'] = __FUNCTION__;
 
 			wp_enqueue_script(
@@ -438,6 +440,7 @@ function learndash_admin_settings_page_assets() {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash-select2-jquery-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash-select2-jquery-style'] = __FUNCTION__;
 		}
 
@@ -460,6 +463,7 @@ function learndash_admin_settings_page_assets() {
 			array(),
 			LEARNDASH_SCRIPT_VERSION_TOKEN
 		);
+		wp_style_add_data( 'learndash-admin-settings-page', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['learndash-admin-settings-page'] = __FUNCTION__;
 	}
 
@@ -481,6 +485,10 @@ function learndash_admin_settings_page_assets() {
 		if ( ! isset( $script_data['ajaxurl'] ) ) {
 			$script_data['ajaxurl'] = admin_url( 'admin-ajax.php' );
 		}
+		if ( ! isset( $script_data['admin_notice_settings_fields_errors'] ) ) {
+			$script_data['admin_notice_settings_fields_errors_container'] = '<div id="learndash-settings-fields-notice-errors" class="learndash-settings-fields-notice-errors notice notice-error"><p class="errors-header">' . esc_html__( 'You have errors on the following settings', 'learndash' ) . '</p><ul class="errors-list"></ul></div>';
+		}
+
 		$script_data = array( 'json' => json_encode( $script_data ) );
 		wp_localize_script( 'learndash-admin-settings-page', 'learndash_admin_settings_data', $script_data );
 	}

@@ -1131,6 +1131,7 @@ function learndash_30_template_assets() {
 	wp_register_style( 'learndash-quiz-front', $theme_template_url . '/assets/css/learndash.quiz.front' . leardash_min_asset() . '.css', [], LD_30_VER );
 
 	wp_enqueue_style( 'learndash-front' );
+	wp_style_add_data( 'learndash-front', 'rtl', 'replace' );
 	wp_enqueue_script( 'learndash-front' );
 
 	wp_localize_script( 'learndash-front', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
@@ -1145,6 +1146,7 @@ function learndash_30_template_assets() {
 
 	if ( get_post_type() == 'sfwd-quiz' ) {
 		wp_enqueue_style( 'learndash-quiz-front' );
+		wp_style_add_data( 'learndash-quiz-front', 'rtl', 'replace' );
 	}
 
 	$dequeue_styles = array(
@@ -1162,81 +1164,241 @@ add_action( 'enqueue_block_editor_assets', 'learndash_30_editor_scripts' );
 function learndash_30_editor_scripts() {
 
 	wp_enqueue_style( 'learndash-front', LEARNDASH_LMS_PLUGIN_URL . 'themes/ld30/assets/css/learndash' . leardash_min_asset() . '.css', [], LD_30_VER );
+	wp_style_add_data( 'learndash-front', 'rtl', 'replace' );
 	wp_enqueue_script( 'learndash-front', LEARNDASH_LMS_PLUGIN_URL . 'themes/ld30/assets/js/learndash' . leardash_min_asset() . '.js', array( 'jquery' ), LD_30_VER, true );
 
 }
 
 add_shortcode( 'learndash_login', 'learndash_login_shortcode' );
-function learndash_login_shortcode( $atts ) {
 
-	ob_start();
-
-	$post_types = array(
-		'sfwd-courses',
-		'sfwd-lessons',
-		'sfwd-topic',
-		'sfwd-quiz',
-	);
-
-	if ( ! in_array( get_post_type(), $post_types, true ) ) {
+/**
+ * Shortcode handler function for [learndash_login].
+ *
+ * @param array $atts Array of shortcode parameters.
+ * @param string $content Content to append to and return.
+ * @return string $content.
+ */
+function learndash_login_shortcode( $atts = array(), $content = '' ) {
+	if ( ! in_array( get_post_type(), learndash_get_post_types( 'course' ), true ) ) {
 		learndash_30_template_assets();
 	}
 
-	$login_model = LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'login_mode_enabled' );
+	$atts = shortcode_atts(
+		array(
+			'login_model'      => LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'login_mode_enabled' ),
+			
+			'url'              => false,
+			'label'            => false,
+			'icon'             => false,
+			'placement'        => false,
+			'class'            => false,
+			'button'           => false,
+	
+			'login_url'        => '',
+			'login_label'      => __( 'Login', 'learndash' ),
+			'login_icon'       => 'login',
+			'login_placement'  => 'left',
+			'login_class'      => 'ld-login',
+			'login_button'     => 'true',
 
-	$login_url = apply_filters( 'learndash_login_url', ( $login_model === 'yes' ? '#login' : wp_login_url( get_permalink() ) ) );
+			'logout_url'       => '',
+			'logout_label'     => __( 'Logout', 'learndash' ),
+			'logout_icon'      => 'arrow-right',
+			'logout_placement' => 'right',
+			'logout_class'     => 'ld-logout',
+			'logout_button'    => '',
 
-	if ( is_user_logged_in() ) {
-		$link = apply_filters(
-			'learndash-login-shortcode-logout',
-			array(
-				'url'       => wp_logout_url( get_permalink() ),
-				'label'     => ( isset( $atts['label'] ) ? $atts['label'] : __( 'Logout', 'learndash' ) ),
-				'icon'      => 'arrow-right',
-				'placement' => 'right',
-				'class'     => 'ld-logout',
-			)
-		);
+			'preview_action'   => '',
+			'return'           => ''
+
+		),
+		$atts
+	);
+
+	$atts['action'] = '';	
+	if ( ( empty( $atts['action'] ) ) || ( ! in_array( $atts['action'], array( 'login', 'logout' ) ) ) ) {
+		if ( is_user_logged_in() ) {
+			$atts['action'] = 'logout';
+		} else {
+			$atts['action'] = 'login';
+		}	
+	}
+
+	if ( ( ! empty( $atts['preview_action'] ) ) && ( in_array( $atts['preview_action'], array( 'login', 'logout' ) ) ) ) {
+		$atts['action'] = $atts['preview_action'];
+	}
+
+	$atts = apply_filters( 'learndash_login_shortcode_atts', $atts );
+
+	$filter_args = array();
+	if ( 'logout' === $atts['action'] ) {
+		$filter_action = 'learndash-login-shortcode-logout';
+
+		if ( false === $atts['url'] ) {
+			if ( ! empty( $atts['logout_url'] ) ) {
+				$atts['logout_url'] = esc_url_raw( $atts['logout_url'] );
+				$filter_args['url'] = wp_logout_url( $atts['logout_url'] );
+			} else {
+				$filter_args['url'] = wp_logout_url( get_permalink() );
+			}
+		} else {
+			$filter_args['url'] = wp_logout_url( $atts['url'] );
+		}
+
+		if ( false === $atts['label'] ) {
+			if ( ! empty( $atts['logout_label'] ) ) {
+				$filter_args['label'] = $atts['logout_label'];
+			} else {
+				$filter_args['label'] = __( 'Logout', 'learndash' );
+			}
+		} else {
+			$filter_args['label'] = $atts['label'];
+		}
+
+		if ( false === $atts['icon'] ) {
+			if ( ! empty( $atts['logout_icon'] ) ) {
+				$filter_args['icon'] = $atts['logout_icon'];
+			} else {
+				$filter_args['icon'] = 'arrow-right';
+			}
+		} else {
+			$filter_args['icon'] = $atts['icon'];
+		}
+
+		if ( false === $atts['placement'] ) {
+			if ( ! empty( $atts['logout_placement'] ) ) {
+				$filter_args['placement'] = $atts['logout_placement'];
+			} else {
+				$filter_args['placement'] = 'right';
+			}
+		} else {
+			$filter_args['placement'] = $atts['placement'];
+		}
+
+		if ( false === $atts['class'] ) {
+			if ( ! empty( $atts['logout_class'] ) ) {
+				$filter_args['class'] = 'ld-logout ' . $atts['logout_class'];
+			} else {
+				$filter_args['class'] = 'ld-logout';
+			}
+		} else {
+			$filter_args['class'] = $atts['class'];
+		}
+
+		if ( false === $atts['button'] ) {
+			if ( ! empty( $atts['logout_button'] ) ) {
+				$filter_args['button'] = $atts['logout_button'];
+			} else {
+				$filter_args['button'] = 'true';
+			}
+		} else {
+			$filter_args['button'] = $atts['button'];
+		}
+
+	} else if ( 'login' === $atts['action'] ) {
+		$filter_action = 'learndash-login-shortcode-login';
+
+		if ( false === $atts['url'] ) {
+			if ( ! empty( $atts['login_url'] ) ) {
+				$atts['login_url'] = esc_url_raw( $atts['login_url'] );
+				$filter_args['url'] = $atts['login_url'];
+			} else {
+				if ( $atts['login_model'] === 'yes' ) {
+					$filter_args['url'] = '#login';
+				} else {
+					$filter_args['url'] = wp_login_url( get_permalink() );
+				}
+			}
+		} else {
+			$filter_args['url'] = $atts['url'];
+		}
+
+		if ( false === $atts['label'] ) {
+			if ( ! empty( $atts['login_label'] ) ) {
+				$filter_args['label'] = $atts['login_label'];
+			} else {
+				$filter_args['label'] = __( 'Login', 'learndash' );
+			}
+		} else {
+			$filter_args['label'] = $atts['label'];
+		}
+
+		if ( false === $atts['icon'] ) {
+			if ( ! empty( $atts['login_icon'] ) ) {
+				$filter_args['icon'] = $atts['login_icon'];
+			} else {
+				$filter_args['icon'] = 'login';
+			}
+		} else {
+			$filter_args['icon'] = $atts['icon'];
+		}
+
+		if ( false === $atts['placement'] ) {
+			if ( ! empty( $atts['login_placement'] ) ) {
+				$filter_args['placement'] = $atts['login_placement'];
+			} else {
+				$filter_args['placement'] = 'left';
+			}
+		} else {
+			$filter_args['placement'] = $atts['placement'];
+		}
+
+		if ( false === $atts['class'] ) {
+			if ( ! empty( $atts['login_class'] ) ) {
+				$filter_args['class'] = 'ld-login ' . $atts['login_class'];
+			} else {
+				$filter_args['class'] = 'ld-login';
+			}
+		} else {
+			$filter_args['class'] = $atts['class'];
+		}
+
+		if ( false === $atts['button'] ) {
+			if ( ! empty( $atts['login_button'] ) ) {
+				$filter_args['button'] = $atts['login_button'];
+			} else {
+				$filter_args['button'] = 'true';
+			}
+		} else {
+			$filter_args['button'] = $atts['button'];
+		}
+	}
+
+	$filter_args['url'] = apply_filters( 'learndash_login_url', $filter_args['url'], $atts['action'], $atts );
+
+	$filter_args = apply_filters( $filter_action, $filter_args, $atts );
+	
+	$filter_args['class'] .= ' ld-login-text ld-login-button ' . ( isset( $filter_args['button'] ) && $filter_args['button'] == 'true' ? 'ld-button' : '' );
+
+	$icon = ( isset( $filter_args['icon'] ) ? '<span class="ld-icon ld-icon-' . $filter_args['icon'] . ' ld-icon-' . $filter_args['placement'] . '"></span>' : '' );
+
+	if ( empty( $atts['return'] ) ) {
+		ob_start();
+
+		echo '<div class="learndash-wrapper"><a class="' . esc_attr( $filter_args['class'] ) . '" href="' . esc_attr( $filter_args['url'] ) . '">';
+
+		if ( $filter_args['placement'] == 'left' ) {
+			echo $icon;
+		}
+
+		echo esc_html( $filter_args['label'] );
+
+		if ( $filter_args['placement'] == 'right' ) {
+			echo $icon;
+		}
+
+		echo '</a></div>';
+
+		if ( ! in_array( get_post_type(), learndash_get_post_types( 'course' ), true ) && ! is_user_logged_in() && $atts['login_model'] === 'yes' ) {
+			learndash_load_login_modal_html();
+		}
+
+		$content .= ob_get_clean();
 	} else {
-		$link = apply_filters(
-			'learndash-login-shortcode-login',
-			array(
-				'url'       => $login_url,
-				'label'     => ( isset( $atts['label'] ) ? $atts['label'] : __( 'Login', 'learndash' ) ),
-				'icon'      => 'login',
-				'placement' => 'left',
-				'class'     => 'ld-login',
-			)
-		);
+		$content = maybe_serialize( $filter_args );
 	}
 
-	$link['class'] .= ' ld-login-text ld-login-button ' . ( isset( $atts['button'] ) && $atts['button'] == 'true' ? 'ld-button' : '' );
-
-	$link = apply_filters( 'learndash_login_shortcode_atts', $link );
-
-	$icon = ( isset( $link['icon'] ) ? '<span class="ld-icon ld-icon-' . $link['icon'] . '"></span>' : '' );
-
-	echo '<div class="learndash-wrapper"><a class="' . esc_attr( $link['class'] ) . '" href="' . esc_attr( $link['url'] ) . '">';
-
-	if ( $link['placement'] == 'left' ) {
-		echo $icon;
-	}
-
-		echo esc_html( $link['label'] );
-
-	if ( $link['placement'] == 'right' ) {
-		echo $icon;
-	}
-
-	echo '</a></div>';
-
-	if ( ! in_array( get_post_type(), $post_types, true ) && ! is_user_logged_in() && $login_model === 'yes' ) {
-		echo '<div class="learndash-wrapper">' . learndash_get_template_part( 'modules/login-modal.php', array(), false ) . '</div>';
-
-	}
-
-	return ob_get_clean();
-
+	return $content;
 }
 
 add_shortcode( 'learndash_user_status', 'learndash_user_status_shortcode' );
@@ -1535,6 +1697,23 @@ function learndash_login_failed( $username = '' ) {
 }
 add_action( 'wp_login_failed', 'learndash_login_failed', 1, 1 );
 
+function learndash_authenticate( $user, $username, $password ) {
+	if ( ( isset( $_POST['learndash-login-form'] ) ) && ( ! empty( $_POST['learndash-login-form'] ) ) ) {
+		if ( ( isset( $_POST['redirect_to'] ) ) && ( ! empty( $_POST['redirect_to'] ) ) ) {
+			if ( wp_verify_nonce( $_POST['learndash-login-form'], 'learndash-login-form' ) ) {
+				$ignore_codes = array( 'empty_username', 'empty_password' );
+				if ( is_wp_error( $user ) && in_array( $user->get_error_code(), $ignore_codes ) ) {
+					wp_safe_redirect( add_query_arg( 'login', 'failed', $_POST['redirect_to'] ) . '#login' );
+					die();
+				}
+			}
+		}
+	}
+
+	return $user;
+}
+add_filter( 'authenticate', 'learndash_authenticate', 99, 3 );
+
 /**
  * Add our hidden form field to the login form.
  *
@@ -1594,9 +1773,9 @@ function learndash_focus_mode_comments( $comment, $args, $depth ) {
 				<?php
 				printf(
 					// translators: placeholders: %1$s: Comment Date, %2$s: Comment Time
-					esc_html__( 'on %1$s at %2$s', 'learndash' ),
-					esc_html( get_comment_date() ),
-					esc_html( get_comment_time() )
+					esc_html_x( 'on %1$s at %2$s', 'placeholders: comment date, comment time', 'learndash' ),
+					get_comment_date(),
+					get_comment_time()
 				);
 				?>
 				</a>

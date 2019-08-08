@@ -230,7 +230,6 @@ $has_lesson_quizzes = learndash_30_has_lesson_quizzes( $course_id, $lessons ); ?
      * @since 3.0
      */
     do_action( 'learndash-course-after', get_the_ID(), $course_id, $user_id );
-
-    learndash_get_template_part( 'modules/login-modal.php', array(), true ); ?>
-
+    learndash_load_login_modal_html();
+?>
 </div>

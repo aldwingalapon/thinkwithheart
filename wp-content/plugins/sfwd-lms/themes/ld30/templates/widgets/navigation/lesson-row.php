@@ -93,7 +93,17 @@ endif; ?>
                 <span class="ld-text ld-primary-color">
                     <?php
                     if( $content_count['topics'] > 0 ) {
-                        printf( '%s %s', $content_count['topics'], _n( LearnDash_Custom_Label::get_label( 'topic' ), LearnDash_Custom_Label::get_label( 'topics' ), $content_count['topics'], 'learndash' ) );
+                        echo sprintf( 
+                            // translators: placeholders: Topic Count, Topic/Topics Label.
+                            esc_html_x( '%1$d %2$s', 'placeholders: Topic Count, Topic/Topics Label', 'learndash' ),
+                            $content_count['topics'],
+                            _n( 
+                                LearnDash_Custom_Label::get_label( 'topic' ),
+                                LearnDash_Custom_Label::get_label( 'topics' ),
+                                $content_count['topics'], 
+                                'learndash'
+                            )
+                        );
                     }
 
                     if( $content_count['quizzes'] > 0 && $content_count['topics'] > 0 ) {
@@ -101,7 +111,17 @@ endif; ?>
                     }
 
                     if( $content_count['quizzes'] > 0 ) {
-                        printf( '%s %s', $content_count['quizzes'], _n( LearnDash_Custom_Label::get_label( 'quiz' ), LearnDash_Custom_Label::get_label( 'quizzes' ), $content_count['quizzes'] ), 'learndash' );
+                        echo sprintf( 
+                            // translators: placeholders: Quiz Count, Quiz/Quizzes Label.
+                            esc_html_x( '%1$d %2$s', 'placeholders: Quiz Count, Quiz/Quizzes Label', 'learndash' ),
+                            $content_count['quizzes'],
+                            _n( 
+                                LearnDash_Custom_Label::get_label( 'quiz' ),
+                                LearnDash_Custom_Label::get_label( 'quizzes' ),
+                                $content_count['quizzes'], 
+                                'learndash'
+                            )
+                        );
                     } ?>
                 </span>
             </span>

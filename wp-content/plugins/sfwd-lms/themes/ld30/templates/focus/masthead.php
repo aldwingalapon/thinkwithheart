@@ -57,7 +57,9 @@ $logo = LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_The
             do_action('learndash-focus-header-user-menu-before', $course_id, $user_id );
 
             $user_data = get_userdata($user_id); ?>
-            <span class="ld-text ld-user-welcome-text"><?php echo sprintf( esc_html_x( 'Hello, %s!', 'Focus mode welcome placeholder', 'learndash' ), apply_filters( 'ld_focus_mode_welcome_name', $user_data->user_nicename, $user_data ) ); ?></span>
+            <span class="ld-text ld-user-welcome-text"><?php echo sprintf(
+                // translators: Focus mode welcome placeholder.
+                esc_html_x( 'Hello, %s!', 'Focus mode welcome placeholder', 'learndash' ), apply_filters( 'ld_focus_mode_welcome_name', $user_data->user_nicename, $user_data ) ); ?></span>
 
             <span class="ld-profile-avatar">
                 <?php
@@ -76,16 +78,39 @@ $logo = LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_The
                 $menu_items = array(
                     'course-home'   =>  array(
                         'url'   =>  get_the_permalink($course_id),
-                        'label' =>  sprintf( esc_html_x( '%s Home', 'Placeholder for course home link', 'learndash' ), LearnDash_Custom_Label::get_label('course')
+                        'label' =>  sprintf( 
+                            // translators: Placeholder for course home link.
+                            esc_html_x( '%s Home', 'Placeholder for course home link', 'learndash' ), LearnDash_Custom_Label::get_label('course')
                     ),
                 ) );
 
                 if( $custom_menu_items ): foreach( $custom_menu_items as $menu_item ):
-
                     $menu_items[$menu_item->post_name] = array(
-                        'url'   =>  $menu_item->url,
-                        'label' =>  $menu_item->title
+                        'url'        => $menu_item->url,
+                        'label'      => $menu_item->title,
+                        'classes'    => esc_attr( 'ld-focus-menu-link ld-focus-menu-' . $menu_item->post_name ),
+                        'target'     => '',
+                        'attr_title' => '',
+                        'xfn'        => ''
                     );
+
+                    if ( ( property_exists( $menu_item, 'classes' ) ) && ( is_array( $menu_item->classes ) ) ) {
+                        $classes = array_filter( $menu_item->classes, 'strlen');
+                        if ( ! empty( $classes ) ) {
+                            $menu_items[$menu_item->post_name]['classes'] .= ' ' . implode( ' ', $classes );
+                        }
+                    }
+                    
+                    if ( ( property_exists( $menu_item, 'target' ) ) && ( ! empty( $menu_item->target ) ) ) {
+                        $menu_items[$menu_item->post_name]['target'] = esc_attr( $menu_item->target );
+                    }
+
+                    if ( ( property_exists( $menu_item, 'attr_title' ) ) && ( ! empty( $menu_item->attr_title ) ) ) {
+                        $menu_items[$menu_item->post_name]['attr_title'] = esc_attr( $menu_item->attr_title );
+                    }
+                    if ( ( property_exists( $menu_item, 'xfn' ) ) && ( ! empty( $menu_item->xfn ) ) ) {
+                        $menu_items[$menu_item->post_name]['xfn'] = esc_attr( $menu_item->xfn );
+                    }
 
                 endforeach; endif;
 
@@ -96,7 +121,15 @@ $logo = LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_The
 
                 if( $menu_items && !empty($menu_items) ):
                     foreach( $menu_items as $slug => $item ): ?>
-                        <a class="<?php echo esc_attr( 'ld-focus-menu-link ld-focus-menu-' . $slug ); ?>" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a>
+                        <a <?php if ( ! empty( $item['classes'] ) ) { ?>
+                            class="<?php echo esc_attr( $item['classes'] ); ?>" 
+                        <?php } ?> <?php if ( ! empty( $item['target'] ) ) { ?>
+                            target="<?php echo esc_attr( $item['target'] ); ?>" 
+                        <?php } ?> <?php if ( ! empty( $item['xfn'] ) ) { ?>
+                            rel="<?php echo esc_attr( $item['xfn'] ); ?>" 
+                        <?php } ?> <?php if ( ! empty( $item['attr_title'] ) ) { ?> 
+                            title="<?php echo esc_attr( $item['attr_title'] ); ?>" 
+                        <?php } ?> href="<?php echo esc_url( $item['url'] ); ?>"><?php echo esc_html( $item['label'] ); ?></a>
                     <?php endforeach;
                 endif; ?>
             </span> <!--/.ld-user-menu-items-->

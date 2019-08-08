@@ -132,15 +132,15 @@ class WpProQuiz_Controller_Quiz extends WpProQuiz_Controller_Controller {
 					learndash_update_setting($get["post_id"], "quiz_pro", $quiz->getId());
 				}
 				
-				if ( ( isset( $get["post_id"] ) ) && ( !empty( $get["post_id"] ) ) ) {
-					if ( isset( $this->_post['viewProfileStatistics'] ) ) {
-						$quiz->setViewProfileStatistics( true );
-						update_post_meta( $get["post_id"], '_viewProfileStatistics', 1 );
-					} else {
-						$quiz->setViewProfileStatistics( false );
-						update_post_meta( $get["post_id"], '_viewProfileStatistics', 0 );
-					}
-				}
+				//if ( ( isset( $get["post_id"] ) ) && ( !empty( $get["post_id"] ) ) ) {
+				//	if ( isset( $this->_post['viewProfileStatistics'] ) ) {
+				//		$quiz->setViewProfileStatistics( true );
+				//		update_post_meta( $get["post_id"], '_viewProfileStatistics', 1 );
+				//	} else {
+				//		$quiz->setViewProfileStatistics( false );
+				//		update_post_meta( $get["post_id"], '_viewProfileStatistics', 0 );
+				//	}
+				//}
 				
 				$quizId = $quiz->getId();
 
@@ -223,7 +223,7 @@ class WpProQuiz_Controller_Quiz extends WpProQuiz_Controller_Controller {
 			return;
 		}
 
-		if ( ( ( isset( $this->_post['templateSaveList'] ) ) && ( intval( $this->_post['templateSaveList'] ) ) ) || ( ( isset( $this->_post['templateName'] ) ) && ( ! empty( $this->_post['templateName'] ) ) ) ) {
+		if ( ( ( isset( $this->_post['templateSaveList'] ) ) && ( intval( $this->_post['templateSaveList'] ) > 0 ) ) || ( ( isset( $this->_post['templateName'] ) ) && ( ! empty( $this->_post['templateName'] ) ) ) ) {
 			$template = $this->saveTemplate();
 		}
 
@@ -271,15 +271,15 @@ class WpProQuiz_Controller_Quiz extends WpProQuiz_Controller_Controller {
 					}
 				}
 				
-				if ( ( isset( $get["post_id"] ) ) && ( !empty( $get["post_id"] ) ) ) {
-					if ( isset( $this->_post['viewProfileStatistics'] ) ) {
-						$quiz->setViewProfileStatistics( true );
-						update_post_meta( $get["post_id"], '_viewProfileStatistics', 1 );
-					} else {
-						$quiz->setViewProfileStatistics( false );
-						update_post_meta( $get["post_id"], '_viewProfileStatistics', 0 );
-					}
-				}
+				//if ( ( isset( $get["post_id"] ) ) && ( !empty( $get["post_id"] ) ) ) {
+				//	if ( isset( $this->_post['viewProfileStatistics'] ) ) {
+				//		$quiz->setViewProfileStatistics( true );
+				//		update_post_meta( $get["post_id"], '_viewProfileStatistics', 1 );
+				//	} else {
+				//		$quiz->setViewProfileStatistics( false );
+				//		update_post_meta( $get["post_id"], '_viewProfileStatistics', 0 );
+				//	}
+				//}
 				
 				$quizId = $quiz->getId();
 
@@ -1009,9 +1009,9 @@ class WpProQuiz_Controller_Quiz extends WpProQuiz_Controller_Controller {
 		$userId = get_current_user_id();
 		
 		$quiz = $quizMapper->fetch($this->_post['quizId']);
-		if ( ( isset( $POST['quiz'] ) ) && ( ! empty( $_POST['quiz'] ) ) ) {
-			if ( absint( $POST['quiz'] ) !== absint( $quiz->getPostId() ) ) {
-				$quiz->setPostId( absint( $POST['quiz'] ) );
+		if ( ( isset( $this->_post['quiz'] ) ) && ( ! empty( $this->_post['quiz'] ) ) ) {
+			if ( absint( $this->_post['quiz'] ) !== absint( $quiz->getPostId() ) ) {
+				$quiz->setPostId( absint( $this->_post['quiz'] ) );
 			}
 		}
 

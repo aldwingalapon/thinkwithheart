@@ -47,7 +47,9 @@ html {
 .cartflows-icon-check:before {
   content: "\e600";
 }
-
+.cartflows-icon-arrow-thin-right:before {
+  content: "\e901";
+}
 /* Sections
      ========================================================================== */
 

@@ -42,11 +42,13 @@ if ( ! class_exists( 'Learndash_Admin_User_Profile_Edit' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash_style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash_style'] = __FUNCTION__;
 
 			$filepath = SFWD_LMS::get_template( 'learndash_template_style.css', null, null, true );
 			if ( ! empty( $filepath ) ) {
 				wp_enqueue_style( 'learndash_template_style_css', learndash_template_url_from_path( $filepath ), array(), LEARNDASH_SCRIPT_VERSION_TOKEN );
+				wp_style_add_data( 'learndash_template_style_css', 'rtl', 'replace' );
 				$learndash_assets_loaded['styles']['learndash_template_style_css'] = __FUNCTION__;
 			}
 
@@ -56,6 +58,7 @@ if ( ! class_exists( 'Learndash_Admin_User_Profile_Edit' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash-admin-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash-admin-style'] = __FUNCTION__;
 
 			wp_enqueue_style(
@@ -64,6 +67,7 @@ if ( ! class_exists( 'Learndash_Admin_User_Profile_Edit' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'sfwd-module-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['sfwd-module-style'] = __FUNCTION__;
 
 			wp_enqueue_script(
@@ -87,6 +91,7 @@ if ( ! class_exists( 'Learndash_Admin_User_Profile_Edit' ) ) {
 			$filepath = SFWD_LMS::get_template( 'learndash_pager.css', null, null, true );
 			if ( ! empty( $filepath ) ) {
 				wp_enqueue_style( 'learndash_pager_css', learndash_template_url_from_path( $filepath ), array(), LEARNDASH_SCRIPT_VERSION_TOKEN );
+				wp_style_add_data( 'learndash_pager_css', 'rtl', 'replace' );
 				$learndash_assets_loaded['styles']['learndash_pager_css'] = __FUNCTION__;
 			}
 
@@ -115,6 +120,7 @@ if ( ! class_exists( 'Learndash_Admin_User_Profile_Edit' ) ) {
 				array(),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash-admin-binary-selector-style', 'rtl', 'replace' );
 			$learndash_assets_loaded['styles']['learndash-admin-binary-selector-style'] = __FUNCTION__;
 		}
 

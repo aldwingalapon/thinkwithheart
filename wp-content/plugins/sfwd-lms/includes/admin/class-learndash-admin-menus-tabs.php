@@ -487,6 +487,17 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 				if ( 'learndash-lms_page_learndash-lms-reports' === $current_screen->id ) {
 					$current_screen_parent_file = 'admin.php?page=learndash-lms-reports';
 				}
+				/**
+				 * The above IF should work. However what we are seeing in LEARNDASH-3661 is
+				 * due to the translation of 'LearnDash LMS' the screen ID gets changed by WP
+				 * to something like 'lms-learndash_page_learndash-lms-reports' in the French
+				 * or something entirely different in other languages. So we add a secondary
+				 * check on the 'page' query string param.
+				 * @since 3.0.7
+				 */
+				else if ( ( isset( $_GET['page'] ) ) && ( 'learndash-lms-reports' === $_GET['page'] ) ) {
+					$current_screen_parent_file = 'admin.php?page=learndash-lms-reports';
+				}
 
 				// See LEARNDASH-581:
 				// In a normal case when viewing the LearnDash > Courses > All Courses tab the screen ID is set to 'edit-sfwd-courses' and the parent_file is set ''edit.php?post_type=sfwd-courses'.
@@ -1222,6 +1233,8 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 						LearnDash_Custom_Label::get_label( 'quiz' ),
 						LearnDash_Custom_Label::get_label( 'questions' )
 					),
+					'question_empty'                     => esc_html( 'The question is empty, click here to edit it.', 'learndash' ),
+					'unsaved_chages'                     => esc_html( 'You have unsaved changes. If you proceed, they will be lost.', 'learndash' ),
 					'manage_questions_builder'           => sprintf(
 						/* translators: placeholders: Questions */
 						esc_html_x( 'Manage %1$s in builder', 'Manage Questions in builder', 'learndash' ),
@@ -1277,21 +1290,13 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 				$header_data['currentTab'] = 'learndash_course_builder';
 				$header_data['tabs']       = [];
 
-				$header_data['back_to_title'] = sprintf(
-					// translators: placeholder: Courses.
-					esc_html_x( 'Back to %s', 'placeholder: Courses', 'learndash' ),
-					\LearnDash_Custom_Label::get_label( 'courses' )
-				);
+				$header_data['back_to_title'] = learndash_get_label_course_step_back( learndash_get_post_type_slug( 'course' ), true );
 				$header_data['back_to_url'] = admin_url( 'edit.php?post_type=sfwd-courses' );
 
 				if ( isset( $_GET['course_id'] ) ) {
 					$header_data['tabs'][] = [
 						'id'         => 'post-body-content',
-						'name'       => sprintf(
-							// translators: placeholder: Course.
-							esc_html_x( '%s Page', 'placeholder: Course', 'learndash' ),
-							\LearnDash_Custom_Label::get_label( 'course' )
-						),
+						'name'       => learndash_get_label_course_step_page( learndash_get_post_type_slug( 'course' ) ),
 						'link'       => get_edit_post_link( absint( $_GET['course_id'] ) ),
 						'isExternal' => 'true',
 					];
@@ -1442,6 +1447,12 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 						}
 					}
 				}
+
+				if ( ( 'learndash-lms_page_learndash-lms-reports' === $screen->id ) || ( ( isset( $_GET['page'] ) ) && ( 'learndash-lms-reports' === $_GET['page'] ) ) ) {
+					if ( isset( $header_data['tabs'][0] ) ) {
+						$header_data['currentTab'] = $header_data['tabs'][0]['id'];
+					}
+				}
 			} elseif ( 'post' === $logic_control ) {
 				$header_data['back_to_title'] = esc_html__( 'Back', 'learndash' );
 				$header_data['back_to_url']   = admin_url( 'edit.php?post_type=' . $screen_post_type );
@@ -1475,37 +1486,63 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 				}
 
 				$header_data['post_data']['builder_post_type'] = $screen_post_type;
-
-				$post_type_object = get_post_type_object( $screen_post_type );
-				if ( $post_type_object ) {
-					$header_data['back_to_title'] = sprintf(
-						// translators: placeholder: Post Type Plural Name.
-						esc_html_x( 'Back to %s', 'placeholder: Post Type Plural Name', 'learndash' ),
-						$post_type_object->labels->name
-					);
-				}
-
+				$header_data['back_to_title'] = learndash_get_label_course_step_back( $screen_post_type, true );
 				$header_data['tabs'] = array(
 					array(
 						'id'      => 'post-body-content',
-						'name'    => sprintf(
-							// translators: placeholder: Post Type Singular Name.
-							esc_html_x( '%s page', 'placeholder: Post Type Singular Name', 'learndash' ),
-							$post_type_object->labels->singular_name
-						),
+						'name'    => learndash_get_label_course_step_page( $screen_post_type ),
 						'actions' => array(),
 					),
 				);
 
 				if ( ( isset( $_GET['page'] ) ) && ( 'ldAdvQuiz' === $_GET['page'] ) ) {
 					if ( ( isset( $_GET['post_id'] ) ) && ( ! empty( $_GET['post_id'] ) ) ) {
-						$header_data['back_to_title'] = sprintf(
-							// translators: placeholder: Quiz.
-							esc_html_x( 'Back to %s', 'placeholder: Quiz', 'learndash' ),
-							learndash_get_custom_label( 'quiz' )
-						);
-						$header_data['back_to_url'] = get_edit_post_link( absint( $_GET['post_id'] ) );
-						$header_data['currentTab']  = $screen->id;
+						if ( ( isset( $_GET['module'] ) ) && ( 'question' === $_GET['module'] ) ) {
+							if ( ( isset( $_GET['action'] ) ) && ( 'addEdit' === $_GET['action'] ) ) {
+								$header_data['currentTab']  = $screen->id;
+								$header_data['back_to_title'] = learndash_get_label_course_step_back( learndash_get_post_type_slug( 'question' ), true );
+								$header_data['back_to_url'] = add_query_arg(
+									array(
+										'page'    => 'ldAdvQuiz',
+										'module'  => 'question',
+										'quiz_id' => $_GET['quiz_id'],
+										'post_id' => $_GET['post_id'],
+									),
+									'admin.php'
+								);
+
+								$header_data['currentTab']  = $screen->id;
+
+								$header_data['tabs'] = array(
+									array(
+										'id'      => $screen->id,
+										'name'    => learndash_get_label_course_step_page( learndash_get_post_type_slug( 'question' ) ),
+										'actions' => array(),
+									),
+								);
+							} else {
+								$header_data['back_to_title'] = learndash_get_label_course_step_back( learndash_get_post_type_slug( 'quiz' ), true );
+								$header_data['back_to_url'] = admin_url( 'edit.php?post_type=' . learndash_get_post_type_slug( 'quiz' ) );
+								$header_data['currentTab']  = $screen->id;
+
+								$header_data['tabs'] = array(
+									array(
+										'id'      => $screen->id,
+										'name'    => sprintf(
+											// translators: placeholder: Questions.
+											esc_html_x( '%s', 'placeholder: Questions', 'learndash' ),
+											learndash_get_custom_label( 'questions' )
+										),
+										'actions' => array(),
+									),
+								);
+							}
+
+						} else {
+							$header_data['back_to_title'] = learndash_get_label_course_step_page( learndash_get_post_type_slug( 'quiz' ) );
+							$header_data['back_to_url'] = get_edit_post_link( absint( $_GET['post_id'] ) );
+							$header_data['currentTab']  = $screen->id;
+						}
 					}
 
 					if ( ( isset( $_GET['post'] ) ) && ( ! empty( $_GET['post'] ) ) ) {
@@ -1622,6 +1659,31 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 							),
 						)
 					);
+
+					if ( ( true !== is_data_upgrade_quiz_questions_updated() ) || ( LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Quizzes_Builder', 'enabled' ) !== 'yes' ) ) {
+						$pro_quiz_id = learndash_get_setting( absint( $_GET['post'] ), 'quiz_pro', true );
+						if ( ! empty( $pro_quiz_id ) ) {
+							$header_data['tabs'] = array_merge(
+								$header_data['tabs'],
+								array(
+									array(
+										'id'   => 'learndash_quiz_questions',
+										'name' => esc_html__( 'Questions', 'learndash' ),
+										'link' => add_query_arg(
+											array(
+												'page'    => 'ldAdvQuiz',
+												'module'  => 'question',
+												'quiz_id' => $pro_quiz_id,
+												'post_id' => absint( $_GET['post'] ),
+											),
+											admin_url( 'admin.php' )
+										),
+										'isExternal' => 'true',
+									),
+								)
+							);
+						}
+					}
 
 					if ( apply_filters( 'learndash_settings_metaboxes_legacy_quiz', LEARNDASH_SETTINGS_METABOXES_LEGACY_QUIZ, $screen_post_type ) ) {
 						$header_data['tabs'] = array_merge(
@@ -1776,7 +1838,7 @@ if ( ! class_exists( 'Learndash_Admin_Menus_Tabs' ) ) {
 						array(),
 						LEARNDASH_SCRIPT_VERSION_TOKEN
 					);
-
+					wp_style_add_data( 'learndash-new-header-style', 'rtl', 'replace' );
 					$learndash_assets_loaded['styles']['learndash-new-header-style'] = __FUNCTION__;
 				}
 

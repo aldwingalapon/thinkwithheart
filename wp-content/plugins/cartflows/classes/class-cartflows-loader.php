@@ -84,7 +84,7 @@ if ( ! class_exists( 'Cartflows_Loader' ) ) {
 
 			if ( is_null( self::$instance ) ) {
 
-				self::$instance = new self;
+				self::$instance = new self();
 
 				/**
 				 * CartFlows loaded.
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Cartflows_Loader' ) ) {
 			define( 'CARTFLOWS_BASE', plugin_basename( CARTFLOWS_FILE ) );
 			define( 'CARTFLOWS_DIR', plugin_dir_path( CARTFLOWS_FILE ) );
 			define( 'CARTFLOWS_URL', plugins_url( '/', CARTFLOWS_FILE ) );
-			define( 'CARTFLOWS_VER', '1.2.3' );
+			define( 'CARTFLOWS_VER', '1.2.4' );
 			define( 'CARTFLOWS_SLUG', 'cartflows' );
 			define( 'CARTFLOWS_SETTINGS', 'cartflows_settings' );
 
@@ -206,7 +206,7 @@ if ( ! class_exists( 'Cartflows_Loader' ) ) {
 				return;
 			}
 
-			if ( version_compare( CARTFLOWS_PRO_VER, '1.1.19', '<' ) ) {
+			if ( version_compare( CARTFLOWS_PRO_VER, '1.2.0', '<' ) ) {
 				add_action( 'admin_notices', array( $this, 'required_cartflows_pro_notice' ) );
 			}
 
@@ -222,11 +222,11 @@ if ( ! class_exists( 'Cartflows_Loader' ) ) {
 		 */
 		function required_cartflows_pro_notice() {
 
-			$required_pro_version = '1.1.19';
+			$required_pro_version = '1.2.0';
 
 			$class = 'notice notice-warning';
 			/* translators: %s: html tags */
-			$message = sprintf( __( 'You are using older version of %1$sCartFlows Pro%2$s. Please update %1$sCartFlows Pro%2$s plugin to version %1$s%3$s%2$s or higher.', 'cartflows' ), '<strong>', '</strong>', $required_pro_version );
+			$message = sprintf( __( 'You are using an older version of %1$sCartFlows Pro%2$s. Please update %1$sCartFlows Pro%2$s plugin to version %1$s%3$s%2$s or higher.', 'cartflows' ), '<strong>', '</strong>', $required_pro_version );
 
 			printf( '<div class="%1$s"><p>%2$s</p></div>', $class, $message );
 		}

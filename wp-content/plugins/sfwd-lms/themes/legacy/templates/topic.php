@@ -53,7 +53,8 @@
 <?php endif; ?>
 
 <?php if ( !empty( $course_id ) ) { ?>
-<div id="learndash_back_to_lesson"><a href='<?php echo learndash_get_step_permalink( $lesson_id, $course_id ); ?>'>&larr; <?php printf( esc_html_x( 'Back to %s', 'Back to Lesson Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'lesson' ) ); ?></a></div>
+<div id="learndash_back_to_lesson"><a href='<?php echo learndash_get_step_permalink( $lesson_id, $course_id ); ?>'>&larr; <?php 
+	echo learndash_get_label_course_step_back( get_post_type( $lesson_id ) ); ?></a></div>
 <?php } ?>
 
 <?php if ( $lesson_progression_enabled && ! $previous_topic_completed ) : ?>

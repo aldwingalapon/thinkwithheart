@@ -3,62 +3,74 @@ if ( ! class_exists( 'LearnDash_Shortcodes_TinyMCE' ) ) {
 
 	class LearnDash_Shortcodes_TinyMCE {
 
-		protected $post_types = array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-topic', 'sfwd-quiz', 'sfwd-question', 'sfwd-certificates', 'page', 'post' );
+		//protected $post_types = array( 'sfwd-courses', 'sfwd-lessons', 'sfwd-topic', 'sfwd-quiz', 'sfwd-question', 'sfwd-certificates', 'page', 'post' );
+
+		//protected $pages = array( 'widgets.php' );
+
+		protected $learndash_admin_shortcodes_assets = array();
 
 		public function __construct() {
+			add_action( 'wp_enqueue_editor', array( $this, 'wp_enqueue_editor' ) );
 
-			add_action( 'load-post.php', array( $this, 'add_button' ), 1 );
-			add_action( 'load-post-new.php', array( $this, 'add_button' ), 1 );
-			add_action( 'admin_print_footer_scripts', array( $this, 'qt_button_script' ) );
+			add_filter( 'mce_external_plugins', array( $this, 'add_tinymce_plugin' ), 1 );
+			add_filter( 'mce_buttons', array( $this, 'register_button' ), 1 );
+
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_scripts' ) );
+			add_action( 'admin_print_footer_scripts', array( $this, 'qt_button_script' ) );
 			add_action( 'wp_ajax_learndash_generate_shortcodes_content', array( $this, 'learndash_generate_shortcodes_content' ) );
 		}
 
-		public function qt_button_script() {
+		protected function shortcodes_assets_init() {
 			global $typenow, $pagenow, $post;
 
-			if ( ( 'post.php' === $pagenow ) || ( 'post-new.php' === $pagenow ) ) {
-				// check user permissions
-				if ( current_user_can( 'edit_posts' ) ) {
-					//if ( ! use_block_editor_for_post( $post ) ) {
-						if ( in_array( $typenow, apply_filters( 'learndash_shortcodes_tinymce_post_types', $this->post_types, $typenow ) ) ) {
-							if ( wp_script_is( 'quicktags' ) ) {
-								?>
-								<script type="text/javascript">
-									QTags.addButton( 'learndash_shortcodes', '[ld]', learndash_shortcodes_qt_callback, '', '', '', 'LearnDash Shortcodes' );
+			if ( empty( $this->learndash_admin_shortcodes_assets ) ) {
+				$this->learndash_admin_shortcodes_assets['popup_title'] = esc_html( 'LearnDash Shortcodes', 'learndash' );
 
-									// In the QTags.addButton we need to call this intermediate function because learndash_shortcodes is now loaded yet. 
-									function learndash_shortcodes_qt_callback() {
-										learndash_shortcodes.qt_callback();
-									}
-								</script>
-								<?php
-							}
-						}
-					//}
-				}
+				$this->learndash_admin_shortcodes_assets['popup_type'] = apply_filters( 'learndash_shortcodes_popup_type', LEARNDASH_ADMIN_POPUP_STYLE );
+				$this->learndash_admin_shortcodes_assets['typenow'] = $typenow;
+				$this->learndash_admin_shortcodes_assets['pagenow'] = $pagenow;
+				$this->learndash_admin_shortcodes_assets['nonce']   = wp_create_nonce( 'learndash_admin_shortcodes_assets_nonce_' . get_current_user_id() . '_' . $pagenow );
 			}
 		}
 
-		public function add_button() {
-			global $typenow, $pagenow, $post;
+		public function wp_enqueue_editor ( $editor_args = array() ) {
+			$this->shortcodes_assets_init();
 
-			if ( ( 'post.php' === $pagenow ) || ( 'post-new.php' === $pagenow ) ) {
-				// check user permissions
-				if ( current_user_can( 'edit_posts' ) ) {
-					//if ( ! use_block_editor_for_post( $post ) ) {
-						// check if WYSIWYG is enabled
-						if ( get_user_option( 'rich_editing' ) == 'true' ) {
-
-							// verify the post type
-							if ( in_array( $typenow, apply_filters( 'learndash_shortcodes_tinymce_post_types', $this->post_types, $typenow ) ) ) {
-								add_filter( 'mce_external_plugins', array( $this, 'add_tinymce_plugin' ), 1 );
-								add_filter( 'mce_buttons', array( $this, 'register_button' ), 1 );
-							}
-						}
-					//}
-				}
+			if ( 'thickbox' === $this->learndash_admin_shortcodes_assets['popup_type'] ) {
+				wp_enqueue_style( 'thickbox' );
+				wp_enqueue_script( 'thickbox' );
+			} else if ( 'jQuery-dialog' === $this->learndash_admin_shortcodes_assets['popup_type'] ) {
+				wp_enqueue_script( 'jquery-ui-dialog' ); // jquery and jquery-ui should be dependencies, didn't check though...
+				wp_enqueue_style( 'wp-jquery-ui-dialog' );
 			}
+
+			if ( ( isset( $editor_args['tinymce'] ) ) && ( true === $editor_args['tinymce'] ) ) {
+				$this->add_button();
+			}
+
+			if ( ( isset( $editor_args['quicktags'] ) ) && ( true === $editor_args['quicktags'] ) ) {
+				add_action( 'admin_print_footer_scripts', array( $this, 'qt_button_script' ) );
+			}
+		}
+
+		public function qt_button_script() {
+			?>
+			<script type="text/javascript">
+				if (typeof QTags !== 'undefined') {
+					QTags.addButton( 'learndash_shortcodes', '[ld]', learndash_shortcodes_qt_callback, '', '', '', 'LearnDash Shortcodes' );
+
+					// In the QTags.addButton we need to call this intermediate function because learndash_shortcodes is now loaded yet. 
+					function learndash_shortcodes_qt_callback() {
+						learndash_shortcodes.qt_callback();
+					}
+				}
+			</script>
+			<?php
+		}
+
+		public function add_button() {
+			add_filter( 'mce_external_plugins', array( $this, 'add_tinymce_plugin' ), 1 );
+			add_filter( 'mce_buttons', array( $this, 'register_button' ), 1 );
 		}
 
 		public function add_tinymce_plugin( $plugin_array ) {
@@ -76,69 +88,90 @@ if ( ! class_exists( 'LearnDash_Shortcodes_TinyMCE' ) ) {
 			global $typenow, $pagenow;
 			global $learndash_assets_loaded;
 
-			global $post;
-			if ( ( $post ) && ( is_a( $post, 'WP_Post' ) ) && ( is_admin() ) && ( in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) ) ) {
-				//if ( ! use_block_editor_for_post( $post ) ) {
-					if ( in_array( $typenow, apply_filters( 'learndash_shortcodes_tinymce_post_types', $this->post_types, $typenow ) ) ) {
+			wp_enqueue_style(
+				'sfwd-module-style',
+				LEARNDASH_LMS_PLUGIN_URL . '/assets/css/sfwd_module' . leardash_min_asset() . '.css',
+				array(),
+				LEARNDASH_SCRIPT_VERSION_TOKEN
+			);
+			$learndash_assets_loaded['styles']['sfwd-module-style'] = __FUNCTION__;
 
-						wp_enqueue_style(
-							'learndash_admin_shortcodes_style',
-							LEARNDASH_LMS_PLUGIN_URL . 'assets/css/learndash-admin-shortcodes' . leardash_min_asset() . '.css',
-							array(),
-							LEARNDASH_SCRIPT_VERSION_TOKEN
-						);
-						$learndash_assets_loaded['styles']['learndash_shortcodes_admin_style'] = __FUNCTION__;
+			wp_enqueue_script(
+				'sfwd-module-script',
+				LEARNDASH_LMS_PLUGIN_URL . '/assets/js/sfwd_module' . leardash_min_asset() . '.js',
+				array( 'jquery' ),
+				LEARNDASH_SCRIPT_VERSION_TOKEN,
+				true
+			);
+			$learndash_assets_loaded['scripts']['sfwd-module-script'] = __FUNCTION__;
+			
+			$data = array();
+			if ( ! isset( $data['ajaxurl'] ) ) {
+				$data['ajaxurl'] = admin_url( 'admin-ajax.php' );
+			}
 
-						$learndash_admin_shortcodes_assets              = array();
-						$learndash_admin_shortcodes_assets['post_id']   = $post->ID;
-						$learndash_admin_shortcodes_assets['post_type'] = $post->post_type;
-						$learndash_admin_shortcodes_assets['nonce']     = wp_create_nonce( 'learndash_admin_shortcodes_assets_nonce_' . get_current_user_id() . '_' . $post->post_type . '_' . $post->ID );
+			$data = array( 'json' => json_encode( $data ) );
+			wp_localize_script( 'sfwd-module-script', 'sfwd_data', $data );
 
-						wp_enqueue_script(
-							'learndash_admin_shortcodes_script',
-							LEARNDASH_LMS_PLUGIN_URL . 'assets/js/learndash-admin-shortcodes' . leardash_min_asset() . '.js',
-							array( 'jquery' ),
-							LEARNDASH_SCRIPT_VERSION_TOKEN,
-							true
-						);
-						$learndash_assets_loaded['styles']['learndash_admin_shortcodes_script'] = __FUNCTION__;
-						wp_localize_script( 'learndash_admin_shortcodes_script', 'learndash_admin_shortcodes_assets', $learndash_admin_shortcodes_assets );
+			wp_enqueue_style(
+				'learndash_admin_shortcodes_style',
+				LEARNDASH_LMS_PLUGIN_URL . 'assets/css/learndash-admin-shortcodes' . leardash_min_asset() . '.css',
+				array(),
+				LEARNDASH_SCRIPT_VERSION_TOKEN
+			);
+			wp_style_add_data( 'learndash_admin_shortcodes_style', 'rtl', 'replace' );
+			$learndash_assets_loaded['styles']['learndash_shortcodes_admin_style'] = __FUNCTION__;
 
-						// Hold until after LD 3.0 release.
-						//learndash_admin_settings_page_assets();
-					}
-				//}
+			$this->shortcodes_assets_init();
+
+			wp_enqueue_script(
+				'learndash_admin_shortcodes_script',
+				LEARNDASH_LMS_PLUGIN_URL . 'assets/js/learndash-admin-shortcodes' . leardash_min_asset() . '.js',
+				array( 'jquery' ),
+				LEARNDASH_SCRIPT_VERSION_TOKEN,
+				true
+			);
+			$learndash_assets_loaded['styles']['learndash_admin_shortcodes_script'] = __FUNCTION__;
+			wp_localize_script( 'learndash_admin_shortcodes_script', 'learndash_admin_shortcodes_assets', $this->learndash_admin_shortcodes_assets );
+
+			if ( 'jQuery-dialog' === $this->learndash_admin_shortcodes_assets['popup_type'] ) {
+				// Hold until after LD 3.0 release.
+				learndash_admin_settings_page_assets();
 			}
 		}
 
 		public function learndash_generate_shortcodes_content() {
-
 			if ( ( ! isset( $_POST['atts'] ) ) || ( empty( $_POST['atts'] ) ) ) {
 				die();
 			}
 
 			$fields_args = array(
-				'post_type' => '',
-				'post_id'   => 0,
-				'nonce'     => '',
+				//'post_type' => '',
+				//'post_id'   => 0,
+				'typenow' => '',
+				'pagenow' => '',
+				'nonce'   => '',
 			);
 			$fields_args = shortcode_atts( $fields_args, $_POST['atts'] );
 
-			if ( ( ! isset( $fields_args['nonce'] ) ) || ( empty( $fields_args['nonce'] ) ) ) {
+			if ( ( empty( $fields_args['nonce'] ) ) || ( empty( $fields_args['pagenow'] ) ) ) {
 				die();
 			}
 
-			if ( ! wp_verify_nonce( $fields_args['nonce'], 'learndash_admin_shortcodes_assets_nonce_' . get_current_user_id() . '_' . $fields_args['post_type'] . '_' . $fields_args['post_id'] ) ) {
+			if ( ! wp_verify_nonce( $fields_args['nonce'], 'learndash_admin_shortcodes_assets_nonce_' . get_current_user_id() . '_' . $fields_args['pagenow'] ) ) {
 				die();
 			}
 
-			if ( ( ! empty( $fields_args['post_type'] ) ) && ( in_array( $fields_args['post_type'], apply_filters( 'learndash_shortcodes_tinymce_post_types', $this->post_types, $fields_args['post_type'] ) ) ) ) {
+			//if ( ( ! empty( $fields_args['post_type'] ) ) && ( in_array( $fields_args['post_type'], apply_filters( 'learndash_shortcodes_tinymce_post_types', $this->post_types, $fields_args['post_type'] ) ) ) ) {
 
 				$shortcode_sections = array();
 
 				require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/class-ld-shortcodes-sections.php';
 
-				if ( 'sfwd-certificates' !== $fields_args['post_type'] ) {
+				if ( 'sfwd-certificates' !== $fields_args['typenow'] ) {
+
+					require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/shortcodes-sections/learndash_login.php';
+					$shortcode_sections['learndash_login'] = new LearnDash_Shortcodes_Section_learndash_login( $fields_args );
 
 					require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/shortcodes-sections/ld_profile.php';
 					$shortcode_sections['ld_profile'] = new LearnDash_Shortcodes_Section_ld_profile( $fields_args );
@@ -194,7 +227,7 @@ if ( ! class_exists( 'LearnDash_Shortcodes_TinyMCE' ) ) {
 					require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/shortcodes-sections/ld_course_expire_status.php';
 					$shortcode_sections['ld_course_expire_status'] = new LearnDash_Shortcodes_Section_ld_course_expire_status( $fields_args );
 
-					if ( ( 'sfwd-lessons' === $fields_args['post_type'] ) || ( 'sfwd-topic' === $fields_args['post_type'] ) ) {
+					if ( ( 'sfwd-lessons' === $fields_args['typenow'] ) || ( 'sfwd-topic' === $fields_args['typenow'] ) ) {
 						require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/shortcodes-sections/ld_video.php';
 						$shortcode_sections['ld_video'] = new LearnDash_Shortcodes_Section_ld_video( $fields_args );
 					}
@@ -203,7 +236,7 @@ if ( ! class_exists( 'LearnDash_Shortcodes_TinyMCE' ) ) {
 				require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/shortcodes-sections/courseinfo.php';
 				$shortcode_sections['courseinfo'] = new LearnDash_Shortcodes_Section_courseinfo( $fields_args );
 
-				if ( 'sfwd-certificates' === $fields_args['post_type'] ) {
+				if ( 'sfwd-certificates' === $fields_args['typenow'] ) {
 					require_once LEARNDASH_LMS_PLUGIN_DIR . '/includes/settings/shortcodes-sections/quizinfo.php';
 					$shortcode_sections['quizinfo'] = new LearnDash_Shortcodes_Section_quizinfo( $fields_args );
 				}
@@ -232,7 +265,7 @@ if ( ! class_exists( 'LearnDash_Shortcodes_TinyMCE' ) ) {
 					</div>
 				</div>
 					<?php
-			}
+			//}
 			die();
 		}
 

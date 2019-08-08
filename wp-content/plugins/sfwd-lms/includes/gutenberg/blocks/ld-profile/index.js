@@ -69,6 +69,10 @@ registerBlockType(
 				type: 'boolean',
 				default: 1
 			},
+			show_search: {
+				type: 'boolean',
+				default: 1
+			},
 			show_quizzes: {
 				type: 'boolean',
 				default: 1
@@ -83,7 +87,7 @@ registerBlockType(
 			},
 		},
         edit: function( props ) {
-			const { attributes: { per_page, orderby, order, course_points_user, expand_all, profile_link, show_header,show_quizzes, preview_user_id, preview_show },
+			const { attributes: { per_page, orderby, order, course_points_user, expand_all, profile_link, show_header, show_search, show_quizzes, preview_user_id, preview_show },
             	setAttributes } = props;
 
 			const inspectorControls = (
@@ -137,6 +141,12 @@ registerBlockType(
 								},
 							] }
 							onChange={ order => setAttributes( { order } ) }
+						/>
+						<ToggleControl
+							label={__('Show Search', 'learndash')}
+							checked={!!show_search}
+							onChange={show_search => setAttributes({ show_search })}
+							help={__('LD30 template only', 'learndash')}
 						/>
 						<ToggleControl
 							label={__('Show Profile Header', 'learndash')}

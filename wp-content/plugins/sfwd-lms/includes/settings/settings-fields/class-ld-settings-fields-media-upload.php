@@ -64,7 +64,7 @@ if ( ( class_exists( 'LearnDash_Settings_Fields' ) ) && ( ! class_exists( 'Learn
 			}
 
 			$html .= '<div class="image-preview-wrapper">';
-			$html .= '<img class="image-preview" src="' . $image_url . '" style="max-height: 200px; border: 1px dashed #ccc;" data-default="' . $default_img_url . '"/>';
+			$html .= '<img class="image-preview" src="' . $image_url . '" style="max-width: 100%; max-height: 200px; border: 1px dashed #ccc;" data-default="' . $default_img_url . '"/>';
 			$html .= '</div>';
 			$html .= '<input type="button" class="button image-remove-button" title="' . esc_html__( 'remove image', 'learndash' ) . '" value="' . esc_html_x( 'X', 'placeholder: clear image', 'learndash' ) . '" />';
 			$html .= '<input type="button" class="button image-upload-button" title="' . esc_html__( 'Select/upload image', 'learndash' ) . '"  value="' . esc_html__( 'Select image', 'learndash' ) . '" />';

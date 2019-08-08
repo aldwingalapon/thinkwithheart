@@ -226,6 +226,7 @@ class WpProQuiz_Model_QuestionMapper extends WpProQuiz_Model_Mapper {
 			$ld_quiz_questions_object = LDLMS_Factory_Post::quiz_questions( intval( $quiz_post_id ) );
 			if ( $ld_quiz_questions_object ) {
 				$pro_questions = $ld_quiz_questions_object->get_questions( 'pro_objects' );
+				$pro_questions = apply_filters( 'learndash_fetch_quiz_questions', $pro_questions, $quizId, $rand, $max );
 				if ( ! empty( $pro_questions ) ) {
 					if ( $rand ) {
 						//$pro_questions = array_rand( $pro_questions, intval( $max ) );

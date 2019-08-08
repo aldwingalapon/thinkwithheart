@@ -1582,3 +1582,130 @@ function learndash_is_protected_meta( $protected = false, $meta_key = '', $meta_
 	return $protected;
 }
 add_filter( 'is_protected_meta', 'learndash_is_protected_meta', 30, 3 );
+
+
+/**
+ * Filter the menus being displayed to show the login/logout.
+ * Look for items where the 'url' is '#login'.
+ * @since 3.0.7
+ * @param array $menu_items From WP Menu items to be displayed.
+ * @param array $menu_args From WP Menu args related to the menu set to be displayed.
+ * @return array $menu_items
+ */
+function learndash_login_menu_items( $menu_items, $menu_args = array() ) {
+
+	foreach ( $menu_items as $menu_key => &$menu_item ) {
+		if ( ( strpos( $menu_item->url, '#login' ) !== false ) && ( in_array( 'ld-button', $menu_item->classes ) ) ) {
+			/**
+			 * Allow externals to override processing of menu_item.
+			 *
+			 * @since 3.0.7
+			 * @var boolean Process this menu item. True.
+			 * @var object  $menu_item WP_Post object for menu item.
+			 * @var array   $menu_args Args array related to menu being processed / displayed.
+			 * @return boolean. If true is not returned the menu item will not be processed for LD login modal.
+			 */
+			if ( apply_filters( 'learndash_login_menu_item_process', true, $menu_item, $menu_args ) ) {
+				if ( ( empty( $menu_item->post_content ) ) || ( strpos( $menu_item->post_content, '[learndash_login' ) === false ) ) {
+					$shortcode = '[learndash_login return="atts"]';
+				} else {
+					$shortcode = str_replace( '[learndash_login',  '[learndash_login return="atts" ', $menu_item->post_content );
+				}
+
+				$menu_item->post_content = '';
+				$menu_item->description = '';
+
+				$active_template_key = LearnDash_Theme_Register::get_active_theme_key();
+				$login_mode_enabled = LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'login_mode_enabled' );
+				if ( ( 'ld30' === $active_template_key ) && ( 'yes' === $login_mode_enabled ) ) {
+					$shortcode_return = do_shortcode( $shortcode );
+					$shortcode_atts = maybe_unserialize( $shortcode_return );
+
+					learndash_load_login_modal_html();
+				} else {
+					// If here we are not using the LD30 templates. So the handling of the menu item is simple link to WP login/logout.
+					$shortcode = str_replace( array( '[learndash_login', ']'), '', $shortcode);
+					$atts = shortcode_parse_atts( $shortcode );
+					$shortcode_atts = array();
+
+					if ( is_user_logged_in() ) {
+						if ( ( isset( $atts['logout_url'] ) ) && ( ! empty( $atts['logout_url'] ) ) ) {
+							$shortcode_atts['url'] = $atts['logout_url'];
+						} else {
+							$shortcode_atts['url'] = wp_logout_url( get_permalink() );
+						}
+
+						if ( ( isset( $atts['logout_label'] ) ) && ( ! empty( $atts['logout_label'] ) ) ) {
+							$shortcode_atts['title'] = $atts['logout_label'];
+						} else {
+							$shortcode_atts['title'] = __( 'Logout', 'learndash' );
+						}
+					} else {
+						if ( ( isset( $atts['login_url'] ) ) && ( ! empty( $atts['login_url'] ) ) ) {
+							$shortcode_atts['url'] = $atts['login_url'];
+						} else {
+							$shortcode_atts['url'] = wp_login_url( get_permalink() );
+						}
+
+						if ( ( isset( $atts['login_label'] ) ) && ( ! empty( $atts['login_label'] ) ) ) {
+								$shortcode_atts['title'] = $atts['login_label'];
+						} else {
+							$shortcode_atts['title'] = __( 'Login', 'learndash' );
+						}
+					}
+				}
+
+				/**
+				 * Allow externals to override menu_item attributes before they are applied.
+				 *
+				 * @since 2.0.7
+				 * @var array  $shortcode_atts Shortcode array containing url, label, etc. 
+				 * @var object $menu_item WP_Post object for menu item.
+				 * @var array  $menu_args Args array related to menu being processed / displayed.
+				 * @return object $menu_item.
+				 */
+				$shortcode_atts = apply_filters( 'learndash_login_menu_item_atts', $shortcode_atts, $menu_item, $menu_args );
+				if ( ( isset( $shortcode_atts['url'] ) ) && ( ! empty( $shortcode_atts['url'] ) ) ) {
+					$menu_item->url = $shortcode_atts['url'];
+				}
+				if ( ( isset( $shortcode_atts['label'] ) ) && ( ! empty( $shortcode_atts['label'] ) ) ) {
+					$menu_item->title = $shortcode_atts['label'];
+				}
+
+				/**
+				 * Allow externals to override final menu_item.
+				 *
+				 * @since 2.0.7
+				 * @var object $menu_item WP_Post object for menu item.
+				 * @var array  $menu_args Args array related to menu being processed / displayed.
+				 * @return object $menu_item.
+				 */
+				$menu_item = apply_filters( 'learndash_login_menu_item', $menu_item, $menu_args );
+			}
+		}
+	}
+	return $menu_items;
+}
+add_filter( 'wp_nav_menu_objects', 'learndash_login_menu_items', 30, 2 );
+
+global $learndash_login_model_html;
+$learndash_login_model_html = false;
+/**
+ * Wrapper function to include the modal login in the footer of the HTML.
+ */
+function learndash_load_login_modal_html() {
+	global $learndash_login_model_html;
+	if ( function_exists( 'learndash_get_template_part' ) ) {
+		if ( false === $learndash_login_model_html ) {
+			$learndash_login_model_html = learndash_get_template_part( 'modules/login-modal.php', array(), false );
+			if ( false !== $learndash_login_model_html ) {
+				add_action( 'wp_footer', function() {
+					global $learndash_login_model_html;
+					if ( ( isset( $learndash_login_model_html ) ) && ( ! empty( $learndash_login_model_html ) ) ) {
+						echo '<div class="learndash-wrapper learndash-wrapper-login-modal">' . $learndash_login_model_html . '</div>';
+					}
+				});
+			}
+		}
+	}
+}

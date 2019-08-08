@@ -216,7 +216,7 @@ if ( ! class_exists( 'CartFlows_Font_Families' ) ) :
 		 *
 		 * @return string
 		 */
-		static public function google_fonts_url( $fonts, $subsets = array() ) {
+		public static function google_fonts_url( $fonts, $subsets = array() ) {
 
 			/* URL */
 			$base_url  = '//fonts.googleapis.com/css';

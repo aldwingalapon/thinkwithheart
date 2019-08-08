@@ -57,6 +57,20 @@ if ( ( class_exists( 'LearnDash_Shortcodes_Section' ) ) && ( ! class_exists( 'Le
 					),
 				),
 
+				'show_search'       => array(
+					'id'        => $this->shortcodes_section_key . 'show_search',
+					'name'      => 'show_search',
+					'type'      => 'select',
+					'label'     => esc_html__( 'Show Search', 'learndash' ),
+					'help_text' => esc_html__( 'Show Search', 'learndash' ),
+					'value'     => 'yes',
+					'options'   => array(
+						''   => esc_html__( 'Yes', 'learndash' ),
+						'no' => esc_html__( 'No', 'learndash' ),
+					),
+					'help_text' => esc_html__( 'LD30 template only', 'learndash' ),
+				),
+
 				'show_header'        => array(
 					'id'        => $this->shortcodes_section_key . 'show_header',
 					'name'      => 'show_header',
@@ -97,7 +111,6 @@ if ( ( class_exists( 'LearnDash_Shortcodes_Section' ) ) && ( ! class_exists( 'Le
 						'no' => esc_html__( 'No', 'learndash' ),
 					),
 				),
-
 				'show_quizzes'       => array(
 					'id'        => $this->shortcodes_section_key . 'show_quizzes',
 					'name'      => 'show_quizzes',
@@ -110,6 +123,7 @@ if ( ( class_exists( 'LearnDash_Shortcodes_Section' ) ) && ( ! class_exists( 'Le
 						'no' => esc_html__( 'No', 'learndash' ),
 					),
 				),
+
 				'expand_all'         => array(
 					'id'        => $this->shortcodes_section_key . 'expand_all',
 					'name'      => 'expand_all',

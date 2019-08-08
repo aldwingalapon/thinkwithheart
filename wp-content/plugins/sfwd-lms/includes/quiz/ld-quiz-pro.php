@@ -1204,23 +1204,53 @@ class LD_QuizPro {
 	 * @since 2.1.0
 	 *
 	 * @param  string $content HTML
+	 * @param  mixed  $pro_quiz (integer) WPProQuixz ID, (object) WpProQuiz_Model_Quiz
 	 * @return string HTML $content or $content concatenated with the certificate link
 	 */
-	static function certificate_link( $content, $pro_quiz_id = null ) {
-		$quiz_post_id = 0;
+	static function certificate_link( $content, $pro_quiz = null ) {
+		$quiz_post_id = null;
+		$pro_quiz_id = null;
 		
-		if ( is_null( $pro_quiz_id ) ) {
-			global $post;
-			if ( ( $post instanceof WP_Post ) && ( $post->post_type == 'sfwd-quiz' ) ) {
-				$pro_quiz_id = $post->ID;
+		if ( ! is_null( $pro_quiz ) ) {
+			if ( is_a( $pro_quiz, 'WpProQuiz_Model_Quiz') ) {
+				$pro_quiz_id = $pro_quiz->getId();
+				$quiz_post_id = $pro_quiz->getPostId();
+			} else {
+				$pro_quiz_id = absint( $pro_quiz );
+			}
+		}
+
+		if ( empty( $quiz_post_id ) ) {
+			if ( empty( $pro_quiz_id ) ) {
+				//global $post;
+				//if ( ( $post instanceof WP_Post ) && ( $post->post_type == 'sfwd-quiz' ) ) {
+				//	$quiz_post_id = $post->ID;
+				//} 	
+
+				$post_id = get_the_ID();
+				if ( !empty( $post_id ) ) {
+					$quiz_post = get_post( $post_id );
+					if ( ( $quiz_post instanceof WP_Post ) && ( $quiz_post->post_type == 'sfwd-quiz' ) ) {
+						$quiz_post_id = $quiz_post->ID;
+					}
+				}
+			} 
+			
+			if ( empty( $quiz_post_id ) ) {
+				$quiz_post_id = learndash_get_quiz_id_by_pro_quiz_id( $pro_quiz_id );
+				if ( !empty( $quiz_post_id ) ) {
+					$quiz_post = get_post( $quiz_post_id );
+					if ( ( $quiz_post instanceof WP_Post ) && ( $quiz_post->post_type == 'sfwd-quiz' ) ) {
+						$quiz_post_id = $quiz_post->ID;
+					} 
+				}
 			} 	
 		} else {
-			$quiz_post_id = learndash_get_quiz_id_by_pro_quiz_id( $pro_quiz_id );
-			if ( !empty( $quiz_post_id ) ) {
-				$quiz_post = get_post( $quiz_post_id );
-				if ( ( $quiz_post instanceof WP_Post ) && ( $quiz_post->post_type == 'sfwd-quiz' ) ) {
-					$quiz_post_id = $quiz_post->ID;
-				} 
+			$quiz_post = get_post( $quiz_post_id );
+			if ( ( $quiz_post instanceof WP_Post ) && ( $quiz_post->post_type == 'sfwd-quiz' ) ) {
+				$quiz_post_id = $quiz_post->ID;
+			} else {
+				$quiz_post_id = 0;
 			}
 		}
 

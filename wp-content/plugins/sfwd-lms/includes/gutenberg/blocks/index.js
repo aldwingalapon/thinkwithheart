@@ -3,6 +3,7 @@
 /**
  * Import LearnDash blocks
  */
+import './ld-login';
 import './ld-profile';
 import './ld-course-list';
 import './ld-lesson-list';

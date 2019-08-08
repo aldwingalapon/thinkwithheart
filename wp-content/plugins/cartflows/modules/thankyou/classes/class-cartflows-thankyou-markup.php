@@ -12,6 +12,7 @@
  */
 class Cartflows_Thankyou_Markup {
 
+
 	/**
 	 * Member Variable
 	 *
@@ -24,7 +25,7 @@ class Cartflows_Thankyou_Markup {
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -56,7 +57,6 @@ class Cartflows_Thankyou_Markup {
 		$output = '';
 
 		if ( _is_wcf_thankyou_type() ) {
-
 			/* Remove order item link */
 			add_filter( 'woocommerce_order_item_permalink', '__return_false' );
 
@@ -71,7 +71,6 @@ class Cartflows_Thankyou_Markup {
 			$order = false;
 
 			if ( ! isset( $_GET['wcf-order'] ) && wcf()->flow->is_flow_testmode() ) {
-
 				$args = array(
 					'limit'     => 1,
 					'order'     => 'DESC',
@@ -84,7 +83,6 @@ class Cartflows_Thankyou_Markup {
 				$order_id = ( ! empty( $latest_order ) ) ? current( $latest_order )->get_id() : 0;
 
 				if ( $order_id > 0 ) {
-
 					$order = wc_get_order( $order_id );
 
 					if ( ! $order ) {
@@ -101,7 +99,6 @@ class Cartflows_Thankyou_Markup {
 				$order_key = apply_filters( 'woocommerce_thankyou_order_key', empty( $_GET['wcf-key'] ) ? '' : wc_clean( wp_unslash( $_GET['wcf-key'] ) ) ); // WPCS: input var ok, CSRF ok.
 
 				if ( $order_id > 0 ) {
-
 					$order = wc_get_order( $order_id );
 
 					if ( ! $order || $order->get_order_key() !== $order_key ) {
@@ -114,7 +111,6 @@ class Cartflows_Thankyou_Markup {
 			unset( WC()->session->order_awaiting_payment );
 
 			if ( null !== WC()->session ) {
-
 				if ( ! isset( WC()->cart ) || '' === WC()->cart ) {
 					WC()->cart = new WC_Cart();
 				}
@@ -148,7 +144,6 @@ class Cartflows_Thankyou_Markup {
 	function thank_you_scripts() {
 
 		if ( _is_wcf_thankyou_type() ) {
-
 			do_action( 'cartflows_thank_you_scripts' );
 
 			$style = $this->generate_thank_you_style();
@@ -166,7 +161,6 @@ class Cartflows_Thankyou_Markup {
 	function set_order_received_page( $is_order_page ) {
 
 		if ( _is_wcf_thankyou_type() ) {
-
 			$is_order_page = true;
 		}
 
@@ -287,9 +281,7 @@ class Cartflows_Thankyou_Markup {
 	function woo_checkout_flag( $is_checkout ) {
 
 		if ( ! is_admin() ) {
-
 			if ( _is_wcf_thankyou_type() ) {
-
 				$is_checkout = true;
 			}
 		}

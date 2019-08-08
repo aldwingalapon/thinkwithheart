@@ -62,8 +62,35 @@ if ( ( class_exists( 'LearnDash_Settings_Fields' ) ) && ( ! class_exists( 'Learn
 				}
 			}
 
+			/*
+			<input autocomplete="off" type="checkbox" id="learndash-quiz-access-settings_startOnlyRegisteredUser-on" name="learndash-quiz-access-settings[startOnlyRegisteredUser]" class="learndash-section-field learndash-section-field-checkbox  ld-checkbox-input" value="on">
+			
+			<select autocomplete="off" type="select" name="learndash-quiz-progress-settings[certificate]" id="learndash-quiz-progress-settings_certificate" class="learndash-section-field learndash-section-field-select select2-hidden-accessible" data-ld-select2="1" data-settings-sub-trigger="ld-settings-sub-certificate" data-settings-inner-trigger="ld-settings-inner-certificate" tabindex="-1" aria-hidden="true"><option value="-1">Search or select a certificate…</option><option value="3136" selected="selected">Cert Test</option><option value="2047">Course Certificate</option><option value="2317">Quiz Certificate</option></select>
+			*/
+
+
 			$html .= '<span class="ld-select">';
-			$html .= '<select class="learndash-section-field-select" data-ld-select2="1" name="templateLoadId">';
+//			$html .= '<select class="learndash-section-field-select" data-ld-select2="1" name="templateLoadId">';
+
+			$html .= '<select autocomplete="off" ';
+			$html .= $this->get_field_attribute_type( $field_args );
+			//$html .= $this->get_field_attribute_name( $field_args );
+			$html .= ' name="templateLoadId" ';
+			$html .= $this->get_field_attribute_id( $field_args );
+			$html .= $this->get_field_attribute_class( $field_args );
+
+			if ( ( defined( 'LEARNDASH_SELECT2_LIB' ) ) && ( true === LEARNDASH_SELECT2_LIB ) ) {
+				if ( ! isset( $field_args['attrs']['data-ld-select2'] ) ) {
+					$html .= ' data-ld-select2="1" ';
+				}
+			}
+
+			$html .= $this->get_field_attribute_misc( $field_args );
+			$html .= $this->get_field_attribute_required( $field_args );
+			$html .= $this->get_field_sub_trigger( $field_args );
+			$html .= $this->get_field_inner_trigger( $field_args );
+
+			$html .= ' >';
 
 			if ( ( isset( $_GET['post'] ) ) && ( ! empty( $_GET['post'] ) ) && ( isset( $_GET['templateLoadId'] ) ) && ( ! empty( $_GET['templateLoadId'] ) ) ) {
 				$template_url = remove_query_arg( 'templateLoadId' );

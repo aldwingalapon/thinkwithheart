@@ -178,6 +178,10 @@ class WpProQuiz_Model_QuizMapper extends WpProQuiz_Model_Mapper
 		if($result === false) {
 			return null;
 		}
+
+		$data->saveTimeLimitCookie();
+		$data->saveViewProfileStatistics();
+
 		return $data;
 	}
 	

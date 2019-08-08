@@ -205,8 +205,21 @@ if ( ! class_exists( 'Learndash_Binary_Selector' ) ) {
 		protected function show_selections_section_controls() {
 			?>
 			<td class="learndash-binary-selector-section learndash-binary-selector-section-middle">
-				<a href="#" class="learndash-binary-selector-button-add"><img src="<?php echo LEARNDASH_LMS_PLUGIN_URL . 'assets/images/arrow_right.png'; ?>" /></a><br>
-				<a href="#" class="learndash-binary-selector-button-remove"><img src="<?php echo LEARNDASH_LMS_PLUGIN_URL . 'assets/images/arrow_left.png'; ?>" /></a>
+				<a href="#" class="learndash-binary-selector-button-add">
+				<?php if ( is_rtl() ) { ?>
+					<img src="<?php echo LEARNDASH_LMS_PLUGIN_URL . 'assets/images/arrow_left.png'; ?>" />
+				<?php } else { ?>
+					<img src="<?php echo LEARNDASH_LMS_PLUGIN_URL . 'assets/images/arrow_right.png'; ?>" />
+				<?php } ?>
+				</a><br>
+				
+				<a href="#" class="learndash-binary-selector-button-remove">
+				<?php if ( is_rtl() ) { ?>
+					<img src="<?php echo LEARNDASH_LMS_PLUGIN_URL . 'assets/images/arrow_right.png'; ?>" />
+				<?php } else { ?>
+					<img src="<?php echo LEARNDASH_LMS_PLUGIN_URL . 'assets/images/arrow_left.png'; ?>" />
+				<?php } ?>				
+				</a>
 			</td>
 			<?php
 		}

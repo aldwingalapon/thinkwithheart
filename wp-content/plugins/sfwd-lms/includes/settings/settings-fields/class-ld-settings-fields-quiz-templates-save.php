@@ -57,7 +57,27 @@ if ( ( class_exists( 'LearnDash_Settings_Fields' ) ) && ( ! class_exists( 'Learn
 			}
 
 			$html .= '<span class="ld-select">';
-			$html .= '<select name="templateSaveList" class="learndash-section-field-select" data-ld-select2="1">';
+			//$html .= '<select name="templateSaveList" class="learndash-section-field-select" data-ld-select2="1">';
+			$html .= '<select autocomplete="off" ';
+			$html .= $this->get_field_attribute_type( $field_args );
+			//$html .= $this->get_field_attribute_name( $field_args );
+			$html .= ' name="templateSaveList" ';
+			$html .= $this->get_field_attribute_id( $field_args );
+			$html .= $this->get_field_attribute_class( $field_args );
+
+			if ( ( defined( 'LEARNDASH_SELECT2_LIB' ) ) && ( true === LEARNDASH_SELECT2_LIB ) ) {
+				if ( ! isset( $field_args['attrs']['data-ld-select2'] ) ) {
+					$html .= ' data-ld-select2="1" ';
+				}
+			}
+
+			$html .= $this->get_field_attribute_misc( $field_args );
+			$html .= $this->get_field_attribute_required( $field_args );
+			$html .= $this->get_field_sub_trigger( $field_args );
+			$html .= $this->get_field_inner_trigger( $field_args );
+
+			$html .= ' >';
+
 			if ( ( defined( 'LEARNDASH_SELECT2_LIB' ) ) && ( true === apply_filters( 'learndash_select2_lib', LEARNDASH_SELECT2_LIB ) ) ) {
 				$html .= '   <option value="-1">';
 			} else {

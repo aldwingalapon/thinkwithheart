@@ -27,7 +27,8 @@ const {
 
  const {
      PanelBody,
-	 TextControl
+     TextControl,
+     ToggleControl
  } = wp.components;
 
 registerBlockType(
@@ -45,9 +46,13 @@ registerBlockType(
                 type: 'string',
                 default: '',
             },
+            autop: {
+                type: 'boolean',
+                default: true
+            },
         },
         edit: props => {
-            const { attributes: { group_id, user_id }, className, setAttributes } = props;
+            const { attributes: { group_id, user_id, autop }, className, setAttributes } = props;
 
             const inspectorControls = (
                 <InspectorControls>
@@ -65,6 +70,11 @@ registerBlockType(
                             help={__('Enter specific User ID. Leave blank for current User.', 'learndash')}
                             value={user_id || ''}
                             onChange={user_id => setAttributes({ user_id })}
+                        />
+                        <ToggleControl
+                            label={__('Auto Paragraph', 'learndash')}
+                            checked={!!autop}
+                            onChange={autop => setAttributes({ autop })}
                         />
                     </PanelBody>
                 </InspectorControls>

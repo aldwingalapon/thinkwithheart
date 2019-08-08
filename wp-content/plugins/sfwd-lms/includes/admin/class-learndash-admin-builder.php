@@ -107,6 +107,8 @@ if ( ! class_exists( 'Learndash_Admin_Builder' ) ) {
 				array( 'wp-editor' ),
 				LEARNDASH_SCRIPT_VERSION_TOKEN
 			);
+			wp_style_add_data( 'learndash-new-builder-style', 'rtl', 'replace' );
+
 			wp_enqueue_script(
 				'learndash-new-builder-script',
 				LEARNDASH_LMS_PLUGIN_URL . 'assets/js/builder/dist/builder' . leardash_min_builder_asset() . '.js',

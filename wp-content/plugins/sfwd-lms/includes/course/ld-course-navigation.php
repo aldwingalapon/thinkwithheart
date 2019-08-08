@@ -25,10 +25,10 @@ function learndash_previous_post_link( $prevlink='', $url = false ) {
 	}
 
 	if ( $post->post_type == 'sfwd-lessons' ) {
-		$link_name = sprintf( esc_html_x( 'Previous %s', 'Previous Lesson Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'lesson' ) );
+		$link_name = learndash_get_label_course_step_previous( learndash_get_post_type_slug ( 'lesson' ) );
 		$posts = learndash_get_lesson_list( null, array( 'num' => 0 ) );
 	} else if ( $post->post_type == 'sfwd-topic' ) {
-		$link_name = sprintf( esc_html_x( 'Previous %s', 'Previous Topic Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'topic' ) );
+		$link_name = learndash_get_label_course_step_previous( learndash_get_post_type_slug ( 'topic' ) );
 		
 		if ( LearnDash_Settings_Section::get_section_setting('LearnDash_Settings_Courses_Builder', 'shared_steps' ) == 'yes' ) {
 			$course_id = learndash_get_course_id( $post );
@@ -101,11 +101,11 @@ function learndash_next_post_link( $prevlink='', $url = false, $post = null ) {
 	}
 
 	if ( $post->post_type == 'sfwd-lessons' ) {
-		$link_name = sprintf( esc_html_x( 'Next %s', 'Next Lesson Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'lesson' ) );
+		$link_name = learndash_get_label_course_step_next( learndash_get_post_type_slug( 'lesson' ) );
 		$course_id = learndash_get_course_id( $post );
 		$posts = learndash_get_lesson_list( $course_id, array( 'num' => 0 ) );
 	} else if ( $post->post_type == 'sfwd-topic' ) {
-		$link_name = sprintf( esc_html_x( 'Next %s', 'Next Topic Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'topic' ) );
+		$link_name = learndash_get_label_course_step_next( learndash_get_post_type_slug( 'topic' ) );
 
 		if ( LearnDash_Settings_Section::get_section_setting('LearnDash_Settings_Courses_Builder', 'shared_steps' ) == 'yes' ) {
 			$course_id = learndash_get_course_id( $post->ID );

@@ -132,6 +132,7 @@ function learndash_load_admin_resources() {
 		array(),
 		LEARNDASH_SCRIPT_VERSION_TOKEN
 	);
+	wp_style_add_data( 'learndash-admin-menu-style', 'rtl', 'replace' );
 	$learndash_assets_loaded['styles']['learndash-admin-menu-style'] = __FUNCTION__;
 
 	wp_enqueue_script(
@@ -141,6 +142,7 @@ function learndash_load_admin_resources() {
 		LEARNDASH_SCRIPT_VERSION_TOKEN,
 		true
 	);
+	wp_style_add_data( 'learndash-admin-menu-script', 'rtl', 'replace' );
 	$learndash_assets_loaded['scripts']['learndash-admin-menu-script'] = __FUNCTION__;
 
 	if ( learndash_should_load_admin_assets() ) {
@@ -160,6 +162,7 @@ function learndash_load_admin_resources() {
 			array(),
 			LEARNDASH_SCRIPT_VERSION_TOKEN
 		);
+		wp_style_add_data( 'learndash_style', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['learndash_style'] = __FUNCTION__;
 
 		wp_enqueue_style(
@@ -168,6 +171,7 @@ function learndash_load_admin_resources() {
 			array(),
 			LEARNDASH_SCRIPT_VERSION_TOKEN
 		);
+		wp_style_add_data( 'learndash-admin-style', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['learndash-admin-style'] = __FUNCTION__;
 
 		wp_enqueue_style(
@@ -176,6 +180,7 @@ function learndash_load_admin_resources() {
 			array(),
 			LEARNDASH_SCRIPT_VERSION_TOKEN
 		);
+		wp_style_add_data( 'sfwd-module-style', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['sfwd-module-style'] = __FUNCTION__;
 
 		if ( ( $pagenow == 'edit.php' ) && ( in_array( $typenow, array( 'sfwd-essays', 'sfwd-assignment', 'sfwd-topic', 'sfwd-quiz' ) ) ) ) {
@@ -209,6 +214,7 @@ function learndash_load_admin_resources() {
 			array(),
 			LEARNDASH_SCRIPT_VERSION_TOKEN
 		);
+		wp_style_add_data( 'ld-datepicker-ui-css', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['ld-datepicker-ui-css'] = __FUNCTION__;
 	}
 
@@ -222,6 +228,7 @@ function learndash_load_admin_resources() {
 			array(),
 			LEARNDASH_SCRIPT_VERSION_TOKEN
 		);
+		wp_style_add_data( 'ld-datepicker-ui-css', 'rtl', 'replace' );
 		$learndash_assets_loaded['styles']['ld-datepicker-ui-css'] = __FUNCTION__;
 	}
 }

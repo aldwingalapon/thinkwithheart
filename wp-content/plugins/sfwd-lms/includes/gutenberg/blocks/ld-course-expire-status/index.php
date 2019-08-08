@@ -32,6 +32,10 @@ if ( ( class_exists( 'LearnDash_Gutenberg_Block' ) ) && ( ! class_exists( 'Learn
 				'label_after' => array(
 					'type' => 'string',
 				),
+				'autop' => array(
+					'type' => 'boolean',
+				),
+				
 				'preview_show' => array(
 					'type' => 'boolean',
 				),

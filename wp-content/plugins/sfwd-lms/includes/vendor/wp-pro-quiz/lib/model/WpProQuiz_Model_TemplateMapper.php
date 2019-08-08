@@ -33,7 +33,7 @@ class WpProQuiz_Model_TemplateMapper extends WpProQuiz_Model_Mapper {
 		$r = array();
 		
 		$result = $this->_wpdb->get_results($this->_wpdb->prepare(
-			"SELECT * FROM {$this->_tableTemplate} WHERE type = %d "
+			"SELECT * FROM {$this->_tableTemplate} WHERE type = %d AND name != ''"
 		, $type), ARRAY_A);
 		
 		foreach($result as $row) {

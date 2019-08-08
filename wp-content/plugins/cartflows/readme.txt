@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/BrainstormForce
 Tags: woocommerce, funnel builder, sales funnels
 Requires at least: 4.4
 Tested up to: 5.2
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -124,6 +124,10 @@ Glad you asked! CartFlows Pro is an optional add-on to CartFlows that adds addit
 5. Easily edit anything with your page builder.
 
 == Changelog ==
+= Version 1.2.4 - Wednesday, 31st July 2019 =
+* Improvement: Added compatibility for a future release of CartFlows Pro's Pre-Checkout Upsell.
+* Fix: Account field CSS updated.
+
 = Version 1.2.3 - Thursday, 11th July 2019 =
 * New: Permalink option added in settings to change the "cartflows_step" post-type slug.
 * New: LearnDash Compatibility added for custom templates.

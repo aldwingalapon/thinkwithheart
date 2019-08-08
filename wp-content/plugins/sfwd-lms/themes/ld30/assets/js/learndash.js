@@ -368,10 +368,15 @@ jQuery(document).ready(function($) {
 	}
 
 	function openLoginModal() {
-		$('.learndash-wrapper').addClass('ld-modal-open');
-		$('html, body').animate({
-			scrollTop: $('.ld-modal').offset().top
-		}, 50);
+		var modal_wrapper = $('.learndash-wrapper-login-modal');
+		if (typeof modal_wrapper !== 'undefined') {
+			// Move the model to be first element of the body. See LEARNDASH-3503
+			$(modal_wrapper).prependTo('body');
+			$(modal_wrapper).addClass('ld-modal-open');
+			$('html, body').animate({
+				scrollTop: $('.ld-modal', modal_wrapper).offset().top
+			}, 50);
+		}
 	}
 
 	function closeLoginModal() {
